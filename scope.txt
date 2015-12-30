@@ -1,0 +1,15 @@
+Vogliamo realizzare un sistema intelligente di controllo del consumo energetico casalingo (Pi-SICCEC) utilizzando Raspberry PI.
+Il Pi-SICCEC analizza i dati raccolti dalle sonde ambientali (temperatura, umidità, pressione, consumo energetico gas, consumo energetico elettrico) e di comportamento degli utilizzatori della casa (umani, animali domestici, elettrodomestici, ...) e provvede secondo parametri di risparmio energetico calcolati autonomamente e/o impostati dall'utente a comandare l'accensione e lo spegnimento dei principali sistemi di gestione delle risorse energetiche casalinghe (caldaie, lavatrice, lavastoviglie, considizionamento, boiler, ...).
+
+Il sistema è composto da tre componenti funzionali distinti: 
+  il modulo di acqusizione dati ed attuatori (MADA), 
+  il modulo di elaborazione delle informazioni e delle decisioni (MEID) ed 
+  il modulo di interfaccia web d'utente (MIWU).
+  
+Di seguito la descrizione dei tre moduli e delle interfacce.
+MADA
+<description>
+MEID
+<description>
+MIWU
+<description>
