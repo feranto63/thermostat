@@ -1,3 +1,5 @@
+# ci ispiriamo al progetto descritto in http://www.stuff.tv/features/how-build-homemade-nest-thermostat
+
 Vogliamo realizzare un sistema intelligente di controllo del consumo energetico casalingo (Pi-SICCEC) utilizzando Raspberry PI.
 Il Pi-SICCEC analizza i dati raccolti dalle sonde ambientali (temperatura, umidità, pressione, consumo energetico gas, consumo energetico elettrico) e di comportamento degli utilizzatori della casa (umani, animali domestici, elettrodomestici, ...) e provvede secondo parametri di risparmio energetico calcolati autonomamente e/o impostati dall'utente a comandare l'accensione e lo spegnimento dei principali sistemi di gestione delle risorse energetiche casalinghe (caldaie, lavatrice, lavastoviglie, considizionamento, boiler, ...).
 
