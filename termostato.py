@@ -24,7 +24,7 @@ import RPi.GPIO as GPIO
 ##wiringpi.wiringPiSetup()
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(0,GPIO.OUT)
+GPIO.setup(17,GPIO.OUT)
 
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
@@ -101,10 +101,10 @@ while True:
 ##        print "Target temp"
 ##        print read_gmail()
 ###        if (Tdes > read_temp()):#Compare varSubject to temp
-        GPIO.output(0, 1) # sets port 0 to 1 (3.3V, on)
+        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
         print "HEATING ON\n"
 ###        else:
         time.sleep (5)
-        GPIO.output(0, 0) # sets port 0 to 0 (3.3V, off)
+        GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
         print "HEATING OFF\n"
         time.sleep(5)
