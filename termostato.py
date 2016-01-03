@@ -23,7 +23,7 @@ import RPi.GPIO as GPIO
 ##import wiringpi2 as wiringpi
 ##wiringpi.wiringPiSetup()
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(17,GPIO.OUT)
 
 #Find temperature from thermometer
