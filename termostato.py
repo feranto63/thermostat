@@ -99,10 +99,10 @@ while True:
 ##        print "Target temp"
 ##        print read_gmail()
 ###        if (Tdes > read_temp()):#Compare varSubject to temp
-            wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
-            print "HEATING ON\n"
+        wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
+        print "HEATING ON\n"
 ###        else:
         time.sleep (5)
-            wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
-            print "HEATING OFF\n"
+        wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
+        print "HEATING OFF\n"
         time.sleep(5)
