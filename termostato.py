@@ -19,7 +19,8 @@ import imaplib
 import email
 
 # wiringpi numbers  
-import wiringpi2 as wiringpi
+import RPi.GPIO as wiringpi
+##import wiringpi2 as wiringpi
 wiringpi.wiringPiSetup()
 wiringpi.pinMode(0, 1) # sets WP pin 0 to output 
 
