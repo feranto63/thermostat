@@ -21,8 +21,9 @@ import email
 # wiringpi numbers  
 import RPi.GPIO as wiringpi
 ##import wiringpi2 as wiringpi
-wiringpi.wiringPiSetup()
-wiringpi.pinMode(0, 1) # sets WP pin 0 to output 
+##wiringpi.wiringPiSetup()
+##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
+wiringpi.setup(0,wiringpi.OUT)
 
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
@@ -99,10 +100,10 @@ while True:
 ##        print "Target temp"
 ##        print read_gmail()
 ###        if (Tdes > read_temp()):#Compare varSubject to temp
-        wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
+        wiringpi.output(0, 1) # sets port 0 to 1 (3.3V, on)
         print "HEATING ON\n"
 ###        else:
         time.sleep (5)
-        wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
+        wiringpi.output(0, 0) # sets port 0 to 0 (3.3V, off)
         print "HEATING OFF\n"
         time.sleep(5)
