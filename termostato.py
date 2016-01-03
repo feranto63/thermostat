@@ -50,54 +50,54 @@ def read_temp():
         return temp_c #, temp_f
 
 #connect to gmail
-def read_gmail():
-    global varSubject
-    mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login('YOUREMAILADDRESS@gmail.com','YOUR PASSWORD HERE')
-    mail.select('inbox')
-    mail.list()
+##def read_gmail():
+##    global varSubject
+##    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+##    mail.login('YOUREMAILADDRESS@gmail.com','YOUR PASSWORD HERE')
+##    mail.select('inbox')
+##    mail.list()
 
-    typ, data = mail.search(None, 'ALL')
-    for num in data[0].split():
-        typ, data = mail.fetch(num, '(RFC822)')
-    typ, data = mail.search(None, 'ALL')
-    ids = data[0]
-    id_list = ids.split()
+##    typ, data = mail.search(None, 'ALL')
+##    for num in data[0].split():
+##        typ, data = mail.fetch(num, '(RFC822)')
+##    typ, data = mail.search(None, 'ALL')
+##    ids = data[0]
+##    id_list = ids.split()
 
     
 # Any Emails? 
 # get most recent email id
-    if id_list:
-        latest_email_id = int( id_list[-1] )
-        for i in range( latest_email_id, latest_email_id-1, -1):
-            typ, data = mail.fetch( i, '(RFC822)')
-        for response_part in data:
-            if isinstance(response_part, tuple):
-                msg = email.message_from_string(response_part[1])
-        varSubject = msg['subject']
-        varFrom = msg['from']
-        varFrom = varFrom.replace('<','')
-        varFrom = varFrom.replace('>','')
+##    if id_list:
+##        latest_email_id = int( id_list[-1] )
+##        for i in range( latest_email_id, latest_email_id-1, -1):
+##            typ, data = mail.fetch( i, '(RFC822)')
+##        for response_part in data:
+##            if isinstance(response_part, tuple):
+##                msg = email.message_from_string(response_part[1])
+##        varSubject = msg['subject']
+##        varFrom = msg['from']
+##        varFrom = varFrom.replace('<','')
+##        varFrom = varFrom.replace('>','')
 
     #Remove used emails from mailbox
-        typ, data = mail.search(None, 'ALL')
-    for num in data[0].split():
-        mail.store(num, '+FLAGS', '\\Deleted')
-        mail.expunge()
-        mail.close()
-        mail.logout()
+##        typ, data = mail.search(None, 'ALL')
+##    for num in data[0].split():
+##        mail.store(num, '+FLAGS', '\\Deleted')
+##        mail.expunge()
+##        mail.close()
+##        mail.logout()
 
-    return int(varSubject)
+##    return int(varSubject)
 
 while True:
         print "Current temp"
         print read_temp()
-        print "Target temp"
-        print read_gmail()
-        if (read_gmail() > read_temp()):#Compare varSubject to temp
-            wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
-            print "HEATING ON\n"
-        else:
-            wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
-            print "HEATING OFF\n"
+##        print "Target temp"
+##        print read_gmail()
+##        if (read_gmail() > read_temp()):#Compare varSubject to temp
+##            wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
+##            print "HEATING ON\n"
+##        else:
+##            wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
+##            print "HEATING OFF\n"
         time.sleep(5)
