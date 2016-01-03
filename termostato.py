@@ -93,12 +93,15 @@ def read_temp():
 while True:
         print "Current temp"
         print read_temp()
+        Tdes=raw_input("temperatura desiderata = ")
+        print "Target temp=",Tdes
+
 ##        print "Target temp"
 ##        print read_gmail()
-##        if (read_gmail() > read_temp()):#Compare varSubject to temp
-##            wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
-##            print "HEATING ON\n"
-##        else:
-##            wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
-##            print "HEATING OFF\n"
+        if (Tdes > read_temp()):#Compare varSubject to temp
+            wiringpi.digitalWrite(0, 1) # sets port 0 to 1 (3.3V, on)
+            print "HEATING ON\n"
+        else:
+            wiringpi.digitalWrite(0, 0) # sets port 0 to 0 (3.3V, off)
+            print "HEATING OFF\n"
         time.sleep(5)
