@@ -21,8 +21,8 @@ import email
 # wiringpi numbers  
 import RPi.GPIO as wiringpi
 ##import wiringpi2 as wiringpi
-wiringpi.wiringPiSetup()
-wiringpi.pinMode(0, 1) # sets WP pin 0 to output 
+##wiringpi.wiringPiSetup()
+##wiringpi.pinMode(0, 1) # sets WP pin 0 to output 
 
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
