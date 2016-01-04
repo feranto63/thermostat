@@ -94,7 +94,7 @@ def read_temp():
 
 while True:
         print "Current temp"
-        CurTemp = read_tem()
+        CurTemp = read_temp()
         print CurTemp
         Tdes=raw_input("temperatura desiderata = ")
         print "Target temp=",Tdes
