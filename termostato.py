@@ -31,8 +31,8 @@ os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
 base_dir = '/sys/bus/w1/devices/'
-###device_folder = glob.glob(base_dir + '28*')[0]
-###device_file = device_folder + '/w1_slave'
+device_folder = glob.glob(base_dir + '28*')[0]
+device_file = device_folder + '/w1_slave'
 
 def read_temp_raw():
     f = open(device_file, 'r')
@@ -94,17 +94,16 @@ def read_temp():
 
 while True:
         print "Current temp"
-###        print read_temp()
+        print read_temp()
         Tdes=raw_input("temperatura desiderata = ")
         print "Target temp=",Tdes
 
 ##        print "Target temp"
 ##        print read_gmail()
-###        if (Tdes > read_temp()):#Compare varSubject to temp
-        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
-        print "HEATING ON\n"
-###        else:
-        time.sleep (5)
-        GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
-        print "HEATING OFF\n"
+        if (Tdes > read_temp()):#Compare varSubject to temp
+            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
+            print "HEATING ON\n"
+        else:
+            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
+            print "HEATING OFF\n"
         time.sleep(5)
