@@ -94,13 +94,14 @@ def read_temp():
 
 while True:
         print "Current temp"
-        print read_temp()
+        CurTemp = read_tem()
+        print CurTemp
         Tdes=raw_input("temperatura desiderata = ")
         print "Target temp=",Tdes
 
 ##        print "Target temp"
 ##        print read_gmail()
-        if (Tdes > read_temp()):#Compare varSubject to temp
+        if (Tdes > CurTemp):#Compare varSubject to temp
             GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
             print "HEATING ON\n"
         else:
