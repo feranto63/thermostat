@@ -18,6 +18,10 @@ import time
 import imaplib
 import email
 
+import thermogram
+bot = thermogram.Bot()
+
+
 # wiringpi numbers  
 import RPi.GPIO as GPIO
 ##import wiringpi2 as wiringpi
@@ -104,6 +108,7 @@ while True:
         if (Tdes > CurTemp):#Compare varSubject to temp
             GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
             print "HEATING ON\n"
+            bot.sendMessage("HEATING ON")
         else:
             GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
             print "HEATING OFF\n"
