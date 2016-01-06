@@ -21,7 +21,7 @@ import email
 import thermogram.thermogram as thermogram
 # voglio parlare con il bot MaggiorBot
 mybot='@MaggiorBot'
-bot = thermogram.Bot(mybot)
+bot = thermogram.Bot() #definisce Telegam bot con token in file token e chatid in file chatid
 
 
 # wiringpi numbers  
