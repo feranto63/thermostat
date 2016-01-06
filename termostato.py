@@ -19,7 +19,9 @@ import imaplib
 import email
 
 import thermogram.thermogram as thermogram
-bot = thermogram.Bot()
+# voglio parlare con il bot MaggiorBot
+mybot='@MaggiorBot'
+bot = thermogram.Bot(mybot)
 
 
 # wiringpi numbers  
