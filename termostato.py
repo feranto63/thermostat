@@ -100,7 +100,7 @@ while True:
         print "Current temp"
         CurTemp = read_temp()
         print CurTemp
-        Tdes=raw_input("temperatura desiderata = ")
+        Tdes=input("temperatura desiderata = ")
         print "Target temp=",Tdes
 
 ##        print "Target temp"
@@ -112,4 +112,5 @@ while True:
         else:
             GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
             print "HEATING OFF\n"
+            bot.sendMessage("HEATING OFF")
         time.sleep(5)
