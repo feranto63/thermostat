@@ -18,7 +18,7 @@ import time
 import imaplib
 import email
 
-import thermogram
+import thermogram.thermogram as thermogram
 bot = thermogram.Bot()
 
 

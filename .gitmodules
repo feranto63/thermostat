@@ -1,0 +1,3 @@
+[submodule "thermogram"]
+	path = thermogram
+	url = https://github.com/rantonels/thermogram.git
