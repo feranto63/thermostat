@@ -69,7 +69,15 @@ while True:
     Tdes=input("temperatura desiderata = ")
     print "Target temp=",Tdes
 
+    #apre il file dei dati in append mode, se il file non esiste lo crea
+    filedati = open("filedati","a")
 
+    #scrive la temperatura coreente ed il timestam sul file
+    filedati.write(str(CurTemp)+"@"+localtime+"\n")
+
+    #chiude il file dei dati e lo salva
+    filedati.close()
+    
     if (Tdes > CurTemp):#Compare varSubject to temp
         GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
         print "HEATING ON "+localtime+"\n"
