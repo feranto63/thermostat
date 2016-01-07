@@ -58,61 +58,24 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return temp_c #, temp_f
 
-#connect to gmail
-##def read_gmail():
-##    global varSubject
-##    mail = imaplib.IMAP4_SSL('imap.gmail.com')
-##    mail.login('YOUREMAILADDRESS@gmail.com','YOUR PASSWORD HERE')
-##    mail.select('inbox')
-##    mail.list()
-
-##    typ, data = mail.search(None, 'ALL')
-##    for num in data[0].split():
-##        typ, data = mail.fetch(num, '(RFC822)')
-##    typ, data = mail.search(None, 'ALL')
-##    ids = data[0]
-##    id_list = ids.split()
-
-    
-# Any Emails? 
-# get most recent email id
-##    if id_list:
-##        latest_email_id = int( id_list[-1] )
-##        for i in range( latest_email_id, latest_email_id-1, -1):
-##            typ, data = mail.fetch( i, '(RFC822)')
-##        for response_part in data:
-##            if isinstance(response_part, tuple):
-##                msg = email.message_from_string(response_part[1])
-##        varSubject = msg['subject']
-##        varFrom = msg['from']
-##        varFrom = varFrom.replace('<','')
-##        varFrom = varFrom.replace('>','')
-
-    #Remove used emails from mailbox
-##        typ, data = mail.search(None, 'ALL')
-##    for num in data[0].split():
-##        mail.store(num, '+FLAGS', '\\Deleted')
-##        mail.expunge()
-##        mail.close()
-##        mail.logout()
-
-##    return int(varSubject)
 
 while True:
-        print "Current temp"
-        CurTemp = read_temp()
-        print CurTemp
-        Tdes=input("temperatura desiderata = ")
-        print "Target temp=",Tdes
+    localtime = time.asctime( time.localtime(time.time()) )
+    print "Local current time :", localtime
+    
+    print "Current temp"
+    CurTemp = read_temp()
+    print CurTemp
+    Tdes=input("temperatura desiderata = ")
+    print "Target temp=",Tdes
 
-##        print "Target temp"
-##        print read_gmail()
-        if (Tdes > CurTemp):#Compare varSubject to temp
-            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
-            print "HEATING ON\n"
-            bot.sendMessage("HEATING ON")
-        else:
-            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
-            print "HEATING OFF\n"
-            bot.sendMessage("HEATING OFF")
-        time.sleep(5)
+
+    if (Tdes > CurTemp):#Compare varSubject to temp
+        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
+        print "HEATING ON "+localtime+"\n"
+        bot.sendMessage("HEATING ON")
+    else:
+        GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
+        print "HEATING OFF "+localtime+"\n"
+        bot.sendMessage("HEATING OFF "+localtime)
+    time.sleep(5)
