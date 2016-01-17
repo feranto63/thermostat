@@ -15,12 +15,12 @@ import os
 import glob
 import time
 #imports for gmail reading
-import imaplib
-import email
+#import imaplib
+#import email
 
 import thermogram.thermogram as thermogram
 # voglio parlare con il bot MaggiorBot
-mybot='@MaggiorBot'
+mybot='@MaggiordomoBot'
 bot = thermogram.Bot() #definisce Telegam bot con token in file token e chatid in file chatid
 
 
