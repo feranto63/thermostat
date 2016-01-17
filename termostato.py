@@ -86,4 +86,4 @@ while True:
     #    GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
     #    print "HEATING OFF "+localtime+"\n"
     #    bot.sendMessage("HEATING OFF @ "+localtime)
-    time.sleep(60)
+    time.sleep(300) #wait 5 minutes
