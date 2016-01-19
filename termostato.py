@@ -67,7 +67,7 @@ while True:
     #print "Current temp"
     CurTemp = read_temp()
     #print CurTemp
-    bot.sendMessage("La temperatura misurata è di "+CurTemp+"°C, Padrone")
+    bot.sendMessage("La temperatura misurata è di "+str(CurTemp)+"°C, Padrone")
     #Tdes=input("temperatura desiderata = ")
     #print "Target temp=",Tdes
 
