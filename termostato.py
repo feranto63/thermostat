@@ -58,14 +58,16 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return temp_c #, temp_f
 
-
+#inizio programma
+bot.sendMessage("Ho avviato il monitoraggio delle temperature, Padrone")
 while True:
     localtime = time.asctime( time.localtime(time.time()) )
-    print "Local current time :", localtime
+    #print "Local current time :", localtime
     
-    print "Current temp"
+    #print "Current temp"
     CurTemp = read_temp()
-    print CurTemp
+    #print CurTemp
+    bot.sendMessage("La temperatura misurata è di "+CurTemp+"°C, Padrone")
     #Tdes=input("temperatura desiderata = ")
     #print "Target temp=",Tdes
 
