@@ -61,24 +61,25 @@ def read_temp():
 #inizio programma
 bot.sendMessage("Ho avviato il monitoraggio delle temperature, Padrone")
 while True:
-    localtime = time.asctime( time.localtime(time.time()) )
-    #print "Local current time :", localtime
+    for i in range(1,12):
+        localtime = time.asctime( time.localtime(time.time()) )
+        #print "Local current time :", localtime
     
-    #print "Current temp"
-    CurTemp = read_temp()
-    #print CurTemp
-    bot.sendMessage("La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
-    #Tdes=input("temperatura desiderata = ")
-    #print "Target temp=",Tdes
+        #print "Current temp"
+        CurTemp = read_temp()
+        #print CurTemp
 
-    #apre il file dei dati in append mode, se il file non esiste lo crea
-    filedati = open("filedati","a")
+        #Tdes=input("temperatura desiderata = ")
+        #print "Target temp=",Tdes
 
-    #scrive la temperatura coreente ed il timestam sul file
-    filedati.write(str(CurTemp)+"@"+localtime+"\n")
+        #apre il file dei dati in append mode, se il file non esiste lo crea
+        filedati = open("filedati","a")
 
-    #chiude il file dei dati e lo salva
-    filedati.close()
+        #scrive la temperatura coreente ed il timestam sul file
+        filedati.write(str(CurTemp)+"@"+localtime+"\n")
+
+        #chiude il file dei dati e lo salva
+        filedati.close()
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
     #    GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
@@ -88,4 +89,6 @@ while True:
     #    GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
     #    print "HEATING OFF "+localtime+"\n"
     #    bot.sendMessage("HEATING OFF @ "+localtime)
-    time.sleep(300) #wait 5 minutes
+        time.sleep(300) #wait 5 minutes
+    # manda un telegram con la temperatura ogni 12 x 5 minuti = 1 ora
+    bot.sendMessage("La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
