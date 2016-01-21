@@ -38,11 +38,11 @@ def handle(msg):
     if command == '/now':
         bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
     elif command == '/5m':
-        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+        bot.sendMessage(chat_id, "Avvio il monitoraggio ogni 5 minuti, Padrone")
         last_report = time.time()
         report_interval = 300    # report every 60 seconds
     elif command == '/1h':
-        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+        bot.sendMessage(chat_id, "Avvio il monitoraggio ogni ora, Padrone")
         last_report = time.time()
         report_interval = 3600  # report every 3600 seconds
     elif command == '/annulla':
@@ -52,11 +52,11 @@ def handle(msg):
     elif command == '/ho_freddo':
         GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
         print "HEATING ON "+localtime+"\n"
-        bot.sendMessage(given_chat_id, "Accendo il riscaldamento, Padrone")
+        bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
         GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
         print "HEATING OFF "+localtime+"\n"
-        bot.sendMessage(given_chat_id, "Spengo il riscaldamento, Padrone")
+        bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
     else:
         bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
