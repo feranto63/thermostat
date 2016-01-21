@@ -22,8 +22,23 @@ import pprint
 import telepot
 
 def handle(msg):
-    pprint.pprint(msg)
+    #pprint.pprint(msg)
     # Do your stuff here ...
+    given_chat_id = msg['chat']['id']
+    command = msg['text']
+
+    print 'Got command: %s' % command
+
+    if command == '/ho_freddo':
+        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
+        print "HEATING ON "+localtime+"\n"
+        bot.sendMessage(given_chat_id, "Accendo il riscaldamento, Padrone")
+    elif command == '/ho_caldo':
+        GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
+        print "HEATING OFF "+localtime+"\n"
+        bot.sendMessage(given_chat_id, "Spengo il riscaldamento, Padrone")
+
+
 
 import logging
 
