@@ -24,12 +24,32 @@ import telepot
 def handle(msg):
     #pprint.pprint(msg)
     # Do your stuff here ...
-    given_chat_id = msg['chat']['id']
-    command = msg['text']
+    global last_report, report_interval
 
-    print 'Got command: %s' % command
+    msg_type, chat_type, chat_id = telepot.glance2(msg)
 
-    if command == '/ho_freddo':
+    # ignore non-text message
+    if msg_type != 'text':
+        return
+
+    command = msg['text'].strip().lower()
+    CurTemp = read_temp()
+
+    if command == '/now':
+        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+    elif command == '/5m':
+        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+        last_report = time.time()
+        report_interval = 300    # report every 60 seconds
+    elif command == '/1h':
+        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+        last_report = time.time()
+        report_interval = 3600  # report every 3600 seconds
+    elif command == '/annulla':
+        last_report = None
+        report_interval = None  # clear periodic reporting
+        bot.sendMessage(chat_id, "Certamente, Padrone")
+    elif command == '/ho_freddo':
         GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
         print "HEATING ON "+localtime+"\n"
         bot.sendMessage(given_chat_id, "Accendo il riscaldamento, Padrone")
@@ -37,6 +57,9 @@ def handle(msg):
         GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
         print "HEATING OFF "+localtime+"\n"
         bot.sendMessage(given_chat_id, "Spengo il riscaldamento, Padrone")
+    else:
+        bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
+
 
 
 
@@ -72,6 +95,10 @@ logging.info("caricata chatId.")
     
     #-94452612 # magic number: chat_id del gruppo termostato antonelli
         
+
+# variables for periodic reporting
+last_report = None
+report_interval = None
 
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
@@ -120,25 +147,21 @@ def read_temp():
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Ho avviato il monitoraggio delle temperature, Padrone')
 while True:
-    for i in range(1,12):
-        localtime = time.asctime( time.localtime(time.time()) )
-        #print "Local current time :", localtime
-    
-        #print "Current temp"
-        CurTemp = read_temp()
-        #print CurTemp
+        # Is it time to report again?
+        now = time.time()
+        localtime = time.asctime( time.localtime(now) )
+        if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+            CurTemp = read_temp()
+            #apre il file dei dati in append mode, se il file non esiste lo crea
+            filedati = open("filedati","a")
+            #scrive la temperatura coreente ed il timestam sul file
+            filedati.write(str(CurTemp)+"@"+localtime+"\n")
+            #chiude il file dei dati e lo salva
+            filedati.close()
+            
+            last_report = now
+        time.sleep(1)
 
-        #Tdes=input("temperatura desiderata = ")
-        #print "Target temp=",Tdes
-
-        #apre il file dei dati in append mode, se il file non esiste lo crea
-        filedati = open("filedati","a")
-
-        #scrive la temperatura coreente ed il timestam sul file
-        filedati.write(str(CurTemp)+"@"+localtime+"\n")
-
-        #chiude il file dei dati e lo salva
-        filedati.close()
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
     #    GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
@@ -148,6 +171,6 @@ while True:
     #    GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
     #    print "HEATING OFF "+localtime+"\n"
     #    bot.sendMessage("HEATING OFF @ "+localtime)
-        time.sleep(300) #wait 5 minutes
+    #    time.sleep(300) #wait 5 minutes
     # manda un telegram con la temperatura ogni 12 x 5 minuti = 1 ora
-    bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+    #bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
