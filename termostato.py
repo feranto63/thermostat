@@ -145,7 +145,7 @@ def read_temp():
         return temp_c #, temp_f
 
 #inizio programma
-bot.sendMessage(CHAT_ID, 'Ho avviato il monitoraggio delle temperature, Padrone')
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 while True:
         # Is it time to report again?
         now = time.time()
