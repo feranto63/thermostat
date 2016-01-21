@@ -37,7 +37,7 @@ import requests
 
 try:
     tokenFile = open(tokenpath,'r')
-    self.token = tokenFile.read().strip()
+    TOKEN = tokenFile.read().strip()
     tokenFile.close()
 except IOError: 
     logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
@@ -47,7 +47,7 @@ logging.info("caricata token.")
         
 try:
     chatidFile = open(chatidpath,'r')
-    self.chat_id = chatidFile.read().strip()
+    CHAT_ID = chatidFile.read().strip()
     chatidFile.close()
 except IOError:
     logging.error("Non ho trovato il file di chatId. E' necessario creare un file 'chatid' con la chatid telegram per il bot")
@@ -57,12 +57,11 @@ logging.info("caricata chatId.")
     
     #-94452612 # magic number: chat_id del gruppo termostato antonelli
         
-self.queue = []
 
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
 # TOKEN = sys.argv[1]
-TOKEN = self.token
+# TOKEN = self.token
 
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
@@ -104,7 +103,7 @@ def read_temp():
         return temp_c #, temp_f
 
 #inizio programma
-bot.sendMessage(chatid, 'Ho avviato il monitoraggio delle temperature, Padrone')
+bot.sendMessage(CHAT_ID, 'Ho avviato il monitoraggio delle temperature, Padrone')
 while True:
     for i in range(1,12):
         localtime = time.asctime( time.localtime(time.time()) )
@@ -136,4 +135,4 @@ while True:
     #    bot.sendMessage("HEATING OFF @ "+localtime)
         time.sleep(300) #wait 5 minutes
     # manda un telegram con la temperatura ogni 12 x 5 minuti = 1 ora
-    bot.sendMessage(self.chatid, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+    bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
