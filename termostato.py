@@ -51,11 +51,11 @@ def handle(msg):
         bot.sendMessage(chat_id, "Certamente, Padrone")
     elif command == '/ho_freddo':
         GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
-        print "HEATING ON "+localtime+"\n"
+        #print "HEATING ON "+localtime+"\n"
         bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
         GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
-        print "HEATING OFF "+localtime+"\n"
+        #print "HEATING OFF "+localtime+"\n"
         bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
     else:
         bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
