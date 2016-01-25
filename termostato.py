@@ -156,6 +156,52 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return temp_c #, temp_f
 
+
+##################### inizio gestione mail ################
+#connect to gmail
+def read_gmail():
+    global varSubject
+    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    mail.login('MaggiordomoBot@gmail.com','cldbzz00')
+    mail.select('inbox')
+    mail.list()
+
+    typ, data = mail.search(None, 'ALL')
+    for num in data[0].split():
+        typ, data = mail.fetch(num, '(RFC822)')
+    typ, data = mail.search(None, 'ALL')
+    ids = data[0]
+    id_list = ids.split()
+
+    
+# Any Emails? 
+# get most recent email id
+    if id_list:
+        latest_email_id = int( id_list[-1] )
+        for i in range( latest_email_id, latest_email_id-1, -1):
+            typ, data = mail.fetch( i, '(RFC822)')
+        for response_part in data:
+            if isinstance(response_part, tuple):
+                msg = email.message_from_string(response_part[1])
+        varSubject = msg['subject']
+        varFrom = msg['from']
+        varFrom = varFrom.replace('<','')
+        varFrom = varFrom.replace('>','')
+
+    #Remove used emails from mailbox
+        typ, data = mail.search(None, 'ALL')
+    for num in data[0].split():
+        mail.store(num, '+FLAGS', '\\Deleted')
+        mail.expunge()
+        mail.close()
+        mail.logout()
+
+    return int(varSubject)
+
+
+####   if (read_gmail() > read_temp()):#Compare varSubject to temp
+
+##################### fine gestione mail ##################
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 
