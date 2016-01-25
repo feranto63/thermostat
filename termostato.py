@@ -189,14 +189,15 @@ def read_gmail():
         varFrom = varFrom.replace('>','')
 
     #Remove used emails from mailbox
-        typ, data = mail.search(None, 'ALL')
-    for num in data[0].split():
-        mail.store(num, '+FLAGS', '\\Deleted')
-        mail.expunge()
-        mail.close()
-        mail.logout()
-
-    return int(varSubject)
+#    typ, data = mail.search(None, 'ALL')
+#    for num in data[0].split():
+#        mail.store(num, '+FLAGS', '\\Deleted')
+#        mail.expunge()
+#        mail.close()
+#        mail.logout()
+#
+#   return int(varSubject)
+    return varSubject
 
 
 ####   if (read_gmail() > read_temp()):#Compare varSubject to temp
@@ -219,7 +220,9 @@ while True:
             filedati.close()
             
             last_report = now
-        time.sleep(1)
+        readgmail()
+        pprint.pprint(varSubject)
+        time.sleep(60)
 
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
