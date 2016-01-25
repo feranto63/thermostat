@@ -1,2 +1,2 @@
-# thermostat
-progetto termostato con mio figlio grande
+# Thermogram
+progetto termostato intelligente e social con i miei due figli
