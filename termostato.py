@@ -15,8 +15,9 @@ import os
 import glob
 import time
 #imports for gmail reading
-#import imaplib
-#import email
+import imaplib
+import email
+#import for Telegram API
 import sys
 import pprint
 import telepot
@@ -25,6 +26,7 @@ def handle(msg):
     #pprint.pprint(msg)
     # Do your stuff here ...
     global last_report, report_interval
+    global heating_status
 
     msg_type, chat_type, chat_id = telepot.glance2(msg)
 
@@ -50,13 +52,20 @@ def handle(msg):
         report_interval = None  # clear periodic reporting
         bot.sendMessage(chat_id, "Certamente, Padrone")
     elif command == '/ho_freddo':
-        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
-        #print "HEATING ON "+localtime+"\n"
-        bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
+        if heating_status:
+            bot.sendMessage(chat_id, "Sto facendo del mio meglio, Padrone")
+        else:
+            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
+            #print "HEATING ON "+localtime+"\n"
+            bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
-        GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
-        #print "HEATING OFF "+localtime+"\n"
-        bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
+        if heating_status:
+            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
+            #print "HEATING OFF "+localtime+"\n"
+            bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
+        else:      
+            bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
+
     else:
         bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
@@ -99,6 +108,9 @@ logging.info("caricata chatId.")
 # variables for periodic reporting
 last_report = None
 report_interval = None
+
+# variable for heating status
+heating_status = False
 
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
@@ -146,6 +158,7 @@ def read_temp():
 
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+
 while True:
         # Is it time to report again?
         now = time.time()
