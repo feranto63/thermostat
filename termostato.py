@@ -44,12 +44,12 @@ def handle(msg):
             bot.sendMessage(chat_id, "Sto facendo del mio meglio, Padrone")
         else:
             GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
-            #print "HEATING ON "+localtime+"\n"
+            heating_status = True #print "HEATING ON "+localtime+"\n"
             bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
         if heating_status:
             GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-            #print "HEATING OFF "+localtime+"\n"
+            heating_status = False #print "HEATING OFF "+localtime+"\n"
             bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
         else:      
             bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
@@ -232,7 +232,8 @@ def read_gmail():
 
 #inizio programma
 show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'], ['/5m','/1h','/annulla']]} #tastiera personalizzata
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', reply_markup=show_keyboard)
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 Ferruccio_at_home = False  #la presence la voglio sviluppare su file cosi' non risente dei restart
 Claudia_at_home = False
