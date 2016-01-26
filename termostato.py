@@ -232,10 +232,10 @@ def read_gmail():
 
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
-Ferruccio_at_home = True
-Claudia_at_home = True
-Lorenzo_at_home = True
-Riccardo_at_home = True
+Ferruccio_at_home = False  #la presence la voglio sviluppare su file così non risente dei restart
+Claudia_at_home = False
+Lorenzo_at_home = False
+Riccardo_at_home = False
 
 while True:
         # Is it time to report again?
