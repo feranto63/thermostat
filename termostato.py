@@ -53,7 +53,21 @@ def handle(msg):
             bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
         else:      
             bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
-
+    elif command == '/casa':
+        who_is_at_home=""
+        if Ferruccio_at_home:
+            who_is_at_home=who_is_at_home+"Ferruccio "
+        if Claudia_at_home:
+            who_is_at_home=who_is_at_home+"Claudia "
+        if Lorenzo_at_home:
+            who_is_at_home=who_is_at_home+"Lorenzo "
+        if Riccardo_at_home:
+            who_is_at_home=who_is_at_home+"Riccardo "
+        if len(who_is_at_home) != 0:
+            bot.sendMessage(chat_id, who_is_at_home+"sono a casa")
+        else:
+            bot.sendMessage(chat_id, "Sono solo a casa, Padrone")
+            
     else:
         bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
@@ -140,7 +154,47 @@ def read_temp():
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
+    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
+    if len(presence_msg !=0):
+        words = presence_msg.split(" ")
+        nome = words[1]
+        status = words[2]
+        if nome == 'Ferruccio':
+            if status == 'IN':
+                if Ferruccio_at_home == False:
+                    Ferruccio_at_home = True
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+            elif Ferruccio_at_home:
+                Ferruccio_at_home = False
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+        elif nome == 'Claudia':
+            if status == 'IN':
+                if Claudia_at_home == False:
+                    Claudia_at_home = True
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+            elif Claudia_at_home:
+                Claudia_at_home = False
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+        elif nome == 'Lorenzo':
+            if status == 'IN':
+                if Lorenzo_at_home == False:
+                    Lorenzo_at_home = True
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+            elif Lorenzo_at_home:
+                Lorenzo_at_home = False
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+        elif nome == 'Riccardo':
+            if status == 'IN':
+                if Riccardo_at_home == False:
+                    Riccardo_at_home = True
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+            elif Riccardo_at_home:
+                Riccardo_at_home = False
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+        else:
+            bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+
 
 
 ##################### inizio gestione presence via email ################
@@ -176,6 +230,10 @@ def read_gmail():
 
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+Ferruccio_at_home = True
+Claudia_at_home = True
+Lorenzo_at_home = True
+Riccardo_at_home = True
 
 while True:
         # Is it time to report again?
