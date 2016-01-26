@@ -156,6 +156,45 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return temp_c #, temp_f
 
+##################### inizio gestione presence via email ################
+#connect to gmail
+def read_gmail():
+    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    mail.login('MaggiordomoBot@gmail.com','cldbzz00')
+    mail.select('inbox')
+    mail.list()
+
+#    typ, data = mail.search(None, 'ALL')
+#    for num in data[0].split():
+#        typ, data = mail.fetch(num, '(RFC822)')
+#    typ, data = mail.search(None, 'ALL')
+#    ids = data[0]
+#    id_list = ids.split()
+
+    
+# Any Emails? 
+    newmails=mail.recent()
+    print "nuove mail ="+str(newmails)
+
+    n=0
+    (retcode, messages) = mail.search(None, '(UNSEEN)')
+    if retcode == 'OK':
+
+        for num in messages[0].split() :
+            print 'Processing '
+            n=n+1
+            typ, data = mail.fetch(num,'(RFC822)')
+            for response_part in data:
+                if isinstance(response_part, tuple):
+                    original = email.message_from_string(response_part[1])
+
+                    print original['From']
+                    print original['Subject']
+                    typ, data = mail.store(num,'+FLAGS','\\Seen')
+
+        print n
+    
+############################### fine gestione presence via email #######################
 
 
 #inizio programma
@@ -175,8 +214,8 @@ while True:
             filedati.close()
             
             last_report = now
-#        readgmail()
-#        pprint.pprint(varSubject)
+        # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
+        read_gmail()
         time.sleep(60)
 
     
