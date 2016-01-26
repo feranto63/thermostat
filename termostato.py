@@ -217,9 +217,12 @@ def read_gmail():
                 if isinstance(response_part, tuple):
                     original = email.message_from_string(response_part[1])
 
+                    logging.info(original)
                     logging.info(original['From'])
-                    logging.info (original['Subject'])
-                    set_presence(original['Subject']) #richiama la funzione per la gestisce della presence
+                    logging.info(original['Subject'])
+                    subject_text=str(original['Subject'])
+                    logging.info(subject_text)
+                    set_presence(subject_text) #richiama la funzione per la gestisce della presence
                     
                     typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
 
