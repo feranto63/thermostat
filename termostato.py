@@ -164,34 +164,34 @@ def set_presence(presence_msg):
             if status == 'IN':
                 if Ferruccio_at_home == False:
                     Ferruccio_at_home = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
             elif Ferruccio_at_home:
                 Ferruccio_at_home = False
-                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
         elif nome == 'Claudia':
             if status == 'IN':
                 if Claudia_at_home == False:
                     Claudia_at_home = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
             elif Claudia_at_home:
                 Claudia_at_home = False
-                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
         elif nome == 'Lorenzo':
             if status == 'IN':
                 if Lorenzo_at_home == False:
                     Lorenzo_at_home = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
             elif Lorenzo_at_home:
                 Lorenzo_at_home = False
-                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
         elif nome == 'Riccardo':
             if status == 'IN':
                 if Riccardo_at_home == False:
                     Riccardo_at_home = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome")
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
             elif Riccardo_at_home:
                 Riccardo_at_home = False
-                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome")
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
         else:
             bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
 
