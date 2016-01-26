@@ -1,14 +1,3 @@
-#prima versione del termostato su pi
-#flowchart
-#ogni 5 minuti leggi la temperatura e lo stato della caldaia
-#memorizza i dati sul DB
-#grafica lo storico orario
-#richiedi in input la temperatura desiderata
-#Tdes=raw_input("temperatura desiderata = ")
-#print "Tdes=",Tdes
-#se Tdes > Tact then turnon caldaia
-#loop
-
 
 #imports for thermometer reading
 import os
@@ -22,11 +11,10 @@ import sys
 import pprint
 import telepot
 
+###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
-    #pprint.pprint(msg)
-    # Do your stuff here ...
-    global last_report, report_interval
-    global heating_status
+    global last_report, report_interval #parametri per il monitoraggio su file delle temperature
+    global heating_status               #stato di accensione dei termosifoni
 
     msg_type, chat_type, chat_id = telepot.glance2(msg)
 
@@ -38,7 +26,7 @@ def handle(msg):
     CurTemp = read_temp()
 
     if command == '/now':
-        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
+        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone")
     elif command == '/5m':
         bot.sendMessage(chat_id, "Avvio il monitoraggio ogni 5 minuti, Padrone")
         last_report = time.time()
@@ -55,12 +43,12 @@ def handle(msg):
         if heating_status:
             bot.sendMessage(chat_id, "Sto facendo del mio meglio, Padrone")
         else:
-            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
+            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
             #print "HEATING ON "+localtime+"\n"
             bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
         if heating_status:
-            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
+            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             #print "HEATING OFF "+localtime+"\n"
             bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
         else:      
@@ -71,7 +59,7 @@ def handle(msg):
 
 
 
-
+############ legge da file il token del Telegram Bot e della chat id
 import logging
 
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
@@ -80,7 +68,6 @@ chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 logging.basicConfig( level=logging.INFO)
 
 import requests
-
 
 try:
     tokenFile = open(tokenpath,'r')
@@ -112,16 +99,11 @@ report_interval = None
 # variable for heating status
 heating_status = False
 
-# Getting the token from command-line is better than embedding it in code,
-# because tokens are supposed to be kept secret.
-# TOKEN = sys.argv[1]
-# TOKEN = self.token
-
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
-print 'Listening ...'
+logging.info("Listening ...")
 
-   
+################# gestione della interfaccia di GPIO   
 # wiringpi numbers  
 import RPi.GPIO as GPIO
 ##import wiringpi2 as wiringpi
@@ -156,43 +138,38 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return temp_c #, temp_f
 
+##################### funzione per la gestione dei messaggi di presence
+def set_presence(presence_msg):
+    
+
+
 ##################### inizio gestione presence via email ################
 #connect to gmail
 def read_gmail():
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login('MaggiordomoBot@gmail.com','cldbzz00')
+    mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
     mail.select('inbox')
     mail.list()
 
-#    typ, data = mail.search(None, 'ALL')
-#    for num in data[0].split():
-#        typ, data = mail.fetch(num, '(RFC822)')
-#    typ, data = mail.search(None, 'ALL')
-#    ids = data[0]
-#    id_list = ids.split()
-
-    
 # Any Emails? 
-    newmails=mail.recent()
-    print "nuove mail ="+str(newmails)
-
     n=0
     (retcode, messages) = mail.search(None, '(UNSEEN)')
     if retcode == 'OK':
-
         for num in messages[0].split() :
-            print 'Processing '
+            logging.info('Processing new emails...')
             n=n+1
             typ, data = mail.fetch(num,'(RFC822)')
             for response_part in data:
                 if isinstance(response_part, tuple):
                     original = email.message_from_string(response_part[1])
 
-                    print original['From']
-                    print original['Subject']
-                    typ, data = mail.store(num,'+FLAGS','\\Seen')
+                    logging.info(original['From'])
+                    logging.info (original['Subject'])
+                    set_presence(original['Subject']) #richiama la funzione per la gestisce della presence
+                    
+                    typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
 
-        print n
+        logging.info("Ho gestito "+str(n)+" messaggi di presence")
     
 ############################### fine gestione presence via email #######################
 
