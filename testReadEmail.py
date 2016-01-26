@@ -77,5 +77,5 @@ def read_gmail():
 while True:
   read_gmail()
 #  pprint.pprint(varSubject)
-  wait(60)
+  time.sleep(60)
   
