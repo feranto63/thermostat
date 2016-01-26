@@ -232,7 +232,7 @@ def read_gmail():
 
 #inizio programma
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
-Ferruccio_at_home = False  #la presence la voglio sviluppare su file così non risente dei restart
+Ferruccio_at_home = False  #la presence la voglio sviluppare su file cosi' non risente dei restart
 Claudia_at_home = False
 Lorenzo_at_home = False
 Riccardo_at_home = False
