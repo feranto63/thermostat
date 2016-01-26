@@ -231,7 +231,9 @@ def read_gmail():
 
 
 #inizio programma
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'], ['/5m','/1h','/annulla']]} #tastiera personalizzata
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', reply_markup=show_keyboard)
+
 Ferruccio_at_home = False  #la presence la voglio sviluppare su file cosi' non risente dei restart
 Claudia_at_home = False
 Lorenzo_at_home = False
