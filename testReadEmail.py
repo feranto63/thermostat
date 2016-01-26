@@ -28,12 +28,25 @@ def read_gmail():
 # Any Emails? 
     newmails=mail.recent()
     print "nuove mail ="+str(newmails)
-    mail.select()
-    typ, data = mail.search(None, 'ALL')
-    for num in data[0].split():
-        typ, data = mail.fetch(num, '(RFC822)')
-        print 'Message %s\n%s\n' % (num, data[0][1])
 
+    n=0
+    (retcode, messages) = mail.search(None, '(UNSEEN)')
+    if retcode == 'OK':
+
+    for num in messages[0].split() :
+      print 'Processing '
+      n=n+1
+      typ, data = mail.fetch(num,'(RFC822)')
+      for response_part in data:
+         if isinstance(response_part, tuple):
+             original = email.message_from_string(response_part[1])
+
+             print original['From']
+             print original['Subject']
+             typ, data = mail.store(num,'+FLAGS','\\Seen')
+
+    print n
+    
 # get most recent email id
 #    if id_list:
 #        latest_email_id = int( id_list[-1] )
