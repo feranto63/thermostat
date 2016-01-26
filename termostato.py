@@ -157,9 +157,9 @@ def set_presence(presence_msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
-        words = presence_msg.split(" ")
-        nome = words[1]
-        status = words[2]
+        words = presence_msg.split()
+        nome = words[0]
+        status = words[1]
         if nome == 'Ferruccio':
             if status == 'IN':
                 if Ferruccio_at_home == False:
@@ -217,7 +217,6 @@ def read_gmail():
                 if isinstance(response_part, tuple):
                     original = email.message_from_string(response_part[1])
 
-                    logging.info(original)
                     logging.info(original['From'])
                     logging.info(original['Subject'])
                     subject_text=str(original['Subject'])
