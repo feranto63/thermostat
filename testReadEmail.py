@@ -75,7 +75,7 @@ def read_gmail():
 ####   if (read_gmail() > read_temp()):#Compare varSubject to temp
 
 while True:
-  readgmail()
+  read_gmail()
 #  pprint.pprint(varSubject)
   wait(60)
   
