@@ -69,7 +69,7 @@ def handle(msg):
             who_is_at_home=who_is_at_home+"Riccardo "
             how_many_at_home=how_many_at_home+1
         if how_many_at_home != 0:
-            if how_many_at_home = 1:
+            if how_many_at_home == 1:
                 bot.sendMessage(chat_id, who_is_at_home+"e' a casa")
             else:
                 bot.sendMessage(chat_id, who_is_at_home+"sono a casa")
