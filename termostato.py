@@ -282,7 +282,7 @@ try:
     else:
         Ferruccio_at_home = False
 except IOError:
-    Ferruccio_at_home = False  #se il file non è presente imposto la presence a False
+    Ferruccio_at_home = False  #se il file non e' presente imposto la presence a False
 
 try:
     f = open("Claudia_at_home","r")  #apre il file dei dati in read mode
@@ -293,7 +293,7 @@ try:
     else:
         Claudia_at_home = False
 except IOError:
-    Claudia_at_home = False  #se il file non è presente imposto la presence a False
+    Claudia_at_home = False  #se il file non e' presente imposto la presence a False
 
 try:
     f = open("Lorenzo_at_home","r")  #apre il file dei dati in read mode
@@ -304,7 +304,7 @@ try:
     else:
         Lorenzo_at_home = False
 except IOError:
-    Lorenzo_at_home = False  #se il file non è presente imposto la presence a False
+    Lorenzo_at_home = False  #se il file non e' presente imposto la presence a False
 
 try:
     f = open("Riccardo_at_home","r")  #apre il file dei dati in read mode
@@ -315,7 +315,7 @@ try:
     else:
         Riccardo_at_home = False
 except IOError:
-    Riccardo_at_home = False  #se il file non è presente imposto la presence a False
+    Riccardo_at_home = False  #se il file non e' presente imposto la presence a False
 
 
 while True:
