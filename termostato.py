@@ -55,16 +55,24 @@ def handle(msg):
             bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
     elif command == '/casa':
         who_is_at_home=""
+        how_many_at_home=0
         if Ferruccio_at_home:
             who_is_at_home=who_is_at_home+"Ferruccio "
+            how_many_at_home=how_many_at_home+1
         if Claudia_at_home:
             who_is_at_home=who_is_at_home+"Claudia "
+            how_many_at_home=how_many_at_home+1
         if Lorenzo_at_home:
             who_is_at_home=who_is_at_home+"Lorenzo "
+            how_many_at_home=how_many_at_home+1
         if Riccardo_at_home:
             who_is_at_home=who_is_at_home+"Riccardo "
-        if len(who_is_at_home) != 0:
-            bot.sendMessage(chat_id, who_is_at_home+"sono a casa")
+            how_many_at_home=how_many_at_home+1
+        if how_many_at_home != 0:
+            if how_many_at_home = 1:
+                bot.sendMessage(chat_id, who_is_at_home+"e' a casa")
+            else:
+                bot.sendMessage(chat_id, who_is_at_home+"sono a casa")
         else:
             bot.sendMessage(chat_id, "Sono solo a casa, Padrone")
             
@@ -157,6 +165,12 @@ def set_presence(presence_msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
+        # scrive la info di presence su file
+        localtime = time.asctime( time.localtime(now) )
+        filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+        filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
+        filepresence.close()  #chiude il file dei dati e lo salva
+
         words = presence_msg.split()
         nome = words[0]
         status = words[1]
@@ -165,33 +179,57 @@ def set_presence(presence_msg):
                 if Ferruccio_at_home == False:
                     Ferruccio_at_home = True
                     bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
+                    f = open("Ferruccio_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                    f.write("IN")  #scrive la info di presence sul file
+                    f.close()  #chiude il file dei dati e lo salva
             elif Ferruccio_at_home:
                 Ferruccio_at_home = False
                 bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
+                f = open("Ferruccio_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("OUT")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
         elif nome == 'Claudia':
             if status == 'IN':
                 if Claudia_at_home == False:
                     Claudia_at_home = True
                     bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
+                    f = open("Claudia_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                    f.write("IN")  #scrive la info di presence sul file
+                    f.close()  #chiude il file dei dati e lo salva
             elif Claudia_at_home:
                 Claudia_at_home = False
                 bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
+                f = open("Claudia_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("OUT")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
         elif nome == 'Lorenzo':
             if status == 'IN':
                 if Lorenzo_at_home == False:
                     Lorenzo_at_home = True
                     bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
+                    f = open("Lorenzo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                    f.write("IN")  #scrive la info di presence sul file
+                    f.close()  #chiude il file dei dati e lo salva
             elif Lorenzo_at_home:
                 Lorenzo_at_home = False
                 bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
+                f = open("Lorenzo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("OUT")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
         elif nome == 'Riccardo':
             if status == 'IN':
                 if Riccardo_at_home == False:
                     Riccardo_at_home = True
                     bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome)
+                    f = open("Riccardo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                    f.write("IN")  #scrive la info di presence sul file
+                    f.close()  #chiude il file dei dati e lo salva
             elif Riccardo_at_home:
                 Riccardo_at_home = False
                 bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome)
+                f = open("Riccardo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("OUT")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
         else:
             bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
 
@@ -235,28 +273,68 @@ show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'], ['/5
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
-Ferruccio_at_home = False  #la presence la voglio sviluppare su file cosi' non risente dei restart
-Claudia_at_home = False
-Lorenzo_at_home = False
-Riccardo_at_home = False
+try:
+    f = open("Ferruccio_at_home","r")  #apre il file dei dati in read mode
+    pres=f.read().strip()   #legge la info di presence sul file
+    f.close()  #chiude il file dei dati e lo salva
+    if pres == "IN":
+        Ferruccio_at_home = True
+    else:
+        Ferruccio_at_home = False
+except IOError:
+    Ferruccio_at_home = False  #se il file non è presente imposto la presence a False
+
+try:
+    f = open("Claudia_at_home","r")  #apre il file dei dati in read mode
+    pres=f.read().strip()   #legge la info di presence sul file
+    f.close()  #chiude il file dei dati e lo salva
+    if pres == "IN":
+        Claudia_at_home = True
+    else:
+        Claudia_at_home = False
+except IOError:
+    Claudia_at_home = False  #se il file non è presente imposto la presence a False
+
+try:
+    f = open("Lorenzo_at_home","r")  #apre il file dei dati in read mode
+    pres=f.read().strip()   #legge la info di presence sul file
+    f.close()  #chiude il file dei dati e lo salva
+    if pres == "IN":
+        Lorenzo_at_home = True
+    else:
+        Lorenzo_at_home = False
+except IOError:
+    Lorenzo_at_home = False  #se il file non è presente imposto la presence a False
+
+try:
+    f = open("Riccardo_at_home","r")  #apre il file dei dati in read mode
+    pres=f.read().strip()   #legge la info di presence sul file
+    f.close()  #chiude il file dei dati e lo salva
+    if pres == "IN":
+        Riccardo_at_home = True
+    else:
+        Riccardo_at_home = False
+except IOError:
+    Riccardo_at_home = False  #se il file non è presente imposto la presence a False
+
 
 while True:
-        # Is it time to report again?
-        now = time.time()
-        localtime = time.asctime( time.localtime(now) )
-        if report_interval is not None and last_report is not None and now - last_report >= report_interval:
-            CurTemp = read_temp()
-            #apre il file dei dati in append mode, se il file non esiste lo crea
-            filedati = open("filedati","a")
-            #scrive la temperatura coreente ed il timestam sul file
-            filedati.write(str(CurTemp)+"@"+localtime+"\n")
-            #chiude il file dei dati e lo salva
-            filedati.close()
-            
-            last_report = now
-        # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-        read_gmail()
-        time.sleep(60)
+    # Is it time to report again?
+    now = time.time()
+    localtime = time.asctime( time.localtime(now) )
+    if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+        CurTemp = read_temp()
+        #apre il file dei dati in append mode, se il file non esiste lo crea
+        filedati = open("filedati","a")
+        #scrive la temperatura coreente ed il timestam sul file
+        filedati.write(str(CurTemp)+"@"+localtime+"\n")
+        #chiude il file dei dati e lo salva
+        filedati.close()
+        
+        last_report = now
+    # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
+    read_gmail()
+    time.sleep(60)
 
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
