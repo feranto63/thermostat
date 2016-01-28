@@ -238,33 +238,36 @@ def set_presence(presence_msg):
 ##################### inizio gestione presence via email ################
 #connect to gmail
 def read_gmail():
-    mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
-    mail.select('inbox')
-    mail.list()
+    try:
+        mail = imaplib.IMAP4_SSL('imap.gmail.com')
+        mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
+        mail.select('inbox')
+        mail.list()
 
-# Any Emails? 
-    n=0
-    (retcode, messages) = mail.search(None, '(UNSEEN)')
-    if retcode == 'OK':
-        for num in messages[0].split() :
-            logging.info('Processing new emails...')
-            n=n+1
-            typ, data = mail.fetch(num,'(RFC822)')
-            for response_part in data:
-                if isinstance(response_part, tuple):
-                    original = email.message_from_string(response_part[1])
+        # Any Emails? 
+        n=0
+        (retcode, messages) = mail.search(None, '(UNSEEN)')
+        if retcode == 'OK':
+            for num in messages[0].split() :
+                logging.info('Processing new emails...')
+                n=n+1
+                typ, data = mail.fetch(num,'(RFC822)')
+                for response_part in data:
+                    if isinstance(response_part, tuple):
+                        original = email.message_from_string(response_part[1])
 
-                    logging.info(original['From'])
-                    logging.info(original['Subject'])
-                    subject_text=str(original['Subject'])
-                    logging.info(subject_text)
-                    set_presence(subject_text) #richiama la funzione per la gestisce della presence
+                        logging.info(original['From'])
+                        logging.info(original['Subject'])
+                        subject_text=str(original['Subject'])
+                        logging.info(subject_text)
+                        set_presence(subject_text) #richiama la funzione per la gestisce della presence
                     
-                    typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
+                        typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
 
-        logging.info("Ho gestito "+str(n)+" messaggi di presence")
-    
+            logging.info("Ho gestito "+str(n)+" messaggi di presence")
+    except Exceptions:
+        logging.info("####### Unexpected error: "+ str(sys.exc_info()[0]))
+        pass
 ############################### fine gestione presence via email #######################
 
 
