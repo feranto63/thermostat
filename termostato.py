@@ -266,7 +266,7 @@ def read_gmail():
 
             logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except Exceptions:
-        logging.info("####### Unexpected error: "+ str(sys.exc_info()[0]))
+        logging.error("Unexpected error: "+ str(sys.exc_info()[0]))
         pass
 ############################### fine gestione presence via email #######################
 
