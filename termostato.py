@@ -91,7 +91,7 @@ def handle(msg):
         f.close()  #chiude il file dei dati e lo salva
     elif command == '/lalloin': #forza Lorenzo a casa
         Lorenzo_at_home = True
-        f = open("FLorenzo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+        f = open("Lorenzo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
         f.write("IN")  #scrive la info di presence sul file
         f.close()  #chiude il file dei dati e lo salva
     elif command == '/rickyin': #forza Riccardo a casa
@@ -145,9 +145,6 @@ report_interval = None
 # variable for heating status
 heating_status = False
 
-bot = telepot.Bot(TOKEN)
-bot.notifyOnMessage(handle)
-logging.info("Listening ...")
 
 ################# gestione della interfaccia di GPIO   
 # wiringpi numbers  
@@ -297,10 +294,6 @@ def read_gmail():
 #inizio programma
 global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
 
-show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
-bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
-
 try:
     f = open("Ferruccio_at_home","r")  #apre il file dei dati in read mode
     pres=f.read().strip()   #legge la info di presence sul file
@@ -345,6 +338,13 @@ try:
 except IOError:
     Riccardo_at_home = False  #se il file non e' presente imposto la presence a False
 
+bot = telepot.Bot(TOKEN)
+bot.notifyOnMessage(handle)
+logging.info("Listening ...")
+
+show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 while True:
     # Is it time to report again?
