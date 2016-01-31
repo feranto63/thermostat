@@ -13,6 +13,7 @@ import telepot
 
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
+    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     global last_report, report_interval #parametri per il monitoraggio su file delle temperature
     global heating_status               #stato di accensione dei termosifoni
 
@@ -56,11 +57,11 @@ def handle(msg):
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
-        if Ferruccio_at_home:
-            who_is_at_home=who_is_at_home+"Ferruccio "
-            how_many_at_home=how_many_at_home+1
         if Claudia_at_home:
             who_is_at_home=who_is_at_home+"Claudia "
+            how_many_at_home=how_many_at_home+1
+        if Ferruccio_at_home:
+            who_is_at_home=who_is_at_home+"Ferruccio "
             how_many_at_home=how_many_at_home+1
         if Lorenzo_at_home:
             who_is_at_home=who_is_at_home+"Lorenzo "
@@ -292,7 +293,6 @@ def read_gmail():
 
 
 #inizio programma
-global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
 
 try:
     f = open("Ferruccio_at_home","r")  #apre il file dei dati in read mode
