@@ -197,7 +197,7 @@ def set_presence(presence_msg):
             logging.info("orario letto da mail "+orario)
         except:
             e = sys.exc_info()[0]
-            write_to_page( "<p>Error: %s</p>" % e )
+            logging.error( "<p>Error: %s</p>" % e )
             orario = time.localtime(now)
         # scrive la info di presence su file
 
