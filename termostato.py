@@ -194,10 +194,13 @@ def set_presence(presence_msg):
         status = words[1]
         try:
             orario = words[2]+word[3]+words[4]+" "+words[6]
+            logging.info("orario letto da mail "+orario)
         except:
+            e = sys.exc_info()[0]
+            write_to_page( "<p>Error: %s</p>" % e )
             orario = time.localtime(now)
         # scrive la info di presence su file
-        logging.info("orario letto da mail "+orario)
+
         localtime = time.asctime( orario )
         logging.info("orario letto da mail configurato asctime "+str(localtime))
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
