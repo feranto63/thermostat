@@ -184,6 +184,7 @@ def read_temp():
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
+    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
         words = presence_msg.split(' ', 2)
