@@ -194,7 +194,8 @@ def set_presence(presence_msg):
         status = words[1]
         try:
             IFTTTtime = words[2]
-            orario = time.strptime(IFTTTtime, "%B %d, %Y at %r")
+            logging.info("IFTTTtime "+IFTTTtime)
+            orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
             logging.info("orario letto da mail "+time.asctime(orario))
         except:
             e = sys.exc_info()[0]
@@ -203,7 +204,7 @@ def set_presence(presence_msg):
         # scrive la info di presence su file
 
         localtime = time.asctime( orario )
-        logging.info("orario letto da mail configurato asctime "+str(localtime))
+        logging.info("orario letto da localtime "+str(localtime))
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
