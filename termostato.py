@@ -112,7 +112,7 @@ import logging
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 
-logging.basicConfig(filename='logging.log',level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 import requests
 
