@@ -189,11 +189,11 @@ def set_presence(presence_msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
-        words = presence_msg.split()
+        words = presence_msg.split(' ', 2)
         nome = words[0]
         status = words[1]
         try:
-            orario = words[2]+word[3]+words[4]+" "+words[6]
+            orario = words[2]
             logging.info("orario letto da mail "+orario)
         except:
             e = sys.exc_info()[0]
