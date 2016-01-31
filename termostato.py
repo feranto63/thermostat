@@ -111,7 +111,7 @@ import logging
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 
-logging.basicConfig( level=logging.INFO)
+logging.basicConfig(filename='logging.log',level=logging.INFO)
 
 import requests
 
@@ -186,7 +186,6 @@ def read_temp():
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
-    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
         words = presence_msg.split(' ', 2)
@@ -204,7 +203,6 @@ def set_presence(presence_msg):
         # scrive la info di presence su file
 
         localtime = time.asctime( orario )
-        logging.info("orario letto da localtime "+str(localtime))
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
@@ -297,6 +295,8 @@ def read_gmail():
 
 
 #inizio programma
+global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
+
 show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
