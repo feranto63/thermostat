@@ -84,7 +84,7 @@ def handle(msg):
         f = open("Ferruccio_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
         f.write("IN")  #scrive la info di presence sul file
         f.close()  #chiude il file dei dati e lo salva
-     elif command == '/clain': #forza Claudia a casa
+    elif command == '/clain': #forza Claudia a casa
         Claudia_at_home = True
         f = open("Claudia_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
         f.write("IN")  #scrive la info di presence sul file
