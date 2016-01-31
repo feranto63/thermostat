@@ -193,8 +193,9 @@ def set_presence(presence_msg):
         nome = words[0]
         status = words[1]
         try:
-            orario = words[2]
-            logging.info("orario letto da mail "+orario)
+            IFTTTtime = words[2]
+            orario = time.strptime(IFTTTtime, "%B %d, %Y at %r")
+            logging.info("orario letto da mail "+time.asctime(orario))
         except:
             e = sys.exc_info()[0]
             logging.error( "<p>Error: %s</p>" % e )
