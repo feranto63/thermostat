@@ -75,7 +75,31 @@ def handle(msg):
                 bot.sendMessage(chat_id, who_is_at_home+"sono a casa")
         else:
             bot.sendMessage(chat_id, "Sono solo a casa, Padrone")
-            
+    elif command == '/help':
+        # send message for help
+        bot.sendMessage(chat_id, "Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n/now - mostra la temperatura\n/ho_freddo - accende il riscaldamento\n/ho_caldo - spegne il riscaldamento\n/casa - chi e' a casa?")
+
+    elif command == '/ferin': #forza Ferruccio a casa
+        Ferruccio_at_home = True
+        f = open("Ferruccio_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+        f.write("IN")  #scrive la info di presence sul file
+        f.close()  #chiude il file dei dati e lo salva
+     elif command == '/clain': #forza Claudia a casa
+        Claudia_at_home = True
+        f = open("Claudia_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+        f.write("IN")  #scrive la info di presence sul file
+        f.close()  #chiude il file dei dati e lo salva
+    elif command == '/lalloin': #forza Lorenzo a casa
+        Lorenzo_at_home = True
+        f = open("FLorenzo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+        f.write("IN")  #scrive la info di presence sul file
+        f.close()  #chiude il file dei dati e lo salva
+    elif command == '/rickyin': #forza Riccardo a casa
+        Riccardo_at_home = True
+        f = open("Riccardo_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+        f.write("IN")  #scrive la info di presence sul file
+        f.close()  #chiude il file dei dati e lo salva
+       
     else:
         bot.sendMessage(chat_id, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
@@ -165,15 +189,19 @@ def set_presence(presence_msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
     
     if len(presence_msg) !=0:
+        words = presence_msg.split()
+        nome = words[0]
+        status = words[1]
+        try:
+            orario = words[2]
+        except:
+            orario = time.localtime(now)
         # scrive la info di presence su file
-        localtime = time.asctime( time.localtime(now) )
+        localtime = time.asctime( orario )
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
 
-        words = presence_msg.split()
-        nome = words[0]
-        status = words[1]
         if nome == 'Ferruccio':
             if status == 'IN':
                 if Ferruccio_at_home == False:
@@ -272,7 +300,7 @@ def read_gmail():
 
 
 #inizio programma
-show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'], ['/5m','/1h','/annulla']]} #tastiera personalizzata
+show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
