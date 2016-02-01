@@ -113,7 +113,7 @@ import logging
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 
 import requests
 
@@ -282,7 +282,7 @@ def set_presence(presence_msg):
         who_is_at_home=who_is_at_home+"Riccardo "
         how_many_at_home=how_many_at_home+1
     if how_many_at_home == 0; #nessuno in casa
-        if heating_standby = False:  #standby termosifoni non attivo
+        if heating_standby == False:  #standby termosifoni non attivo
             heating_standby = True
             if heating_status: #se termosifoni attivi
                 GPIO.output(17, 0) # spenge i termosifoni
