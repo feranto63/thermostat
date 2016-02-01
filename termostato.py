@@ -14,8 +14,9 @@ import telepot
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
-    global last_report, report_interval #parametri per il monitoraggio su file delle temperature
-    global heating_status               #stato di accensione dei termosifoni
+    global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
+    global heating_status, heating_standby  #stato di accensione dei termosifoni
+    global who_is_at_home, how_many_at_home
 
     msg_type, chat_type, chat_id = telepot.glance2(msg)
 
@@ -145,6 +146,7 @@ report_interval = None
 
 # variable for heating status
 heating_status = False
+heating_standby = False
 
 
 ################# gestione della interfaccia di GPIO   
@@ -184,7 +186,7 @@ def read_temp():
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
-    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
+    global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home, who_is_at_home, how_many_at_home
     
     if len(presence_msg) !=0:
         words = presence_msg.split(' ', 2)
@@ -264,6 +266,35 @@ def set_presence(presence_msg):
                 f.close()  #chiude il file dei dati e lo salva
         else:
             bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+    # calcola chi e' a casa
+    who_is_at_home=""
+    how_many_at_home=0
+    if Claudia_at_home:
+        who_is_at_home=who_is_at_home+"Claudia "
+        how_many_at_home=how_many_at_home+1
+    if Ferruccio_at_home:
+        who_is_at_home=who_is_at_home+"Ferruccio "
+        how_many_at_home=how_many_at_home+1
+    if Lorenzo_at_home:
+        who_is_at_home=who_is_at_home+"Lorenzo "
+        how_many_at_home=how_many_at_home+1
+    if Riccardo_at_home:
+        who_is_at_home=who_is_at_home+"Riccardo "
+        how_many_at_home=how_many_at_home+1
+    if how_many_at_home == 0; #nessuno in casa
+        if heating_standby = False:  #standby termosifoni non attivo
+            heating_standby = True
+            if heating_status: #se termosifoni attivi
+                GPIO.output(17, 0) # spenge i termosifoni
+                bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa")
+    else: #almeno una persona in casa
+        if heating_standby: #se standby attivo
+            heating_standby = False
+            if heating_status: #se termosifoni attivi prima dello standby
+                GPIO.output(17, 1) # riaccende i termosifoni
+                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamentoper il tuo confort, Padrone")
+    #return set_presence            
+
 
 
 
