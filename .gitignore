@@ -3,4 +3,6 @@ thermogram/chatid
 token
 chatid
 filedati
+filepresence
+logging.log
 *.pyc
