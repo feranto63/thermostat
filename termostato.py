@@ -379,23 +379,25 @@ bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 while True:
-    # Is it time to report again?
-    now = time.time()
-    localtime = time.asctime( time.localtime(now) )
-    if report_interval is not None and last_report is not None and now - last_report >= report_interval:
-        CurTemp = read_temp()
-        #apre il file dei dati in append mode, se il file non esiste lo crea
-        filedati = open("filedati","a")
-        #scrive la temperatura coreente ed il timestam sul file
-        filedati.write(str(CurTemp)+"@"+localtime+"\n")
-        #chiude il file dei dati e lo salva
-        filedati.close()
+    try:
+        # Is it time to report again?
+        now = time.time()
+        localtime = time.asctime( time.localtime(now) )
+        if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+            CurTemp = read_temp()
+            #apre il file dei dati in append mode, se il file non esiste lo crea
+            filedati = open("filedati","a")
+            #scrive la temperatura coreente ed il timestam sul file
+            filedati.write(str(CurTemp)+"@"+localtime+"\n")
+            #chiude il file dei dati e lo salva
+            filedati.close()
         
-        last_report = now
-    # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-    read_gmail()
-    time.sleep(60)
-
+            last_report = now
+        # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
+        read_gmail()
+        time.sleep(60)
+    except Exception:
+        logging.exception("C'e' stato un errore del programma termostato")
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
     #    GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
