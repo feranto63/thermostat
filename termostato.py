@@ -380,7 +380,7 @@ bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 while True:
-    try:
+    #try:
         # Is it time to report again?
         now = time.time()
         localtime = time.asctime( time.localtime(now) )
@@ -397,8 +397,8 @@ while True:
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
         read_gmail()
         time.sleep(60)
-    except Exception:
-        logging.exception("C'e' stato un errore del programma termostato")
+    #except Exception:
+    #    logging.exception("C'e' stato un errore del programma termostato")
     
     #if (Tdes > CurTemp):#Compare varSubject to temp
     #    GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
