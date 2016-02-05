@@ -281,7 +281,7 @@ def set_presence(presence_msg):
     if Riccardo_at_home:
         who_is_at_home=who_is_at_home+"Riccardo "
         how_many_at_home=how_many_at_home+1
-    if how_many_at_home == 0; #nessuno in casa
+    if how_many_at_home == 0: #nessuno in casa
         if heating_standby == False:  #standby termosifoni non attivo
             heating_standby = True
             if heating_status: #se termosifoni attivi
