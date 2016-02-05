@@ -293,7 +293,7 @@ def set_presence(presence_msg):
             heating_standby = False
             if heating_status: #se termosifoni attivi prima dello standby
                 GPIO.output(17, 1) # riaccende i termosifoni
-                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamentoper il tuo confort, Padrone")
+                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone")
     #return set_presence            
 
 
