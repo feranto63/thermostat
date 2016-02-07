@@ -11,6 +11,14 @@ import sys
 import pprint
 import telepot
 
+import requests
+
+#import library for logging
+import logging
+logging.basicConfig(filename='termostato.log', level=logging.WARNING)
+
+
+
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home
@@ -18,6 +26,7 @@ def handle(msg):
     global heating_status, heating_standby  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
 
+    logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance2(msg)
 
     # ignore non-text message
@@ -26,7 +35,9 @@ def handle(msg):
 
     command = msg['text'].strip().lower()
     CurTemp = read_temp()
-
+    
+    logging.debug('elaboro il comando '+command)
+    
     if command == '/now':
         bot.sendMessage(chat_id, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone")
     elif command == '/5m':
@@ -108,14 +119,10 @@ def handle(msg):
 
 
 ############ legge da file il token del Telegram Bot e della chat id
-import logging
 
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 
-logging.basicConfig(filename='termostato.log', level=logging.WARNING)
-
-import requests
 
 try:
     tokenFile = open(tokenpath,'r')
@@ -188,6 +195,8 @@ def read_temp():
 def set_presence(presence_msg):
     global Ferruccio_at_home, Claudia_at_home, Lorenzo_at_home, Riccardo_at_home, who_is_at_home, how_many_at_home
     global heating_status, heating_standby
+    
+    logging.debug('gestisco il messaggio di presence '+presence_msg)
     
     if len(presence_msg) !=0:
         words = presence_msg.split(' ', 2)
@@ -302,6 +311,8 @@ def set_presence(presence_msg):
 ##################### inizio gestione presence via email ################
 #connect to gmail
 def read_gmail():
+    logging.debug('leggo mail')
+    
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
     mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
     mail.select('inbox')
@@ -339,7 +350,7 @@ def is_connected():
         s = socket.create_connection((host, 80), 2)
         return True
     except Exception as e:
-        logging.exception("message "+str(localtime))
+        logging.exception("www.google.com not reachable at "+str(localtime))
         pass
     return False
 ######### fine test internet connection
