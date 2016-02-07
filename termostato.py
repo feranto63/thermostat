@@ -324,6 +324,25 @@ def read_gmail():
             logging.info("Ho gestito "+str(n)+" messaggi di presence")
 ############################### fine gestione presence via email #######################
 
+############################ TEST Internet connection #############
+import socket
+REMOTE_SERVER = "www.google.com"
+def is_connected():
+    now = time.time()
+    localtime = time.asctime( time.localtime(now) )
+    try:
+        # see if we can resolve the host name -- tells us if there is
+        # a DNS listening
+        host = socket.gethostbyname(REMOTE_SERVER)
+        # connect to the host -- tells us if the host is actually
+        # reachable
+        s = socket.create_connection((host, 80), 2)
+        return True
+    except Exception as e:
+        logging.exception("message "+str(localtime))
+        pass
+    return False
+######### fine test internet connection
 
 #inizio programma
 
@@ -395,19 +414,9 @@ while True:
         
             last_report = now
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-        read_gmail()
+        if is_connected():
+            read_gmail()
         time.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
     
-    #if (Tdes > CurTemp):#Compare varSubject to temp
-    #    GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on)
-    #    print "HEATING ON "+localtime+"\n"
-    #    bot.sendMessage("HEATING ON @ "+localtime)
-    #else:
-    #    GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off)
-    #    print "HEATING OFF "+localtime+"\n"
-    #    bot.sendMessage("HEATING OFF @ "+localtime)
-    #    time.sleep(300) #wait 5 minutes
-    # manda un telegram con la temperatura ogni 12 x 5 minuti = 1 ora
-    #bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str(CurTemp)+" C, Padrone")
