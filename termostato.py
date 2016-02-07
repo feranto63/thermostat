@@ -27,7 +27,7 @@ def handle(msg):
     global who_is_at_home, how_many_at_home
 
     logging.debug('inizio la gestione di handle')
-    msg_type, chat_type, chat_id = telepot.glance2(msg)
+    msg_type, chat_type, chat_id = telepot.glance(msg)
 
     # ignore non-text message
     if msg_type != 'text':
