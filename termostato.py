@@ -405,20 +405,6 @@ try:
 except IOError:
     Riccardo_at_home = False  #se il file non e' presente imposto la presence a False
 
-#bot = telepot.Bot(TOKEN)
-#bot.notifyOnMessage(handle)
-#logging.info("Listening ...")
-
-bot = telepot.async.Bot(TOKEN)
-loop = asyncio.get_event_loop()
-
-loop.create_task(bot.messageLoop(handle))
-print('Listening ...')
-
-
-show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
-bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 @asyncio.coroutine
 def loop_principale():
@@ -440,11 +426,25 @@ def loop_principale():
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
         if is_connected():
             read_gmail()
-        #time.sleep(60)
-        yield from asyncio.sleep(60)
+        time.sleep(60)
+        #yield from asyncio.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
     
+#bot = telepot.Bot(TOKEN)
+#bot.notifyOnMessage(handle)
+#logging.info("Listening ...")
+
+bot = telepot.async.Bot(TOKEN)
+loop = asyncio.get_event_loop()
+
+loop.create_task(bot.messageLoop(handle))
+print('Listening ...')
+
+
+show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo']]} #tastiera personalizzata
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 try:
     task = loop.create_task(loop_principale())
