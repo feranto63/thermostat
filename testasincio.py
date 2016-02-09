@@ -3,7 +3,7 @@ import asyncio
 import telepot
 import telepot.async
 import os
-import RPi.GPIO as GPIO
+import RPIO as GPIO
 
 """
 $ python3.4 skeletona_extend.py <token>
