@@ -72,7 +72,7 @@ class YourBot(telepot.async.Bot):
             raise telepot.BadFlavor(msg)
 
 
-TOKEN = sys.argv[1]  # get token from command-line
+#TOKEN = sys.argv[1]  # get token from command-line
 
 bot = YourBot(TOKEN)
 loop = asyncio.get_event_loop()
