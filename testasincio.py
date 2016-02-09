@@ -2,6 +2,7 @@ import sys
 import asyncio
 import telepot
 import telepot.async
+import os
 
 """
 $ python3.4 skeletona_extend.py <token>
