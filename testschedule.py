@@ -2,7 +2,7 @@ import time
 
 import thermoschedule
 
-orario = time.localtime(now)
+orario = time.localtime(time.time())
 curr_year=num(strftime("%Y",orario))
 curr_month=num(strftime("%m",orario)) 
 curr_day=num(strftime("%e",orario))
