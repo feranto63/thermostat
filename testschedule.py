@@ -3,10 +3,10 @@ import time
 import thermoschedule
 
 orario = time.localtime(time.time())
-curr_year=int(strftime("%Y",orario))
-curr_month=int(strftime("%m",orario)) 
-curr_day=int(strftime("%e",orario))
-curr_hour=int(strftime("%H",orario))
+curr_year=int(time.strftime("%Y",orario))
+curr_month=int(time.strftime("%m",orario)) 
+curr_day=int(time.strftime("%e",orario))
+curr_hour=int(time.strftime("%H",orario))
 localtime = time.asctime( orario )
 day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
 
