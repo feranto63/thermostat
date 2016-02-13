@@ -1,6 +1,6 @@
 import time
 
-import thermoschedule.py
+import thermoschedule
 
 orario = time.localtime(now)
 curr_year=num(strftime("%Y",orario))
