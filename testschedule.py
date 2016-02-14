@@ -3,6 +3,7 @@ import calendar
 
 #import thermoschedule
 # schedulazione della programmazione della temperatura
+#mySchedule is a matrix [7 x 25]
 mySchedule=[["lun",17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
             ["mar",17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
             ["mer",17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
@@ -29,8 +30,9 @@ print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_h
 print mySchedule
 
 fileschedule = open("fileschedule","w")  #apre il file dei dati in append mode, se il file non esiste lo crea
-for item in mySchedule:
-            fileschedule.write(item+"\n")  #scrive la info di presence ed il timestam sul file
+for i in range (0,6):
+            for y in range (0,24):
+                        fileschedule.write(mySchedule[i][y]+"\n")  #scrive la info di presence ed il timestam sul file
 fileschedule.close()  #chiude il file dei dati e lo salva
 
 #fileschedule = open("fileschedule","rb")  #apre il file dei dati in append mode, se il file non esiste lo crea
