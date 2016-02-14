@@ -3,7 +3,7 @@ import calendar
 
 #import thermoschedule
 # schedulazione della programmazione della temperatura
-#mySchedule is a matrix [7 x 24] [lunedì is first row]
+#mySchedule is a matrix [7 x 24] [lunedi' is first row]
 mySchedule=[[17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
             [17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
             [17,17,17,17,17,17,20,20,20,18,18,18,18,20,20,18,18,18,18,18,20,20,20,17],
