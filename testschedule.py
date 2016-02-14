@@ -26,3 +26,14 @@ localtime = time.asctime( orario )
 day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
 
 print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour+1] 
+print mySchedule
+
+fileschedule = open("fileschedule","wb")  #apre il file dei dati in append mode, se il file non esiste lo crea
+fileschedule.write(mySchedule)  #scrive la info di presence ed il timestam sul file
+fileschedule.close()  #chiude il file dei dati e lo salva
+
+fileschedule = open("fileschedule","rb")  #apre il file dei dati in append mode, se il file non esiste lo crea
+fileschedule.read(mySchedule)  #scrive la info di presence ed il timestam sul file
+fileschedule.close()  #chiude il file dei dati e lo salva
+
+print mySchedule
