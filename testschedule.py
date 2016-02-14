@@ -13,9 +13,9 @@ try:
         tmpstr=fileschedule.readline().strip(",\n")
         print "tmpstr["+str(i)+"]="+tmpstr
         mySchedule[i]=tmpstr.split(",")  #scrive la info di presence ed il timestam sul file
-    fileschedule.close()  #chiude il file dei dati e lo salva
+   fileschedule.close()  #chiude il file dei dati e lo salva
 except IOerror:
-    mySchedule=[['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+   mySchedule= [['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
                 ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
                 ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
                 ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
@@ -51,9 +51,9 @@ print mySchedule[6][23]
 
 fileschedule = open("fileschedule","w")  #apre il file dei dati in append mode, se il file non esiste lo crea
 for i in range (0,7):
-            for y in range (0,24):
-                        fileschedule.write(str(mySchedule[i][y])+",")
-            fileschedule.write("\n")#scrive la info di presence ed il timestam sul file
+   for y in range (0,24):
+      fileschedule.write(str(mySchedule[i][y])+",")
+      fileschedule.write("\n")#scrive la info di presence ed il timestam sul file
 fileschedule.close()  #chiude il file dei dati e lo salva
 
 #fileschedule = open("fileschedule","rb")  #apre il file dei dati in append mode, se il file non esiste lo crea
