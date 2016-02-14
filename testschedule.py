@@ -4,7 +4,7 @@ import calendar
 #import thermoschedule
 # schedulazione della programmazione della temperatura
 #mySchedule is a matrix [7 x 24] [lunedi' is first row]
-mySchedule = [['17' for x in range(24)] for x in range(7)] 
+mySchedule = [['17' for x in range(7)] for x in range(24)] 
 
 try:
    fileschedule = open("fileschedule","r")  #apre il file dei dati in append mode, se il file non esiste lo crea
