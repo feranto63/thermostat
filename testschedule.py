@@ -45,7 +45,7 @@ fileschedule.close()  #chiude il file dei dati e lo salva
 fileschedule = open("fileschedule","r")  #apre il file dei dati in append mode, se il file non esiste lo crea
 for i in range (0,7):
             for y in range (0,25):
-                        mySchedule[i][y]=fileschedule.readlines()  #scrive la info di presence ed il timestam sul file
+                        mySchedule[i][y]=fileschedule.read().splitlines()  #scrive la info di presence ed il timestam sul file
 fileschedule.close()  #chiude il file dei dati e lo salva
 
 print mySchedule
