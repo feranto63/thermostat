@@ -28,6 +28,10 @@ day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
 
 print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour+1] 
 print mySchedule
+print mySchedule[0][0]
+print mySchedule[6][0]
+print mySchedule[6][24]
+
 
 fileschedule = open("fileschedule","w")  #apre il file dei dati in append mode, se il file non esiste lo crea
 for i in range (0,6):
