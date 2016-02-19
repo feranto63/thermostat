@@ -469,8 +469,8 @@ while True:
         
             last_report = now
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-        #if is_connected():
-        read_gmail()
+        if is_connected():
+            read_gmail()
         time.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
