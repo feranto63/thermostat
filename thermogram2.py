@@ -158,7 +158,7 @@ logging.info("caricata chatId.")
 
 # variables for periodic reporting
 last_report = None
-report_interval = None
+report_interval = 3600
 
 # variable for heating status
 heating_status = False
@@ -321,34 +321,52 @@ def set_presence(presence_msg):
                 bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone")
     #return set_presence            
 
-
-
+##### connette o riconnette alla mail ###########
+def connect(retries=5, delay=3):
+    while True:
+        try:
+            imap_host = 'imap.gmail.com'
+            mail = imaplib.IMAP4_SSL(imap_host)
+            mail.login('MaggiordomoBot@gmail.com','cldbzz00')
+            return mail
+        except imaplib.IMAP4_SSL.abort:
+            if retries > 0:
+                retries -= 1
+                time.sleep(delay)
+            else:
+                raise
+#################################################
 
 ##################### inizio gestione presence via email ################
 #connect to gmail
 def read_gmail():
+    global mail
     logging.debug('leggo mail')
     
-    mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
-    mail.select('inbox')
-    mail.list()
+    #mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    #mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
+    try:
+        mail.select('inbox')
+        mail.list()
+        # Any Emails? 
+        n=0
+        (retcode, messages) = mail.search(None, '(UNSEEN)')
+        if retcode == 'OK':
+            for num in messages[0].split() :
+                logging.info('Processing new emails...')
+                n=n+1
+                typ, data = mail.fetch(num,'(RFC822)')
+                for response_part in data:
+                    if isinstance(response_part, tuple):
+                        original = email.message_from_string(response_part[1])
+                        subject_text=str(original['Subject'])
+                        set_presence(subject_text) #richiama la funzione per la gestisce della presence
+                        typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
+                logging.info("Ho gestito "+str(n)+" messaggi di presence")
+    except:
+        logging.debug('Errore nella lettura della mail')
+        mail = connect()
 
-    # Any Emails? 
-    n=0
-    (retcode, messages) = mail.search(None, '(UNSEEN)')
-    if retcode == 'OK':
-        for num in messages[0].split() :
-            logging.info('Processing new emails...')
-            n=n+1
-            typ, data = mail.fetch(num,'(RFC822)')
-            for response_part in data:
-                if isinstance(response_part, tuple):
-                    original = email.message_from_string(response_part[1])
-                    subject_text=str(original['Subject'])
-                    set_presence(subject_text) #richiama la funzione per la gestisce della presence
-                    typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
-            logging.info("Ho gestito "+str(n)+" messaggi di presence")
 ############################### fine gestione presence via email #######################
 
 ############################ TEST Internet connection #############
@@ -452,6 +470,8 @@ if heating_status and not heating_standby:
     bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone")
 
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
+
+mail = connect() #apre la casella di posta
 
 while True:
     #try:
