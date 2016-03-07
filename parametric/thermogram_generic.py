@@ -133,8 +133,8 @@ logging.info("caricata chatId.")
         
 
 # variables for periodic reporting
-last_report = None
-report_interval = 3600
+last_report = time.time()
+report_interval = 3600  # report every 3600 seconds (1 hour) as a default
 
 # variable for heating status
 heating_status = False
