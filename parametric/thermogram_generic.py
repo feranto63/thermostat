@@ -204,8 +204,7 @@ def set_presence(presence_msg):
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
 
-        n=0
-        for n in persone_della_casa:
+        for n in range(persone_della_casa):
             if nome == persona[n]:
                 if status == 'IN':
                     if persona_at_home[n] == False:
@@ -226,7 +225,7 @@ def set_presence(presence_msg):
     who_is_at_home=""
     how_many_at_home=0
     n=0
-    for n in persone_della_casa:
+    for n in range(persone_della_casa):
         if persona_at_home[n]:
             who_is_at_home+=persona[n]
             how_many_at_home+=1
@@ -320,8 +319,7 @@ def is_connected():
 
 #inizio programma
 
-n=0
-for n in persone_della_casa:
+for n in range(persone_della_casa):
     try:
         f = open(persona[n]+"_at_home","r")  #apre il file dei dati in read mode
         pres=f.read().strip()   #legge la info di presence sul file
