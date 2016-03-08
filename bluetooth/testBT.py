@@ -18,13 +18,13 @@ while True:
     #subprocess.call(['bash','/home/pi/alarma_apaga.sh'])
     #subprocess.call(['bash','/home/pi/textoAvoz.sh','Bienvenido a casa Hector'])
     FerOUT = 0
-    time.sleep(300)
+    time.sleep(3)
   else:
     print "Fer: out"
     FerIN = 0
     FerOUT = FerOUT + 1
-print "Fer IN:"
-print FerIN
-print "FerOUT"
-print FerOUT
-print "------"
+  print "Fer IN:"
+  print FerIN
+  print "FerOUT"
+  print FerOUT
+  print "------"
