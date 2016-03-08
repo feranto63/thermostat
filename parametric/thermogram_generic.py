@@ -79,7 +79,7 @@ def handle(msg):
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
-        for who_at_home in persone_della_casa:
+        for who_at_home in range(persone_della_casa):
             if persona_at_home[who_at_home]:
                 who_is_at_home+=persona[who_at_home]
                 how_many_at_home+=1
