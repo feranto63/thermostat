@@ -219,8 +219,8 @@ def set_presence(presence_msg):
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("OUT")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
-        else:
-            bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+            else:
+                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
     # calcola chi e' a casa
     who_is_at_home=""
     how_many_at_home=0
