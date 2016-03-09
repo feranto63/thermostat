@@ -1,2 +1,2 @@
-include thermocfg as cfg
+include thermocfg
 print vartest
