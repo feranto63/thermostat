@@ -20,6 +20,7 @@ logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 persone_della_casa = 4
 persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
 persona_at_home=[True, True, True, True]
+imap_host = 'imap.gmail.com'
 EMAIL_ID='MaggiordomoBot@gmail.com'
 EMAIL_PASSWD='cldbzz00'
 
@@ -204,30 +205,31 @@ def set_presence(presence_msg):
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
 
-        for n in range(persone_della_casa):
-            if nome == persona[n]:
-                if status == 'IN':
-                    if persona_at_home[n] == False:
-                        persona_at_home[n] = True
-                        bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
-                        f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
-                        f.write("IN")  #scrive la info di presence sul file
-                        f.close()  #chiude il file dei dati e lo salva
-                elif persona_at_home[n]:
+        try:
+            n=persona.index(nome)
+            if status == 'IN':
+                if persona_at_home[n] == False:
+                    persona_at_home[n] = True
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
+                    f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                    f.write("IN")  #scrive la info di presence sul file
+                    f.close()  #chiude il file dei dati e lo salva
+            elif status == 'OUT':
+                if persona_at_home[n]:
                     persona_at_home[n] = False
                     bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti)
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("OUT")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
-            else:
-                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+        except ValueError: #non ho riconosciuto la persona
+            bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+    
     # calcola chi e' a casa
     who_is_at_home=""
     how_many_at_home=0
-    n=0
     for n in range(persone_della_casa):
         if persona_at_home[n]:
-            who_is_at_home+=persona[n]
+            who_is_at_home+=persona[n]+" "
             how_many_at_home+=1
     if how_many_at_home == 0: #nessuno in casa
         if heating_standby == False:  #standby termosifoni non attivo
@@ -253,7 +255,6 @@ def set_presence(presence_msg):
 def connect(retries=5, delay=3):
     while True:
         try:
-            imap_host = 'imap.gmail.com'
             mail = imaplib.IMAP4_SSL(imap_host)
             mail.login(EMAIL_ID,EMAIL_PASSWD)
             return mail
