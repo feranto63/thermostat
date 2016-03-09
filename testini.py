@@ -1,2 +1,2 @@
-include thermostat.ini
+include thermogram.ini
 print vartest
