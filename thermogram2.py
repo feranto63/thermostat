@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
+
+persone_della_casa = 4
+persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
+persona_at_home=[True, True, True, True]
+imap_host = 'imap.gmail.com'
+EMAIL_ID='MaggiordomoBot@gmail.com'
+EMAIL_PASSWD='cldbzz00'
+Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
+#80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
+Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
+#8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
+Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
+Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
+
 
 #imports for thermometer reading
 import os
@@ -13,16 +29,13 @@ import telepot
 
 import requests
 
+import bluetooth
+
 #import library for logging
 import logging
 logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 
-persone_della_casa = 4
-persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
-persona_at_home=[True, True, True, True]
-imap_host = 'imap.gmail.com'
-EMAIL_ID='MaggiordomoBot@gmail.com'
-EMAIL_PASSWD='cldbzz00'
+
 
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
@@ -388,6 +401,10 @@ while True:
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
         if is_connected():
             read_gmail()
+        # verifica se ci sono nuovi aggiornamenti sulla presence (via bluetooth)
+        #result = bluetooth.lookup_name('F0:5B:7B:43:42:68', timeout=5)
+        #if (result != None):
+        #############
         time.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
