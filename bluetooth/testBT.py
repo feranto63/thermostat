@@ -11,6 +11,7 @@ while True:
   print "Buscando " + time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime())
   result = bluetooth.lookup_name('F0:5B:7B:43:42:68', timeout=5)
   if (result != None):
+    print result
     print "Fer: in"
   #if FerIN == 0:
    # FerIN = FerIN + 1
