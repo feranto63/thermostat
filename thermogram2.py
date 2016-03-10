@@ -402,8 +402,24 @@ while True:
         if is_connected():
             read_gmail()
         # verifica se ci sono nuovi aggiornamenti sulla presence (via bluetooth)
-        #result = bluetooth.lookup_name('F0:5B:7B:43:42:68', timeout=5)
-        #if (result != None):
+        result = bluetooth.lookup_name(Ferruccio_BT, timeout=5)
+        if (result != None):
+            set_presence('Ferruccio IN') #richiama la funzione per la gestisce della presence
+        else:
+            set_presence('Ferruccio OUT') #richiama la funzione per la gestisce della presence
+            
+        result = bluetooth.lookup_name(Claudia_BT, timeout=5)
+        if (result != None):
+            set_presence('Claudia IN') #richiama la funzione per la gestisce della presence
+        else:
+            set_presence('Claudia OUT') #richiama la funzione per la gestisce della presence
+            
+        result = bluetooth.lookup_name(Lorenzo_BT, timeout=5)
+        if (result != None):
+            set_presence('Lorenzo IN') #richiama la funzione per la gestisce della presence
+        else:
+            set_presence('Lorenzo OUT') #richiama la funzione per la gestisce della presence
+            
         #############
         time.sleep(60)
     #except Exception:
