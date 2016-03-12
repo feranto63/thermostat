@@ -13,6 +13,7 @@ Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
 #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
 Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
 Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
+persona_IP=['192.168.1.38','192.168.1.5','192.168.1.1','192.168.1.37']
 
 
 #imports for thermometer reading
@@ -402,31 +403,41 @@ while True:
         if is_connected():
             read_gmail()
         # verifica se ci sono nuovi aggiornamenti sulla presence (via bluetooth)
-        result = bluetooth.lookup_name(Ferruccio_BT, timeout=5)
-        if (result != None):
-            if not persona_at_home[0]:
-                set_presence('Ferruccio IN') #richiama la funzione per la gestisce della presence
-        else:
-            if persona_at_home[0]:
-                set_presence('Ferruccio OUT') #richiama la funzione per la gestisce della presence
-            
-        result = bluetooth.lookup_name(Claudia_BT, timeout=5)
-        if (result != None):
-            if not persona_at_home[1]:
-                set_presence('Claudia IN') #richiama la funzione per la gestisce della presence
-        else:
-            if persona_at_home[1]:
-                set_presence('Claudia OUT') #richiama la funzione per la gestisce della presence
-            
-        result = bluetooth.lookup_name(Lorenzo_BT, timeout=5)
-        if (result != None):
-            if not persona_at_home[3]:
-                set_presence('Lorenzo IN') #richiama la funzione per la gestisce della presence
-        else:
-            if persona_at_home[3]:
-                set_presence('Lorenzo OUT') #richiama la funzione per la gestisce della presence
-            
-        #############
+        #result = bluetooth.lookup_name(Ferruccio_BT, timeout=5)
+        #if (result != None):
+        #    if not persona_at_home[0]:
+        #        set_presence('Ferruccio IN') #richiama la funzione per la gestisce della presence
+        #else:
+        #    if persona_at_home[0]:
+        #        set_presence('Ferruccio OUT') #richiama la funzione per la gestisce della presence
+        #    
+        #result = bluetooth.lookup_name(Claudia_BT, timeout=5)
+        #if (result != None):
+        #    if not persona_at_home[1]:
+        #        set_presence('Claudia IN') #richiama la funzione per la gestisce della presence
+        #else:
+        #    if persona_at_home[1]:
+        #        set_presence('Claudia OUT') #richiama la funzione per la gestisce della presence
+        #    
+        #result = bluetooth.lookup_name(Lorenzo_BT, timeout=5)
+        #if (result != None):
+        #    if not persona_at_home[3]:
+        #        set_presence('Lorenzo IN') #richiama la funzione per la gestisce della presence
+        #else:
+        #    if persona_at_home[3]:
+        #        set_presence('Lorenzo OUT') #richiama la funzione per la gestisce della presence
+        #    
+        ###################################################
+        ######################## check presence con ping IP su wifi
+        for n in range(persone_della_casa):
+            result = os.system("ping -c 1 " + persona_IP[n])
+            if (result == 0):
+                if not persona_at_home[n]:
+                    set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
+            else:
+                if persona_at_home[n]:
+                    set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+        ####################################################
         time.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
