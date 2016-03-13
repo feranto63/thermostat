@@ -102,7 +102,8 @@ def handle(msg):
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
     global heating_status, heating_standby  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
-
+    global mySchedule, CurrTargetTemp
+    
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
 
@@ -116,7 +117,13 @@ def handle(msg):
     logging.debug('elaboro il comando '+command)
     
     if command == '/now':
-        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone")
+        if heating_status:
+            heatstat = "acceso"
+        else:
+            heatstat = "spento"
+        bot.sendMessage(chat_id, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+
+                                 " C, Padrone\nLa temperatura di confort e' di "+CurTargetTemp+" C\n"+
+                                 "Il riscaldamento e' "+heatstat)
     elif command == '/5m':
         bot.sendMessage(chat_id, "Avvio il monitoraggio ogni 5 minuti, Padrone")
         last_report = time.time()
@@ -130,25 +137,27 @@ def handle(msg):
         report_interval = None  # clear periodic reporting
         bot.sendMessage(chat_id, "Certamente, Padrone")
     elif command == '/ho_freddo':
-        if heating_status:
-            bot.sendMessage(chat_id, "Sto facendo del mio meglio, Padrone")
-        else:
-            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
-            heating_status = True #print "HEATING ON "+localtime+"\n"
-            f = open("heating_status","w")
-            f.write('ON')
-            f.close()  #chiude il file dei dati e lo salva
-            bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
+        bot.sendMessage(chat_id, "Funzionalita' in sviluppo")
+#        if heating_status:
+#            bot.sendMessage(chat_id, "Sto facendo del mio meglio, Padrone")
+#        else:
+#            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
+#            heating_status = True #print "HEATING ON "+localtime+"\n"
+#            f = open("heating_status","w")
+#            f.write('ON')
+#            f.close()  #chiude il file dei dati e lo salva
+#            bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
     elif command == '/ho_caldo':
-        if heating_status:
-            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-            heating_status = False #print "HEATING OFF "+localtime+"\n"
-            f = open("heating_status","w")
-            f.write('OFF')
-            f.close()  #chiude il file dei dati e lo salva
-            bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
-        else:      
-            bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
+        bot.sendMessage(chat_id, "Funzionalita' in sviluppo")
+#        if heating_status:
+#            GPIO.output(17, 0) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+#            heating_status = False #print "HEATING OFF "+localtime+"\n"
+#            f = open("heating_status","w")
+#            f.write('OFF')
+#            f.close()  #chiude il file dei dati e lo salva
+#            bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
+#        else:      
+#            bot.sendMessage(chat_id, "Dovresti aprire le finestre, Padrone")
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
