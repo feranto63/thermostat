@@ -461,6 +461,7 @@ except IOError:
     heating_standby = False  #se il file non e' presente imposto la presence a False
 
 initialize_schedule()
+print mySchedule
 
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
