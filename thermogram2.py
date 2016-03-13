@@ -44,7 +44,7 @@ import calendar
 #import thermoschedule
 # schedulazione della programmazione della temperatura
 #mySchedule is a matrix [7 x 24] [lunedi' is first row]
-mySchedule = [['17,5' for x in range(24)] for x in range(7)] 
+mySchedule = [['17' for x in range(24)] for x in range(7)] 
 
 def initialize_schedule():
     global mySchedule, FILESCHEDULE
@@ -64,7 +64,6 @@ def initialize_schedule():
                     ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
                     ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17'],
                     ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17']]
-    return
 
 def current_target_temp():
     global mySchedule
