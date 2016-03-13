@@ -65,7 +65,8 @@ def initialize_schedule:
                     ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17']]
     return
 
-def current_target_temp():
+def current_target_temp:
+    global mySchedule
     #orario = time.localtime(time.time())
     now = time.time()
     orario = time.localtime(now)
@@ -447,8 +448,9 @@ while True:
         # Is it time to report again?
         now = time.time()
         localtime = time.asctime( time.localtime(now) )
+        CurTargetTemp=current_target_temp()
+        CurTemp = read_temp()
         if report_interval is not None and last_report is not None and now - last_report >= report_interval:
-            CurTemp = read_temp()
             #apre il file dei dati in append mode, se il file non esiste lo crea
             filedati = open("filedati","a")
             #scrive la temperatura coreente ed il timestam sul file
