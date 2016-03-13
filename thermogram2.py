@@ -345,15 +345,15 @@ def TurnOnHeating():
     f.close()  #chiude il file dei dati e lo salva
     
     if heating_standby:
-            bot.sendMessage(chat_id, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
-        else:
-            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
-            bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
-            localtime = time.asctime( orario )
-            ora_minuti = time.strftime("%H:%M", orario)
-            fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
-            fileheating.write("ON,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
-            fileheating.close()  #chiude il file dei dati e lo salva
+       bot.sendMessage(chat_id, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+    else:
+        GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
+        bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
+        localtime = time.asctime( orario )
+        ora_minuti = time.strftime("%H:%M", orario)
+        fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+        fileheating.write("ON,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
+        fileheating.close()  #chiude il file dei dati e lo salva
 
     
     
