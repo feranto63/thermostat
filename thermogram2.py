@@ -488,7 +488,7 @@ while True:
         if not heating_status:
             if CurTemp < CurTargetTemp:
                 TurnOnHeating()
-        else
+        else:
             if CurTemp > CurTargetTemp:
                 TurnOffHeating()
         if report_interval is not None and last_report is not None and now - last_report >= report_interval:
