@@ -16,6 +16,7 @@ Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
 persona_IP=['192.168.1.38','192.168.1.5','192.168.0.0','192.168.1.37'] #IP address of smartphone; fixed assignment by router
 persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
 FILESCHEDULE="fileschedule"
+FILEHEATING="fileheating"
 
 #imports for thermometer reading
 import os
@@ -43,16 +44,16 @@ import calendar
 #import thermoschedule
 # schedulazione della programmazione della temperatura
 #mySchedule is a matrix [7 x 24] [lunedi' is first row]
-mySchedule = [['17' for x in range(24)] for x in range(7)] 
+mySchedule = [['17,5' for x in range(24)] for x in range(7)] 
 
-def initialize_schedule:
+def initialize_schedule():
     global mySchedule, FILESCHEDULE
     try:
         fileschedule = open(FILESCHEDULE,"r")  #apre il file dei dati in append mode, se il file non esiste lo crea
         for i in range (0,7):
         #for y in range (0,25):
-            tmpstr=fileschedule.readline().strip(",\n")
-            mySchedule[i]=tmpstr.split(",")  #scrive la info di presence ed il timestam sul file
+            tmpstr=fileschedule.readline().strip(";\n")
+            mySchedule[i]=tmpstr.split(";")  #scrive la info di presence ed il timestam sul file
         fileschedule.close()  #chiude il file dei dati e lo salva
     except IOError:
         mySchedule= [['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
@@ -65,7 +66,7 @@ def initialize_schedule:
                     ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17']]
     return
 
-def current_target_temp:
+def current_target_temp():
     global mySchedule
     #orario = time.localtime(time.time())
     now = time.time()
@@ -84,13 +85,13 @@ def current_target_temp:
     target_temp=mySchedule[day_of_week][curr_hour]
     return(target_temp)
 
-def save_schedule:
+def save_schedule():
     global mySchedule, FILESCHEDULE
     
     fileschedule = open(FILESCHEDULE,"w")  #apre il file dei dati in append mode, se il file non esiste lo crea
     for i in range (0,7):
         for y in range (0,24):
-            fileschedule.write(mySchedule[i][y]+",")
+            fileschedule.write(mySchedule[i][y]+";")
         fileschedule.write("\n")#scrive la info di presence ed il timestam sul file
     fileschedule.close()  #chiude il file dei dati e lo salva
 
@@ -201,13 +202,10 @@ except IOError:
     # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
 
 logging.info("caricata chatId.")
-    
-    #-94452612 # magic number: chat_id del gruppo termostato antonelli
-        
 
 # variables for periodic reporting
 last_report = time.time()
-report_interval = 3600  # report every 3600 seconds (1 hour) as a default
+report_interval = 60  # report every 3600 seconds (1 hour) as a default
 
 # variable for heating status
 heating_status = False
@@ -338,6 +336,43 @@ def connect(retries=5, delay=3):
                 raise
 #################################################
 
+############## gestione del riscaldamento ##################
+def TurnOnHeating():
+    global heating_status, heating_standby, FILEHEATING
+    heating_status = True #print "HEATING ON "+localtime+"\n"
+    f = open("heating_status","w")
+    f.write('ON')
+    f.close()  #chiude il file dei dati e lo salva
+    
+    if heating_standby:
+            bot.sendMessage(chat_id, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+        else:
+            GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
+            bot.sendMessage(chat_id, "Accendo il riscaldamento, Padrone")
+            localtime = time.asctime( orario )
+            ora_minuti = time.strftime("%H:%M", orario)
+            fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+            fileheating.write("ON,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
+            fileheating.close()  #chiude il file dei dati e lo salva
+
+    
+    
+def TurnOffHeating():
+    global heating_status, heating_standby, FILEHEATING
+    heating_status = False
+    f = open("heating_status","w")
+    f.write('OFF')
+    f.close()  #chiude il file dei dati e lo salva
+    
+    GPIO.output(17, 0) # sets port 0 to 0 (0V, off) per spegnere i termosifoni
+    bot.sendMessage(chat_id, "Spengo il riscaldamento, Padrone")
+    localtime = time.asctime( orario )
+    ora_minuti = time.strftime("%H:%M", orario)
+    fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+    fileheating.write("OFF,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
+    fileheating.close()  #chiude il file dei dati e lo salva
+
+
 ##################### inizio gestione presence via email ################
 #connect to gmail
 def read_gmail():
@@ -450,6 +485,12 @@ while True:
         localtime = time.asctime( time.localtime(now) )
         CurTargetTemp=current_target_temp()
         CurTemp = read_temp()
+        if not heating_status:
+            if CurTemp < CurTargetTemp:
+                TurnOnHeating()
+        else
+            if CurTemp > CurTargetTemp:
+                TurnOffHeating()
         if report_interval is not None and last_report is not None and now - last_report >= report_interval:
             #apre il file dei dati in append mode, se il file non esiste lo crea
             filedati = open("filedati","a")
