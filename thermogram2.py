@@ -82,7 +82,7 @@ def current_target_temp():
 #    print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour] 
 
     target_temp=mySchedule[day_of_week][curr_hour]
-    return(target_temp)
+    return(float(target_temp))
 
 def save_schedule():
     global mySchedule, FILESCHEDULE
@@ -122,7 +122,7 @@ def handle(msg):
         else:
             heatstat = "spento"
         bot.sendMessage(chat_id, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+
-                                 " C, Padrone\nLa temperatura di confort e' di "+CurTargetTemp+" C\n"+
+                                 " C, Padrone\nLa temperatura di confort e' di "+str(CurTargetTemp)+" C\n"+
                                  "Il riscaldamento e' "+heatstat)
     elif command == '/5m':
         bot.sendMessage(chat_id, "Avvio il monitoraggio ogni 5 minuti, Padrone")
