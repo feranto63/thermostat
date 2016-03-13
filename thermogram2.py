@@ -329,6 +329,20 @@ def set_presence(presence_msg):
                 bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone")
     #return set_presence            
 
+######################## check presence con ping IP su wifi
+def check_presence_IP():
+    global personaIP, persona_at_home
+    for n in range(persone_della_casa):
+        result = os.system("ping -c 4 " + persona_IP[n])
+        if (result == 0):
+            if not persona_at_home[n]:
+                set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
+        else:
+            if persona_at_home[n]:
+                set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+####################################################
+
+
 ##### connette o riconnette alla mail ###########
 def connect(retries=5, delay=3):
     while True:
@@ -537,16 +551,9 @@ while True:
         #        set_presence('Lorenzo OUT') #richiama la funzione per la gestisce della presence
         #    
         ###################################################
-        ######################## check presence con ping IP su wifi
-        for n in range(persone_della_casa):
-            result = os.system("ping -c 1 " + persona_IP[n])
-            if (result == 0):
-                if not persona_at_home[n]:
-                    set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
-            else:
-                if persona_at_home[n]:
-                    set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
-        ####################################################
+
+        check_presence_IP() # controlla la presente con ping IP
+        
         time.sleep(60)
     #except Exception:
     #    logging.exception("C'e' stato un errore del programma termostato")
