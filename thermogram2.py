@@ -462,7 +462,8 @@ except IOError:
 
 initialize_schedule()
 print mySchedule
-print mySchedule[6][17]
+print mySchedule[6]
+print mySchedule[17][6]
 
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
