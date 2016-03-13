@@ -337,7 +337,7 @@ def connect(retries=5, delay=3):
 
 ############## gestione del riscaldamento ##################
 def TurnOnHeating():
-    global heating_status, heating_standby, FILEHEATING
+    global heating_status, heating_standby, FILEHEATING, chat_id
     heating_status = True #print "HEATING ON "+localtime+"\n"
     f = open("heating_status","w")
     f.write('ON')
@@ -357,7 +357,7 @@ def TurnOnHeating():
     
     
 def TurnOffHeating():
-    global heating_status, heating_standby, FILEHEATING
+    global heating_status, heating_standby, FILEHEATING, chat_id
     heating_status = False
     f = open("heating_status","w")
     f.write('OFF')
