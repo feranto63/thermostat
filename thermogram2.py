@@ -13,8 +13,9 @@ Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
 #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
 Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
 Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
-persona_IP=['192.168.1.38','192.168.1.5','192.168.0.0','192.168.1.37']
-
+persona_IP=['192.168.1.38','192.168.1.5','192.168.0.0','192.168.1.37'] #IP address of smartphone; fixed assignment by router
+persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
+FILESCHEDULE="fileschedule"
 
 #imports for thermometer reading
 import os
@@ -36,7 +37,63 @@ import bluetooth
 import logging
 logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 
+################### gestione cronotermostato ###########################
+import calendar
 
+#import thermoschedule
+# schedulazione della programmazione della temperatura
+#mySchedule is a matrix [7 x 24] [lunedi' is first row]
+mySchedule = [['17' for x in range(24)] for x in range(7)] 
+
+def initialize_schedule:
+    global mySchedule, FILESCHEDULE
+    try:
+        fileschedule = open(FILESCHEDULE,"r")  #apre il file dei dati in append mode, se il file non esiste lo crea
+        for i in range (0,7):
+        #for y in range (0,25):
+            tmpstr=fileschedule.readline().strip(",\n")
+            mySchedule[i]=tmpstr.split(",")  #scrive la info di presence ed il timestam sul file
+        fileschedule.close()  #chiude il file dei dati e lo salva
+    except IOError:
+        mySchedule= [['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','20','20','20','18','18','18','18','20','20','18','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17'],
+                    ['17','17','17','17','17','17','17','17','20','20','18','18','18','20','20','20','18','18','18','18','20','20','20','17']]
+    return
+
+def current_target_temp():
+    #orario = time.localtime(time.time())
+    now = time.time()
+    orario = time.localtime(now)
+   
+    curr_year=int(time.strftime("%Y",orario))
+    curr_month=int(time.strftime("%m",orario)) 
+    curr_day=int(time.strftime("%e",orario))
+    curr_hour=int(time.strftime("%H",orario))
+
+    localtime = time.asctime( orario )
+    day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
+
+    #print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour] 
+
+    target_temp=mySchedule[day_of_week][curr_hour]
+    return(target_temp)
+
+def save_schedule:
+    global mySchedule, FILESCHEDULE
+    
+    fileschedule = open(FILESCHEDULE,"w")  #apre il file dei dati in append mode, se il file non esiste lo crea
+    for i in range (0,7):
+        for y in range (0,24):
+            fileschedule.write(mySchedule[i][y]+",")
+        fileschedule.write("\n")#scrive la info di presence ed il timestam sul file
+    fileschedule.close()  #chiude il file dei dati e lo salva
+
+################### fine gestione cronotermostato ######################
 
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
@@ -368,6 +425,7 @@ try:
 except IOError:
     heating_standby = False  #se il file non e' presente imposto la presence a False
 
+initialize_schedule()
 
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
