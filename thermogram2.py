@@ -79,8 +79,6 @@ def current_target_temp():
     localtime = time.asctime( orario )
     day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
 
-#    print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour] 
-
     target_temp=mySchedule[day_of_week][curr_hour]
     return(float(target_temp))
 
@@ -213,7 +211,7 @@ logging.info("caricata chatId.")
 
 # variables for periodic reporting
 last_report = time.time()
-report_interval = 60  # report every 3600 seconds (1 hour) as a default
+report_interval = 300  # report every 300 seconds (5 min) as a default
 
 # variable for heating status
 heating_status = False
@@ -331,7 +329,7 @@ def set_presence(presence_msg):
 
 ######################## check presence con ping IP su wifi
 def check_presence_IP():
-    global personaIP, persona_at_home
+    global personaIP, persona_at_home, persone_della_casa
     for n in range(persone_della_casa):
         result = os.system("ping -c 4 " + persona_IP[n])
         if (result == 0):
@@ -341,6 +339,19 @@ def check_presence_IP():
             if persona_at_home[n]:
                 set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
 ####################################################
+
+############# controlla la presence con ping BT #################        
+def check_presence_BT():
+    global persona_BT, persona_at_home, persone_della_casa
+    for n in range (persone_della_casa):
+        result = bluetooth.lookup_name(persona_BT[n], timeout=5)
+        if (result != None):
+            if not persona_at_home[0]:
+                set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
+        else:
+            if persona_at_home[0]:
+                set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+###################################################
 
 
 ##### connette o riconnette alla mail ###########
@@ -448,7 +459,7 @@ def is_connected():
 ######### fine test internet connection
 
 #inizio programma
-
+######## legge da file lo stato di presenza delle persone della casa ###########
 for n in range(persone_della_casa):
     try:
         f = open(persona[n]+"_at_home","r")  #apre il file dei dati in read mode
@@ -461,6 +472,7 @@ for n in range(persone_della_casa):
     except IOError:
         persona_at_home[n] = False  #se il file non e' presente imposto la presence a False
 
+######## legge da file lo stato del riscaldamento e dello standby ###########
 try:
     f = open("heating_status","r")  #apre il file dei dati in read mode
     h_status=f.read().strip()   #legge la info di presence sul file
@@ -483,8 +495,10 @@ try:
 except IOError:
     heating_standby = False  #se il file non e' presente imposto la presence a False
 
+######## legge da file lo programmazione del cronotermostato ###########
 initialize_schedule()
 
+######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
 logging.info("Listening ...")
@@ -525,33 +539,8 @@ while True:
         # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
         if is_connected():
             read_gmail()
-        # verifica se ci sono nuovi aggiornamenti sulla presence (via bluetooth)
-        #result = bluetooth.lookup_name(Ferruccio_BT, timeout=5)
-        #if (result != None):
-        #    if not persona_at_home[0]:
-        #        set_presence('Ferruccio IN') #richiama la funzione per la gestisce della presence
-        #else:
-        #    if persona_at_home[0]:
-        #        set_presence('Ferruccio OUT') #richiama la funzione per la gestisce della presence
-        #    
-        #result = bluetooth.lookup_name(Claudia_BT, timeout=5)
-        #if (result != None):
-        #    if not persona_at_home[1]:
-        #        set_presence('Claudia IN') #richiama la funzione per la gestisce della presence
-        #else:
-        #    if persona_at_home[1]:
-        #        set_presence('Claudia OUT') #richiama la funzione per la gestisce della presence
-        #    
-        #result = bluetooth.lookup_name(Lorenzo_BT, timeout=5)
-        #if (result != None):
-        #    if not persona_at_home[3]:
-        #        set_presence('Lorenzo IN') #richiama la funzione per la gestisce della presence
-        #else:
-        #    if persona_at_home[3]:
-        #        set_presence('Lorenzo OUT') #richiama la funzione per la gestisce della presence
-        #    
-        ###################################################
-
+            
+        #check_presence_BT()
         check_presence_IP() # controlla la presente con ping IP
         
         time.sleep(60)
