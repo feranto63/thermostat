@@ -79,7 +79,7 @@ def current_target_temp():
     localtime = time.asctime( orario )
     day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
 
-    print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour] 
+#    print "localtime:",localtime, " day_of_week:", day_of_week, " curr_hour:",curr_hour," temp target:", mySchedule[day_of_week][curr_hour] 
 
     target_temp=mySchedule[day_of_week][curr_hour]
     return(target_temp)
@@ -461,9 +461,6 @@ except IOError:
     heating_standby = False  #se il file non e' presente imposto la presence a False
 
 initialize_schedule()
-print mySchedule
-print mySchedule[6]
-print mySchedule[17][6]
 
 bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
