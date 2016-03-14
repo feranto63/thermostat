@@ -383,6 +383,7 @@ def TurnOnHeating():
     else:
         GPIO.output(17, 1) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
         bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
+        orario = time.localtime(now)
         localtime = time.asctime( orario )
         ora_minuti = time.strftime("%H:%M", orario)
         fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
@@ -400,6 +401,7 @@ def TurnOffHeating():
     
     GPIO.output(17, 0) # sets port 0 to 0 (0V, off) per spegnere i termosifoni
     bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
+    orario = time.localtime(now)
     localtime = time.asctime( orario )
     ora_minuti = time.strftime("%H:%M", orario)
     fileheating = open(FILEHEATING,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
