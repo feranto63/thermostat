@@ -533,6 +533,8 @@ bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 if heating_status and not heating_standby:
     GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
     bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone")
+else:
+    GPIO.output(HEAT_PIN, HEAT_OFF)
 
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
