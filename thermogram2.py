@@ -531,7 +531,7 @@ show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pu
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 
 if heating_status and not heating_standby:
-    GPIO.output(17, 1) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+    GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
     bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone")
 
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
