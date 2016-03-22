@@ -21,6 +21,10 @@ HEAT_ON  = 0
 HEAT_OFF = 1
 HEAT_PIN = 17
 
+lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
+lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
+
+
 #imports for thermometer reading
 import os
 import glob
