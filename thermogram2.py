@@ -13,7 +13,7 @@ Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
 #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
 Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
 Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
-persona_IP=['192.168.1.38','192.168.1.5','192.168.0.0','192.168.1.37'] #IP address of smartphone; fixed assignment by router
+persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
 persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
 FILESCHEDULE="fileschedule"
 FILEHEATING="fileheating"
