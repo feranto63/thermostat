@@ -128,7 +128,14 @@ def handle(msg):
             heatstat = "acceso"
         else:
             heatstat = "spento"
-        bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone\nLa temperatura di confort e' di"+str(CurTargetTemp)+" C\nIl riscaldamento e' "+"disattivato per pulizie" if pulizie_status else heatstat)
+        messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone\n"
+        messaggio+="La temperatura di confort e' di"+str(CurTargetTemp)+" C\n"
+        messaggio+="Il riscaldamento e' "
+        if pulizie_status:
+            messaggio+="disattivato per pulizie"
+        else:
+            messaggio+=heatstat
+        bot.sendMessage(CHAT_ID, messaggio)
 #    elif command == '/5m':
 #        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni 5 minuti, Padrone")
 #        last_report = time.time()
@@ -181,7 +188,17 @@ def handle(msg):
             bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone")
     elif command == '/help':
         # send message for help
-        bot.sendMessage(CHAT_ID, "Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n/now - mostra la temperatura\n/ho_freddo - accende il riscaldamento\n/ho_caldo - spegne il riscaldamento\n/casa - chi e' a casa?\nRiscaldamento "+"attivato" if heating_status else "disattivato")
+        messaggio="Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n"
+        messaggio+="/now - mostra la temperatura\n"
+        messaggio+="/ho_freddo - accende il riscaldamento\n"
+        messaggio+="/ho_caldo - spegne il riscaldamento\n"
+        messaggio+="/casa - chi e' a casa?\n"
+        messaggio+="Riscaldamento "
+        if heating_status:
+            messaggio+="attivato"
+        else:
+            messaggio+="disattivato"
+        bot.sendMessage(CHAT_ID, messaggio)
     elif command == '/pulizie':
         if not pulizie_status:
             # set 2 hours off for cleaning
