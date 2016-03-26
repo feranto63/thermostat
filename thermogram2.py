@@ -130,19 +130,19 @@ def handle(msg):
             heatstat = "spento"
         bot.sendMessage(CHAT_ID, "La temperatura misurata e' di "+str("%0.1f" % CurTemp)+
                                  " C, Padrone\nLa temperatura di confort e' di "+str(CurTargetTemp)+" C\n"+
-                                 "Il riscaldamento e' "+heatstat)
-    elif command == '/5m':
-        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni 5 minuti, Padrone")
-        last_report = time.time()
-        report_interval = 300    # report every 60 seconds
-    elif command == '/1h':
-        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni ora, Padrone")
-        last_report = time.time()
-        report_interval = 3600  # report every 3600 seconds
-    elif command == '/annulla':
-        last_report = None
-        report_interval = None  # clear periodic reporting
-        bot.sendMessage(CHAT_ID, "Certamente, Padrone")
+                                 "Il riscaldamento e' "+"disattivato per pulizie" if pulizie_status else heatstat)
+#    elif command == '/5m':
+#        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni 5 minuti, Padrone")
+#        last_report = time.time()
+#        report_interval = 300    # report every 60 seconds
+#    elif command == '/1h':
+#        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni ora, Padrone")
+#        last_report = time.time()
+#        report_interval = 3600  # report every 3600 seconds
+#    elif command == '/annulla':
+#        last_report = None
+#        report_interval = None  # clear periodic reporting
+#        bot.sendMessage(CHAT_ID, "Certamente, Padrone")
     elif command == '/ho_freddo':
         bot.sendMessage(CHAT_ID, "Funzionalita' in sviluppo")
 #        if heating_status:
@@ -200,6 +200,10 @@ def handle(msg):
             if heating_status:
                 GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
+    elif command == '/turnon':
+        TurnOnHeating()
+    elif command == '/turnoff':
+        TurnOffHeating()
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
