@@ -105,7 +105,7 @@ def save_schedule():
 def handle(msg):
     global persona_at_home
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
-    global heating_status, heating_standby  #stato di accensione dei termosifoni
+    global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
     global mySchedule, CurTargetTemp
     global CHAT_ID
@@ -139,10 +139,12 @@ def handle(msg):
 #        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni ora, Padrone")
 #        last_report = time.time()
 #        report_interval = 3600  # report every 3600 seconds
-#    elif command == '/annulla':
+    elif command == '/annulla':
 #        last_report = None
 #        report_interval = None  # clear periodic reporting
 #        bot.sendMessage(CHAT_ID, "Certamente, Padrone")
+        heating_overwrite = False
+        bot.sendMessage(CHAT_ID, "Annullo overwrite")
     elif command == '/ho_freddo':
         bot.sendMessage(CHAT_ID, "Funzionalita' in sviluppo")
 #        if heating_status:
@@ -181,29 +183,37 @@ def handle(msg):
             bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone")
     elif command == '/help':
         # send message for help
-        bot.sendMessage(CHAT_ID, "Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n/now - mostra la temperatura\n/ho_freddo - accende il riscaldamento\n/ho_caldo - spegne il riscaldamento\n/casa - chi e' a casa?")
-        if heating_status:
-            bot.sendMessage(CHAT_ID, "Riscaldamento attivato")
-        else:
-            bot.sendMessage(CHAT_ID, "Riscaldamento disattivato")
+        bot.sendMessage(CHAT_ID, "Sono il Maggiordomo e custodisco la casa. 
+Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n
+/now - mostra la temperatura\n
+/ho_freddo - accende il riscaldamento\n
+/ho_caldo - spegne il riscaldamento\n
+/casa - chi e' a casa?\n
+Riscaldamento "+"attivato" if heating_status else "disattivato")
     elif command == '/pulizie':
         if not pulizie_status:
             # set 2 hours off for cleaning
             pulizie_status=True
             pulizie_timer = time.time() + 2*60*60 #2 hours
             if heating_status:
-                GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+                TurnOffHeating()
+                #GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             bot.sendMessage(CHAT_ID, "Disattivo il riscaldamento Padrone cosi' puoi fare le pulizie")
         else:
             # set 2 hours off for cleaning
             pulizie_status=False
             if heating_status:
-                GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+                TurnOnHeating()
+                #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
     elif command == '/turnon':
+        heating_overwrite = True
         TurnOnHeating()
+        bot.sendMessage(CHAT_ID, "Attivo overwrite")
     elif command == '/turnoff':
+        heating_overwrite = True
         TurnOffHeating()
+        bot.sendMessage(CHAT_ID, "Attivo overwrite")
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
@@ -242,6 +252,7 @@ report_interval = 300  # report every 300 seconds (5 min) as a default
 # variable for heating status
 heating_status = False
 heating_standby = False
+heating_overwrite = False
 
 # variables for cleaning period
 pulizie_status=False
@@ -286,7 +297,7 @@ def read_temp():
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
     global persona_at_home, who_is_at_home, how_many_at_home
-    global heating_status, heating_standby
+    global heating_status, heating_standby, heating_overwrite
     
     logging.debug('gestisco il messaggio di presence '+presence_msg)
     
@@ -343,8 +354,9 @@ def set_presence(presence_msg):
             f = open("heating_standby","w")
             f.write('ON')
             f.close()  #chiude il file dei dati e lo salva
-            if heating_status: #se termosifoni attivi
-                GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
+            if not heating_overwrite and heating_status: #se termosifoni attivi
+                TurnOffHeating()
+                #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
                 bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa")
     else: #almeno una persona in casa
         if heating_standby: #se standby attivo
@@ -352,8 +364,9 @@ def set_presence(presence_msg):
             f = open("heating_standby","w")
             f.write('OFF')
             f.close()  #chiude il file dei dati e lo salva
-            if heating_status: #se termosifoni attivi prima dello standby
-                GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
+            if not heating_overwrite and heating_status: #se termosifoni attivi prima dello standby
+                TurnOnHeating()
+                #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
                 bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone")
     #return set_presence            
 
@@ -401,13 +414,14 @@ def connect(retries=5, delay=3):
 
 ############## gestione del riscaldamento ##################
 def TurnOnHeating():
-    global heating_status, heating_standby, FILEHEATING, CHAT_ID
+    global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
+
     heating_status = True #print "HEATING ON "+localtime+"\n"
     f = open("heating_status","w")
     f.write('ON')
     f.close()  #chiude il file dei dati e lo salva
     
-    if heating_standby:
+    if not heating_overwrite and heating_standby:
        bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
     else:
         GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
@@ -422,7 +436,7 @@ def TurnOnHeating():
     
     
 def TurnOffHeating():
-    global heating_status, heating_standby, FILEHEATING, CHAT_ID
+    global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
     heating_status = False
     f = open("heating_status","w")
     f.write('OFF')
@@ -539,22 +553,23 @@ show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pu
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 
 if heating_status and not heating_standby:
-    GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+    TurnOnHeating()
+    #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
     bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone")
 else:
-    GPIO.output(HEAT_PIN, HEAT_OFF)
+    TurnOffHeating()
+    #GPIO.output(HEAT_PIN, HEAT_OFF)
 
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
 
 mail = connect() #apre la casella di posta
 
 while True:
-    #try:
-        # Is it time to report again?
-        now = time.time()
-        localtime = time.asctime( time.localtime(now) )
-        CurTargetTemp=current_target_temp()
-        CurTemp = read_temp()
+    now = time.time()
+    localtime = time.asctime( time.localtime(now) )
+    CurTargetTemp=current_target_temp()
+    CurTemp = read_temp()
+    if not heating_overwrite:
         if pulizie_status:
             if now >= pulizie_timer:
                 pulizie_status=False
@@ -566,23 +581,21 @@ while True:
             else:
                 if CurTemp > (CurTargetTemp + 0.2):
                     TurnOffHeating()
-        if report_interval is not None and last_report is not None and now - last_report >= report_interval:
-            #apre il file dei dati in append mode, se il file non esiste lo crea
-            filedati = open("filedati","a")
-            #scrive la temperatura coreente ed il timestam sul file
-            filedati.write(str(CurTemp)+"@"+localtime+"\n")
-            #chiude il file dei dati e lo salva
-            filedati.close()
+    if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+        #apre il file dei dati in append mode, se il file non esiste lo crea
+        filedati = open("filedati","a")
+        #scrive la temperatura coreente ed il timestam sul file
+        filedati.write(str(CurTemp)+"@"+localtime+"\n")
+        #chiude il file dei dati e lo salva
+        filedati.close()
         
-            last_report = now
-        # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-        if is_connected():
-            read_gmail()
+        last_report = now
+    # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
+    if is_connected():
+        read_gmail()
             
-        #check_presence_BT()
-        check_presence_IP() # controlla la presente con ping IP
+    #check_presence_BT()
+    check_presence_IP() # controlla la presente con ping IP
         
-        time.sleep(60)
-    #except Exception:
-    #    logging.exception("C'e' stato un errore del programma termostato")
- 
+    time.sleep(60)
+
