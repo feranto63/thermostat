@@ -183,13 +183,7 @@ def handle(msg):
             bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone")
     elif command == '/help':
         # send message for help
-        bot.sendMessage(CHAT_ID, "Sono il Maggiordomo e custodisco la casa. 
-Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n
-/now - mostra la temperatura\n
-/ho_freddo - accende il riscaldamento\n
-/ho_caldo - spegne il riscaldamento\n
-/casa - chi e' a casa?\n
-Riscaldamento "+"attivato" if heating_status else "disattivato")
+        bot.sendMessage(CHAT_ID, "Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n/now - mostra la temperatura\n/ho_freddo - accende il riscaldamento\n/ho_caldo - spegne il riscaldamento\n/casa - chi e' a casa?\nRiscaldamento "+"attivato" if heating_status else "disattivato")
     elif command == '/pulizie':
         if not pulizie_status:
             # set 2 hours off for cleaning
