@@ -351,7 +351,7 @@ def set_presence(presence_msg):
         except:
             e = sys.exc_info()[0]
             logging.error( "<p>Error: %s</p>" % e )
-            orario = time.localtime(now)
+            orario = time.localtime(time.time())
         # scrive la info di presence su file
 
         localtime = time.asctime( orario )
