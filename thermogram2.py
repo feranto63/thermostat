@@ -1,25 +1,46 @@
 #!/usr/bin/python
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 
-persone_della_casa = 4
-persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
-persona_at_home=[True, True, True, True]
-imap_host = 'imap.gmail.com'
-EMAIL_ID='MaggiordomoBot@gmail.com'
-EMAIL_PASSWD='cldbzz00'
-Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
-#80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
-Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
-#8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
-Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
-Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
-persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
-persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
+PROPRIETARIO = sys.argv[1]  # get user from command-line
+
+if PROPRIETARIO == 'Ferruccio':
+    persone_della_casa = 4
+    persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
+    persona_at_home=[True, True, True, True]
+    imap_host = 'imap.gmail.com'
+    EMAIL_ID='MaggiordomoBot@gmail.com'
+    EMAIL_PASSWD='cldbzz00'
+    Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
+    #80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
+    Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
+    #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
+    Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
+    Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
+    persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
+    persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
+    GATE_PRESENT = False
+
+if PROPRIETARIO == 'Piero':
+    persone_della_casa = 2
+    persona=['Piero','Annamaria']
+    persona_at_home=[True, True]
+    imap_host = 'imap.gmail.com'
+    EMAIL_ID='BattistaMaggiordomoBot@gmail.com'
+    EMAIL_PASSWD='peterbel'
+    persona_IP=['192.168.0.0','192.168.0.0','192.168.0.0','192.168.0.0'] #IP address of smartphone; fixed assignment by router
+    persona_BT=['00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00'] #BT mac address of smartphone
+    GATE_PRESENT = True
+
+
 FILESCHEDULE="fileschedule"
 FILEHEATING="fileheating"
 HEAT_ON  = 0
 HEAT_OFF = 1
 HEAT_PIN = 17
+GATE_PIN = 22
+GATE_ON = 0
+GATE_OFF = 1
+DHT_PIN = 4
 
 lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -58,7 +79,6 @@ def initialize_schedule():
     try:
         fileschedule = open(FILESCHEDULE,"r")  #apre il file dei dati in append mode, se il file non esiste lo crea
         for i in range (0,7):
-        #for y in range (0,25):
             tmpstr=fileschedule.readline().strip(";\n")
             mySchedule[i]=tmpstr.split(";")  #scrive la info di presence ed il timestam sul file
         fileschedule.close()  #chiude il file dei dati e lo salva
@@ -74,7 +94,6 @@ def initialize_schedule():
 
 def current_target_temp():
     global mySchedule
-    #orario = time.localtime(time.time())
     now = time.time()
     orario = time.localtime(now)
    
@@ -108,19 +127,29 @@ def handle(msg):
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
     global mySchedule, CurTargetTemp
-    global CHAT_ID
+    global CHAT_ID, GATE_PRESENT
     global pulizie_status, pulizie_timer
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
-
+    msg_sender = msg['from']['first_name']
+    
     # ignore non-text message
     if msg_type != 'text':
         return
 
     command = msg['text'].strip().lower()
     CurTemp = read_temp()
+    CurTargetTemp=current_target_temp()
     
+    orario = time.localtime(time.time())
+    localtime = time.asctime( orario )
+    giorno_ora_minuti = time.strftime("%a %H:%M", orario)
+    if heating_status:
+        heatstat = "acceso"
+    else:
+        heatstat = "spento"
+   
     logging.debug('elaboro il comando '+command)
     
     if command == '/now':
@@ -136,42 +165,20 @@ def handle(msg):
         else:
             messaggio+=heatstat
         bot.sendMessage(CHAT_ID, messaggio)
-#    elif command == '/5m':
-#        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni 5 minuti, Padrone")
-#        last_report = time.time()
-#        report_interval = 300    # report every 60 seconds
-#    elif command == '/1h':
-#        bot.sendMessage(CHAT_ID, "Avvio il monitoraggio ogni ora, Padrone")
-#        last_report = time.time()
-#        report_interval = 3600  # report every 3600 seconds
     elif command == '/annulla':
-#        last_report = None
-#        report_interval = None  # clear periodic reporting
-#        bot.sendMessage(CHAT_ID, "Certamente, Padrone")
         heating_overwrite = False
         bot.sendMessage(CHAT_ID, "Annullo overwrite")
     elif command == '/ho_freddo':
-        bot.sendMessage(CHAT_ID, "Funzionalita' in sviluppo")
-#        if heating_status:
-#            bot.sendMessage(CHAT_ID, "Sto facendo del mio meglio, Padrone")
-#        else:
-#            GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
-#            heating_status = True #print "HEATING ON "+localtime+"\n"
-#            f = open("heating_status","w")
-#            f.write('ON')
-#            f.close()  #chiude il file dei dati e lo salva
-#            bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
+        bot.sendMessage(CHAT_ID, "Ho capito che hai freddo")
+        f = open("heating_update","a")
+        f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
+        f.close()  #chiude il file dei dati e lo salva
     elif command == '/ho_caldo':
         bot.sendMessage(CHAT_ID, "Funzionalita' in sviluppo")
-#        if heating_status:
-#            GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-#            heating_status = False #print "HEATING OFF "+localtime+"\n"
-#            f = open("heating_status","w")
-#            f.write('OFF')
-#            f.close()  #chiude il file dei dati e lo salva
-#            bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
-#        else:      
-#            bot.sendMessage(CHAT_ID, "Dovresti aprire le finestre, Padrone")
+        bot.sendMessage(CHAT_ID, "Ho capito che hai caldo")
+        f = open("heating_update","a")
+        f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
+        f.close()  #chiude il file dei dati e lo salva
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
@@ -215,6 +222,17 @@ def handle(msg):
                 TurnOnHeating()
                 #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
+    elif command == '/apri':
+        GPIO.output(GATE_PIN, GATE_ON)
+        if str(chat_id) == str(CHAT_ID):
+            bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
+        else:
+            show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
+            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza")
+            bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard)
+            bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
+        time.sleep(2)
+        GPIO.output(GATE_PIN, GATE_OFF)
     elif command == '/turnon':
         heating_overwrite = True
         TurnOnHeating()
@@ -232,6 +250,7 @@ def handle(msg):
 
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
+chatidgatepath = os.path.dirname(os.path.realpath(__file__)) + "/chatid_cancello"
 
 
 try:
@@ -253,6 +272,18 @@ except IOError:
     # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
 
 logging.info("caricata chatId.")
+
+try:
+    chatidFile = open(chatidgatepath,'r')
+    CHAT_ID_GATE = chatidFile.read().strip()
+    chatidFile.close()
+except IOError:
+    CHAT_ID_GATE = CHAT_ID #se non c'e' il cancello metto lo stesso chat_id principale
+    logging.error("Non ho trovato il file di chatId_cancello. E' necessario creare un file 'chatid' con la chatid telegram per il bot")
+    # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+
+logging.info("caricata chatIdGate.")
+
 
 # variables for periodic reporting
 last_report = time.time()
@@ -276,6 +307,7 @@ import RPi.GPIO as GPIO
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(HEAT_PIN,GPIO.OUT)
+GPIO.setup(GATE_PIN,GPIO.OUT)
 
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
@@ -309,10 +341,11 @@ import Adafruit_DHT
 # Sensor should be set to Adafruit_DHT.DHT11,
 # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
 def read_TandH():
+    global DHT_PIN
     sensor = Adafruit_DHT.DHT11
     # Example using a Raspberry Pi with DHT sensor
     # connected to GPIO4.
-    pin = 4
+    pin = DHT_PIN
     
     # Try to grab a sensor reading.  Use the read_retry method which will retry up
     # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
@@ -412,7 +445,7 @@ def set_presence(presence_msg):
 def check_presence_IP():
     global personaIP, persona_at_home, persone_della_casa
     for n in range(persone_della_casa):
-        result = os.system("ping -c 4 " + persona_IP[n])
+        result = os.system("ping -c 1 " + persona_IP[n])
         if (result == 0):
             if not persona_at_home[n]:
                 set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
@@ -496,8 +529,6 @@ def read_gmail():
     global mail
     logging.debug('leggo mail')
     
-    #mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    #mail.login('MaggiordomoBot@gmail.com','cldbzz00') #login e password da mettere su file successivamente
     try:
         mail.select('inbox')
         mail.list()
@@ -587,7 +618,11 @@ bot = telepot.Bot(TOKEN)
 bot.notifyOnMessage(handle)
 logging.info("Listening ...")
 
-show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie','/help']]} #tastiera personalizzata
+help_or_gate = '/help'
+if GATE_PRESENT:
+    help_on_gate = '/apri'
+
+show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 
 if heating_status and not heating_standby:
@@ -598,7 +633,14 @@ else:
     TurnOffHeating()
     #GPIO.output(HEAT_PIN, HEAT_OFF)
 
+GPIO.output(GATE_PIN, GATE_OFF) #pulisce il circuito di apertura cancello
+
 bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
+
+#predispone la tastiera per i visitatori della casa
+if GATE_PRESENT:
+    show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
+    bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard)
 
 mail = connect() #apre la casella di posta
 
@@ -607,6 +649,9 @@ while True:
     localtime = time.asctime( time.localtime(now) )
     CurTargetTemp=current_target_temp()
     CurTemp = read_temp()
+    CurTempDHT, CurHumidity = read_TandH()
+    if CurHumidity == None:
+        CurHumidity = 'N.A.'
     if not heating_overwrite:
         if pulizie_status:
             if now >= pulizie_timer:
@@ -623,7 +668,7 @@ while True:
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
         #scrive la temperatura coreente ed il timestam sul file
-        filedati.write(str(CurTemp)+"@"+localtime+"\n")
+        filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
         
