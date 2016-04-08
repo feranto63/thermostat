@@ -3,6 +3,7 @@
 import sys
 
 PROPRIETARIO = sys.argv[1]  # get user from command-line
+owner_found = False
 
 if PROPRIETARIO == 'Ferruccio':
     persone_della_casa = 4
@@ -20,6 +21,9 @@ if PROPRIETARIO == 'Ferruccio':
     persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
     persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
     GATE_PRESENT = False
+    IP_PRESENCE = True
+    BT_PRESENCE = False
+    owner_found=True
 
 if PROPRIETARIO == 'Piero':
     persone_della_casa = 2
@@ -31,6 +35,12 @@ if PROPRIETARIO == 'Piero':
     persona_IP=['192.168.0.0','192.168.0.0','192.168.0.0','192.168.0.0'] #IP address of smartphone; fixed assignment by router
     persona_BT=['00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00'] #BT mac address of smartphone
     GATE_PRESENT = True
+    IP_PRESENCE = False
+    BT_PRESENCE = False
+    owner_found=True
+
+if not owner_found:
+    sys.exit("owner not found")
 
 
 FILESCHEDULE="fileschedule"
@@ -620,7 +630,7 @@ logging.info("Listening ...")
 
 help_or_gate = '/help'
 if GATE_PRESENT:
-    help_on_gate = '/apri'
+    help_or_gate = '/apri'
 
 show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
@@ -678,7 +688,8 @@ while True:
         read_gmail()
             
     #check_presence_BT()
-    check_presence_IP() # controlla la presente con ping IP
+    if IP_PRESENCE:
+        check_presence_IP() # controlla la presente con ping IP
         
     time.sleep(60)
 
