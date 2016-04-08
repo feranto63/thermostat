@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
+import sys
 
 PROPRIETARIO = sys.argv[1]  # get user from command-line
 
@@ -54,7 +55,6 @@ import time
 import imaplib
 import email
 #import for Telegram API
-import sys
 import pprint
 import telepot
 
