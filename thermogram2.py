@@ -184,7 +184,6 @@ def handle(msg):
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
     elif command == '/ho_caldo':
-        bot.sendMessage(CHAT_ID, "Funzionalita' in sviluppo")
         bot.sendMessage(CHAT_ID, "Ho capito che hai caldo")
         f = open("heating_update","a")
         f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
