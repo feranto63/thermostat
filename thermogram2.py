@@ -2,42 +2,61 @@
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
-PROPRIETARIO = sys.argv[1]  # get user from command-line
+#PROPRIETARIO = sys.argv[1]  # get user from command-line
 owner_found = False
 
-if PROPRIETARIO == 'Ferruccio':
-    persone_della_casa = 4
-    persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
-    persona_at_home=[True, True, True, True]
-    imap_host = 'imap.gmail.com'
-    EMAIL_ID='MaggiordomoBot@gmail.com'
-    EMAIL_PASSWD='cldbzz00'
-    Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
-    #80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
-    Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
-    #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
-    Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
-    Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
-    persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
-    persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
-    GATE_PRESENT = False
-    IP_PRESENCE = True
-    BT_PRESENCE = False
-    owner_found=True
 
-if PROPRIETARIO == 'Piero':
-    persone_della_casa = 2
-    persona=['Piero','Annamaria']
-    persona_at_home=[True, True]
-    imap_host = 'imap.gmail.com'
-    EMAIL_ID='BattistaMaggiordomoBot@gmail.com'
-    EMAIL_PASSWD='peterbel'
-    persona_IP=['192.168.0.0','192.168.0.0','192.168.0.0','192.168.0.0'] #IP address of smartphone; fixed assignment by router
-    persona_BT=['00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00'] #BT mac address of smartphone
-    GATE_PRESENT = True
-    IP_PRESENCE = False
-    BT_PRESENCE = False
-    owner_found=True
+import ConfigParser
+
+settings = ConfigParser.ConfigParser()
+settings.read('thermogram2.ini')
+persone_della_casa = settings.getint('SectionOne','persone_della_casa')
+persona= settings.get('SectionOne','persona')
+persona_at_home=settings.get('SectionOne','persona_at_home')
+imap_host = settings.get('SectionOne','imap_host')
+EMAIL_ID=settings.get('SectionOne','EMAIL_ID')
+EMAIL_PASSWD=settings.get('SectionOne','EMAIL_PASSWD')
+persona_IP=settings.get('SectionOne','persona_IP')
+persona_BT=settings.get('SectionOne','persona_BT')
+GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
+IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
+BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
+owner_found= settings.getboolean('SectionOne','owner_found')
+
+
+#if PROPRIETARIO == 'Ferruccio':
+#    persone_della_casa = 4
+#    persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
+#    persona_at_home=[True, True, True, True]
+#    imap_host = 'imap.gmail.com'
+#    EMAIL_ID='MaggiordomoBot@gmail.com'
+#    EMAIL_PASSWD='cldbzz00'
+#    Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
+#    #80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
+#    Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
+#    #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
+#    Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
+#    Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
+#    persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
+#    persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
+#    GATE_PRESENT = False
+#    IP_PRESENCE = True
+#    BT_PRESENCE = False
+#    owner_found=True
+
+#if PROPRIETARIO == 'Piero':
+#    persone_della_casa = 2
+#    persona=['Piero','Annamaria']
+#    persona_at_home=[True, True]
+#    imap_host = 'imap.gmail.com'
+#    EMAIL_ID='BattistaMaggiordomoBot@gmail.com'
+#    EMAIL_PASSWD='peterbel'
+#    persona_IP=['192.168.0.0','192.168.0.0','192.168.0.0','192.168.0.0'] #IP address of smartphone; fixed assignment by router
+#    persona_BT=['00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00'] #BT mac address of smartphone
+#    GATE_PRESENT = True
+#    IP_PRESENCE = False
+#    BT_PRESENCE = False
+#    owner_found=True
 
 if not owner_found:
     sys.exit("owner not found")
