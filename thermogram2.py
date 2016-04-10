@@ -473,7 +473,7 @@ def set_presence(presence_msg):
 def check_presence_IP():
     global personaIP, persona_at_home, persone_della_casa
     for n in range(persone_della_casa):
-        result = os.system("ping -c 1 " + persona_IP[n])
+        result = os.system("ping -c 2 " + persona_IP[n])
         if (result == 0):
             if not persona_at_home[n]:
                 set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
