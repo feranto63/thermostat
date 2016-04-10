@@ -6,3 +6,7 @@ filedati
 filepresence
 logging.log
 *.pyc
+*.ini
+fileheating
+fileschedule
+*.log
