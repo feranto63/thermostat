@@ -156,7 +156,7 @@ def handle(msg):
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
-    global mySchedule, CurTargetTemp, CurHumidity
+    global mySchedule, CurTargetTemp
     global CHAT_ID, GATE_PRESENT
     global pulizie_status, pulizie_timer
     
@@ -171,6 +171,8 @@ def handle(msg):
     command = msg['text'].strip().lower()
     CurTemp = read_temp()
     CurTargetTemp=current_target_temp()
+    CurTempDHT, CurHumidity = read_TandH()
+
     
     orario = time.localtime(time.time())
     localtime = time.asctime( orario )
@@ -187,8 +189,9 @@ def handle(msg):
             heatstat = "acceso"
         else:
             heatstat = "spento"
-        messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone\n"
-#        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%, Padrone\n"
+        messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
+        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%\n"
+        messaggio+="La temperatura DHT e' di "+str("%0.1f" % CurTempDHT)+" C\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
         if pulizie_status:
