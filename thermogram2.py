@@ -188,7 +188,7 @@ def handle(msg):
         else:
             heatstat = "spento"
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone\n"
-        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity+"%, Padrone\n"
+        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%, Padrone\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
         if pulizie_status:
