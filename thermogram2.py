@@ -156,7 +156,7 @@ def handle(msg):
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
-    global mySchedule, CurTargetTemp
+    global mySchedule, CurTargetTemp, CurTempDHT, CurHumidity
     global CHAT_ID, GATE_PRESENT
     global pulizie_status, pulizie_timer
     
@@ -188,7 +188,7 @@ def handle(msg):
             heatstat = "acceso"
         else:
             heatstat = "spento"
-        CurTempDHT, CurHumidity = read_TandH()
+#        CurTempDHT, CurHumidity = read_TandH()
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
         messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%\n"
         messaggio+="La temperatura DHT e' di "+str("%0.1f" % CurTempDHT)+" C\n"
@@ -326,6 +326,9 @@ report_interval = 300  # report every 300 seconds (5 min) as a default
 heating_status = False
 heating_standby = False
 heating_overwrite = False
+
+CurTempDHT = 0
+CurHumidity = 0
 
 # variables for cleaning period
 pulizie_status=False
