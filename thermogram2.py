@@ -171,7 +171,6 @@ def handle(msg):
     command = msg['text'].strip().lower()
     CurTemp = read_temp()
     CurTargetTemp=current_target_temp()
-    CurTempDHT, CurHumidity = read_TandH()
 
     
     orario = time.localtime(time.time())
@@ -189,6 +188,7 @@ def handle(msg):
             heatstat = "acceso"
         else:
             heatstat = "spento"
+        CurTempDHT, CurHumidity = read_TandH()
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
         messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%\n"
         messaggio+="La temperatura DHT e' di "+str("%0.1f" % CurTempDHT)+" C\n"
