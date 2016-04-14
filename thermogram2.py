@@ -156,7 +156,7 @@ def handle(msg):
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
-    global mySchedule, CurTargetTemp
+    global mySchedule, CurTargetTemp, CurHumidity
     global CHAT_ID, GATE_PRESENT
     global pulizie_status, pulizie_timer
     
@@ -188,7 +188,8 @@ def handle(msg):
         else:
             heatstat = "spento"
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C, Padrone\n"
-        messaggio+="La temperatura di confort e' di "+str(CurTargetTemp)+" C\n"
+        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity+"%, Padrone\n"
+        messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
         if pulizie_status:
             messaggio+="disattivato per pulizie"
@@ -371,7 +372,7 @@ import Adafruit_DHT
 # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
 def read_TandH():
     global DHT_PIN
-    sensor = Adafruit_DHT.DHT11
+    sensor = Adafruit_DHT.DHT22
     # Example using a Raspberry Pi with DHT sensor
     # connected to GPIO4.
     pin = DHT_PIN
