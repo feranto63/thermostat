@@ -72,6 +72,7 @@ GATE_PIN = 22
 GATE_ON = 0
 GATE_OFF = 1
 DHT_PIN = 4
+dbname='/var/www/templog.db'
 
 lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -95,6 +96,20 @@ import bluetooth
 #import library for logging
 import logging
 logging.basicConfig(filename='termostato.log', level=logging.WARNING)
+
+
+###################### database per la memorizzazione delle temperature ###############
+import sqlite3
+
+# store the temperature in the database
+def log_temperature(temp):
+
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
+    # commit the changes
+    conn.commit()
+    conn.close()
 
 ################### gestione cronotermostato ###########################
 import calendar
@@ -685,7 +700,6 @@ while True:
     localtime = time.asctime( time.localtime(now) )
     CurTargetTemp=current_target_temp()
     CurTemp = read_temp()
-    CurTempDHT, CurHumidity = read_TandH()
     if CurHumidity == None:
         CurHumidity = 'N.A.'
     if not heating_overwrite:
@@ -701,12 +715,14 @@ while True:
                 if CurTemp > (CurTargetTemp + 0.2):
                     TurnOffHeating()
     if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+        CurTempDHT, CurHumidity = read_TandH()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
         #scrive la temperatura coreente ed il timestam sul file
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
+        log_temperature(CurTemp)
         
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
