@@ -102,11 +102,13 @@ logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 import sqlite3
 
 # store the temperature in the database
-def log_temperature(temp):
+def log_temperature(orario,temp):
 
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
-    curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
+#    curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
+    dati_da_inserire = [orario,temp]
+    curs.execute("INSERT INTO temps values (?,?)", dati_da_inserire)
     # commit the changes
     conn.commit()
     conn.close()
@@ -722,7 +724,7 @@ while True:
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
-        log_temperature(CurTemp)
+        log_temperature(localtime,CurTemp)
         
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
