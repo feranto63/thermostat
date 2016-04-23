@@ -700,7 +700,7 @@ mail = connect() #apre la casella di posta
 while True:
     now = time.time()
     #localtime = time.asctime( time.localtime(now) )
-    localtime = time.strftime(time.localtime(now),'%Y-%m-%d %H:%M:%S')
+    localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     CurTargetTemp=current_target_temp()
     CurTemp = read_temp()
     if CurHumidity == None:
