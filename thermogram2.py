@@ -102,13 +102,13 @@ logging.basicConfig(filename='termostato.log', level=logging.WARNING)
 import sqlite3
 
 # store the temperature in the database
-def log_temperature(orario,temp):
+def log_temperature(orario,temp, tempDHT, humidity):
 
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
 #    curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
-    dati_da_inserire = [orario,temp]
-    curs.execute("INSERT INTO temps values (?,?)", dati_da_inserire)
+    dati_da_inserire = [orario,temp,tempDHT,humidity]
+    curs.execute("INSERT INTO temps values (?,?,?,?)", dati_da_inserire)
     # commit the changes
     conn.commit()
     conn.close()
@@ -699,7 +699,8 @@ mail = connect() #apre la casella di posta
 
 while True:
     now = time.time()
-    localtime = time.asctime( time.localtime(now) )
+    #localtime = time.asctime( time.localtime(now) )
+    localtime = time.strftime(time.localtime(now),'%Y-%m-%d %H:%M:%S')
     CurTargetTemp=current_target_temp()
     CurTemp = read_temp()
     if CurHumidity == None:
@@ -724,7 +725,7 @@ while True:
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
-        log_temperature(localtime,CurTemp)
+        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity)
         
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
