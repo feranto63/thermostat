@@ -48,6 +48,16 @@ def log_temperature(orario,temp, tempDHT, humidity):
     # commit the changes
     conn.commit()
     conn.close()
+    
+def log_temp_radio(orario,deviceID,msgType,temp):
+
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    dati_da_inserire = [orario,deviceID,msgType,temp]
+    curs.execute("INSERT INTO temp_radio values (?,?,?,?)", dati_da_inserire)
+    # commit the changes
+    conn.commit()
+    conn.close()
 
 # get temperature
 # returns -100 on error, or the temperature as a float
@@ -207,6 +217,7 @@ def main():
 #    get_temp_wu()
 #    t =threading.Timer(SAMPLE,get_temp_wu)
 #    t.start()
+CurHumidity = 0
 
     while True:
     	now = time.time()
@@ -227,6 +238,7 @@ def main():
         #chiude il file dei dati e lo salva
         filedati.close()
         log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity)
+        log_temp_radio(localtime,deviceID,msgType,value)
         
 #        if temperature['temperature'] != -100:
 #            print ("temperature="+str(temperature))#
