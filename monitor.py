@@ -206,7 +206,7 @@ def main():
 #    t.start()
 
     while True:
-	    now = time.time()
+    	now = time.time()
     	#localtime = time.asctime( time.localtime(now) )
     	localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 #    	CurTargetTemp=current_target_temp()
