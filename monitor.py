@@ -217,7 +217,7 @@ def main():
 #    get_temp_wu()
 #    t =threading.Timer(SAMPLE,get_temp_wu)
 #    t.start()
-CurHumidity = 0
+    CurHumidity = 0
 
     while True:
     	now = time.time()
