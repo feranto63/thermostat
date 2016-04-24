@@ -86,8 +86,8 @@ import RPi.GPIO as GPIO
 ##wiringpi.wiringPiSetup()
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(HEAT_PIN,GPIO.OUT)
-GPIO.setup(GATE_PIN,GPIO.OUT)
+#GPIO.setup(HEAT_PIN,GPIO.OUT)
+#GPIO.setup(GATE_PIN,GPIO.OUT)
 
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
