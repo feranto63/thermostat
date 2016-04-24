@@ -417,6 +417,29 @@ def read_TandH():
 
 ########## fine gestione sensore DHT11 ############################
 
+########## gestione sensori Radio CISECO ###############
+import serial
+
+
+def get_temp_radio():
+    DEVICE = '/dev/ttyAMA0'
+    BAUD = 9600
+
+    ser = serial.Serial(DEVICE, BAUD)
+    n = ser.inWaiting()
+    if n != 0:
+        msg = ser.read(n)
+        deviceID = msg[1:3]
+        messType = msg[3:7]
+        value = msg[7:12]
+    else:
+        deviceID = "--"
+        messType = "NULL"
+        value = 0
+    return deviceID, messType, value
+    
+################### fine gestione sensori Radio CISECO ##############
+
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
@@ -719,10 +742,13 @@ while True:
                     TurnOffHeating()
     if report_interval is not None and last_report is not None and now - last_report >= report_interval:
         CurTempDHT, CurHumidity = read_TandH()
+        deviceID, msgType, value = get_temp_radio()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
         #scrive la temperatura coreente ed il timestam sul file
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
+        if deviceID != '--':
+            filedati.write("ID="+deviceID+",msgType="+msgType+",value="+str(value))
         #chiude il file dei dati e lo salva
         filedati.close()
         log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity)
