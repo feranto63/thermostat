@@ -10,8 +10,9 @@ dbname='/var/www/templog.db'
 conn=sqlite3.connect(dbname)
 
 selectQuery = "SELECT  * FROM  sqlite_sequence WHERE name = temps";
-Cursor cursor = db.rawQuery(selectQuery, null);
-cursor.moveToLast();curs=conn.cursor()
+cursor = conn.rawQuery(selectQuery, null);
+cursor.moveToLast();
+#curs=conn.cursor()
 #dati_da_inserire = [orario,temp,tempDHT,humidity]
 #curs.execute("INSERT INTO temps values (?,?,?,?)", dati_da_inserire)
 rows = cursor.fetchone()
