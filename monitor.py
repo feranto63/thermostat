@@ -5,7 +5,7 @@ import threading
 import os
 import glob
 
-from time import time, sleep, gmtime, strftime
+import time
 #import urllib2
 #import urllib
 
