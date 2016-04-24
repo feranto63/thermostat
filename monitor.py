@@ -251,6 +251,7 @@ def main():
         #if t.is_alive() == False:
         #    t =threading.Timer(SAMPLE,get_temp_wu)
         #    t.start()
+        time.sleep(5*60)
 
 if __name__=="__main__":
     main()
