@@ -235,10 +235,11 @@ def main():
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         if deviceID != '--':
             filedati.write("ID="+deviceID+",msgType="+msgType+",value="+str(value))
+            log_temp_radio(localtime,deviceID,msgType,value)
+            print "ID="+deviceID+",msgType="+msgType+",value="+str(value)
         #chiude il file dei dati e lo salva
         filedati.close()
         log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity)
-        log_temp_radio(localtime,deviceID,msgType,value)
         
 #        if temperature['temperature'] != -100:
 #            print ("temperature="+str(temperature))#
