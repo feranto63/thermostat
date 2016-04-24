@@ -691,7 +691,7 @@ initialize_schedule()
 
 ######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
-bot.notifyOnMessage(handle)
+bot.message_loop(handle)
 logging.info("Listening ...")
 
 help_or_gate = '/help'
