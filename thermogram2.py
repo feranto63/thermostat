@@ -218,7 +218,7 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, messaggio)
     elif command == '/annulla':
         heating_overwrite = False
-        bot.sendMessage(CHAT_ID, "Annullo overwrite")
+        bot.sendMessage(CHAT_ID, "Annullo overwrite",disable_notification=True)
     elif command == '/ho_freddo':
         bot.sendMessage(CHAT_ID, "Ho capito che hai freddo")
         f = open("heating_update","a")
@@ -278,19 +278,19 @@ def handle(msg):
             bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
         else:
             show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
-            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza")
-            bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard)
+            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
+            bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
             bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
         time.sleep(2)
         GPIO.output(GATE_PIN, GATE_OFF)
     elif command == '/turnon':
         heating_overwrite = True
         TurnOnHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite")
+        bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
     elif command == '/turnoff':
         heating_overwrite = True
         TurnOffHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite")
+        bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
@@ -474,14 +474,14 @@ def set_presence(presence_msg):
             if status == 'IN':
                 if persona_at_home[n] == False:
                     persona_at_home[n] = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=True)
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("IN")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
             elif status == 'OUT':
                 if persona_at_home[n]:
                     persona_at_home[n] = False
-                    bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti)
+                    bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=True)
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("OUT")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
@@ -504,7 +504,7 @@ def set_presence(presence_msg):
             if not heating_overwrite and heating_status: #se termosifoni attivi
                 TurnOffHeating()
                 #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
-                bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa")
+                bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
     else: #almeno una persona in casa
         if heating_standby: #se standby attivo
             heating_standby = False
@@ -514,7 +514,7 @@ def set_presence(presence_msg):
             if not heating_overwrite and heating_status: #se termosifoni attivi prima dello standby
                 TurnOnHeating()
                 #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
-                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone")
+                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
     #return set_presence            
 
 ######################## check presence con ping IP su wifi
