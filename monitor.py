@@ -2,7 +2,7 @@
 
 import sqlite3
 import threading
-import sys
+import os
 
 from time import time, sleep, gmtime, strftime
 #import urllib2
