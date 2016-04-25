@@ -81,7 +81,7 @@ def get_temp_radio():
             nb_msg = len(data) / 12
             for i in range (0, nb_msg):
                 msg = data[i*12:(i+1)*12]
-                print("ser.inWaiting= "+str(i))
+				print("ser.inWaiting= "+str(i))
 				print("Data= "+str(msg))
 				deviceid = msg[1:3]
 				print("Device ID is= "+str(deviceid))
