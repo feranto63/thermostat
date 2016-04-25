@@ -76,8 +76,8 @@ def get_temp_radio():
     fim = time.time()+ TIMEOUT
     while (time.time()<fim) and (tempvalue == -100):
 	    p = ser.inWaiting()
-	    print("ser.inWaiting= "+str(p))
 	    while ser.inWaiting() >= 12:
+	    	    print("ser.inWaiting= "+str(p))
 		    data = ser.read(12)
 		    print("Data= "+str(data))
 		    deviceid = data[1:3]
