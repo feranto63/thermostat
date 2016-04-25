@@ -742,13 +742,13 @@ while True:
                     TurnOffHeating()
     if report_interval is not None and last_report is not None and now - last_report >= report_interval:
         CurTempDHT, CurHumidity = read_TandH()
-        deviceID, msgType, value = get_temp_radio()
+#        deviceID, msgType, value = get_temp_radio()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
         #scrive la temperatura coreente ed il timestam sul file
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
-        if deviceID != '--':
-            filedati.write("ID="+deviceID+",msgType="+msgType+",value="+str(value))
+#        if deviceID != '--':
+#            filedati.write("ID="+deviceID+",msgType="+msgType+",value="+str(value))
         #chiude il file dei dati e lo salva
         filedati.close()
         log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity)
