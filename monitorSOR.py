@@ -81,28 +81,28 @@ def get_temp_radio():
             nb_msg = len(data) / 12
             for i in range (0, nb_msg):
                 msg = data[i*12:(i+1)*12]
-				print("ser.inWaiting= "+str(i))
-				print("Data= "+str(msg))
-				deviceid = msg[1:3]
-				print("Device ID is= "+str(deviceid))
-				if msg[0] != "a":
-					print("First letter doesn't equal a. Flushing...")
-					ser.flushInput()
-					return
-				if len(msg) != 12:
-					print("Message length not 12. Flushing...")
-					ser.flushInput()
-					return
-				msgType = msg[3:7]
-				if msgType == "TEMP":
-					tempvalue = float(msg[7:])
-					print("Temp msg= "+str(tempvalue))
-				if msgType == "BATT":
-					if msg[7:10] == "LOW":
-						tempvalue = 0
-					else:
-						tempvalue = float(msg[7:11])
-					print("Bat msg= "+str(tempvalue))
+		print("ser.inWaiting= "+str(i))
+		print("Data= "+str(msg))
+		deviceid = msg[1:3]
+		print("Device ID is= "+str(deviceid))
+		if msg[0] != "a":
+			print("First letter doesn't equal a. Flushing...")
+			ser.flushInput()
+			return
+		if len(msg) != 12:
+			print("Message length not 12. Flushing...")
+			ser.flushInput()
+			return
+		msgType = msg[3:7]
+		if msgType == "TEMP":
+			tempvalue = float(msg[7:])
+			print("Temp msg= "+str(tempvalue))
+		if msgType == "BATT":
+			if msg[7:10] == "LOW":
+				tempvalue = 0
+			else:
+				tempvalue = float(msg[7:11])
+			print("Bat msg= "+str(tempvalue))
     return (deviceid,msgType,tempvalue)
 
 ################# gestione della interfaccia di GPIO   
