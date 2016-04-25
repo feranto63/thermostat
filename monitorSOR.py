@@ -73,8 +73,8 @@ def get_temp_radio():
     voltage = 0
     msgType = 'NULL'
 
-    fim = time()+ TIMEOUT
-    while (time()<fim) and (tempvalue == -100):
+    fim = time.time()+ TIMEOUT
+    while (time.time()<fim) and (tempvalue == -100):
 	    p = ser.inWaiting()
 	    print("ser.inWaiting= "+str(p))
 	    while ser.inWaiting() >= 12:
