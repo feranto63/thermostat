@@ -67,7 +67,7 @@ def get_temp_radio():
     global ser
 
 	#Timeout (in s) for waiting to read a temperature from RF sensors
-	TIMEOUT = 30
+    TIMEOUT = 30
     tempvalue = -100
     deviceid = '??'
     voltage = 0
