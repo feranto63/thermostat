@@ -92,7 +92,7 @@ def get_temp_radio():
 			    print("Message length not 12. Flushing...")
 			    ser.flushInput()
 			    return
-			msgType = data[3:7]
+		    msgType = data[3:7]
 		    if msgType == "TEMP":
 			    tempvalue = float(data[7:])
 			    print("Temp msg= "+str(tempvalue))
