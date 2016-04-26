@@ -721,6 +721,8 @@ if GATE_PRESENT:
 
 mail = connect() #apre la casella di posta
 
+CurTempDHT, CurHumidity = read_TandH()
+
 while True:
     now = time.time()
     #localtime = time.asctime( time.localtime(now) )
