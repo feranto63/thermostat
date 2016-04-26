@@ -71,7 +71,7 @@ HEAT_PIN = 17
 GATE_PIN = 22
 GATE_ON = 0
 GATE_OFF = 1
-DHT_PIN = 4
+DHT_PIN = 18
 dbname='/var/www/templog.db'
 
 lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
