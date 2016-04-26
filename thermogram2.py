@@ -73,6 +73,7 @@ GATE_ON = 0
 GATE_OFF = 1
 DHT_PIN = 18
 dbname='/var/www/templog.db'
+hide_notify = False
 
 lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -474,14 +475,14 @@ def set_presence(presence_msg):
             if status == 'IN':
                 if persona_at_home[n] == False:
                     persona_at_home[n] = True
-                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=True)
+                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("IN")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
             elif status == 'OUT':
                 if persona_at_home[n]:
                     persona_at_home[n] = False
-                    bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=True)
+                    bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
                     f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                     f.write("OUT")  #scrive la info di presence sul file
                     f.close()  #chiude il file dei dati e lo salva
