@@ -26,7 +26,8 @@ def printHTMLHead(title, table, table_radio):
     print title
     print "    </title>"
     
-    print_graph_script(table,table_radio)
+    print_graph_script(table)
+    print_graph_script_radio(table_radio)
 
     print "</head>"
 
@@ -83,10 +84,25 @@ def create_table(rows):
 
     return chart_table
 
+def create_table_radio(rows):
+    chart_table=""
+
+    for row in rows[:-1]:
+        if row[2]=='TEMP':
+            rowstr="['{0}', {1}],\n".format(str(row[0]),str(row[3]))
+            chart_table+=rowstr
+
+    row=rows[-1]
+    if row[2]=='TEMP':
+        rowstr="['{0}', {1}]\n".format(str(row[0]),str(row[3]))
+        chart_table+=rowstr
+
+    return chart_table
+
 
 # print the javascript to generate the chart
 # pass the table generated from the database info
-def print_graph_script(table, table_radio):
+def print_graph_script(table):
 
     # google chart snippet
     chart_code="""
@@ -96,7 +112,7 @@ def print_graph_script(table, table_radio):
       google.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Time', 'Temperature','Ext Temp],
+          ['Time', 'Temperature'],
 %s
         ]);
         var options = {
@@ -108,6 +124,30 @@ def print_graph_script(table, table_radio):
     </script>"""
 
     print chart_code % (table)
+    
+    
+ def print_graph_script_radio(table_radio):
+
+    # google chart snippet
+    chart_code="""
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Time', 'Ext Temperature'],
+%s
+        ]);
+        var options = {
+          title: 'Ext Temperature'
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>"""
+
+   print chart_code % (table_radio)
 
 
 
@@ -115,7 +155,7 @@ def print_graph_script(table, table_radio):
 # print the div that contains the graph
 def show_graph():
     print "<h2>Temperature Chart</h2>"
-    print '<div id="chart_div" style="width: 900px; height: 500px;"></div>'
+    print '<div id="chart_div" style="width: 900px; height: 1000px;"></div>'
 
 
 
@@ -262,7 +302,7 @@ def main():
 
     if len(records_radio) != 0:
         # convert the data into a table
-        table_radio=create_table(records_radio)
+        table_radio=create_table_radio(records_radio)
     else:
         print "No data radio found"
         return
