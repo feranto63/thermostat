@@ -75,11 +75,11 @@ def create_table(rows):
     chart_table=""
 
     for row in rows[:-1]:
-        rowstr="['{0}', {1}],\n".format(str(row[0]),str(row[1]))
+        rowstr="['{0}', {1}, {2}],\n".format(str(row[0]),str(row[1]),str(row[2]))
         chart_table+=rowstr
 
     row=rows[-1]
-    rowstr="['{0}', {1}]\n".format(str(row[0]),str(row[1]))
+    rowstr="['{0}', {1}, {2}]\n".format(str(row[0]),str(row[1]),str(row[2]))
     chart_table+=rowstr
 
     return chart_table
@@ -112,7 +112,7 @@ def print_graph_script(table):
       google.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Time', 'Temperature'],
+          ['Time', 'Temperature', 'Temp DHT'],
 %s
         ]);
         var options = {
@@ -126,7 +126,7 @@ def print_graph_script(table):
     print chart_code % (table)
     
     
- def print_graph_script_radio(table_radio):
+def print_graph_script_radio(table_radio):
 
     # google chart snippet
     chart_code="""
@@ -142,12 +142,12 @@ def print_graph_script(table):
         var options = {
           title: 'Ext Temperature'
         };
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_radio'));
         chart.draw(data, options);
       }
     </script>"""
 
-   print chart_code % (table_radio)
+    print chart_code % (table_radio)
 
 
 
@@ -155,7 +155,8 @@ def print_graph_script(table):
 # print the div that contains the graph
 def show_graph():
     print "<h2>Temperature Chart</h2>"
-    print '<div id="chart_div" style="width: 900px; height: 1000px;"></div>'
+    print '<div id="chart_div" style="width: 900px; height: 500px;"></div>'
+    print '<div id="chart_div_radio" style="width: 900px; height: 500px;"></div>'
 
 
 
