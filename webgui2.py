@@ -20,13 +20,13 @@ def printHTTPheader():
 
 # print the HTML head section
 # arguments are the page title and the table for the chart
-def printHTMLHead(title, table):
+def printHTMLHead(title, table, table_radio):
     print "<head>"
     print "    <title>"
     print title
     print "    </title>"
     
-    print_graph_script(table)
+    print_graph_script(table,table_radio)
 
     print "</head>"
 
@@ -43,6 +43,23 @@ def get_data(interval):
         curs.execute("SELECT * FROM temps")
     else:
         curs.execute("SELECT * FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
+#        curs.execute("SELECT * FROM temps WHERE timestamp>datetime('2013-09-19 21:30:02','-%s hours') AND timestamp<=datetime('2013-09-19 21:31:02')" % interval)
+
+    rows=curs.fetchall()
+
+    conn.close()
+
+    return rows
+
+def get_data_radio(interval):
+
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+
+    if interval == None:
+        curs.execute("SELECT * FROM temp_radio")
+    else:
+        curs.execute("SELECT * FROM temp_radio WHERE timestamp>datetime('now','-%s hours')" % interval)
 #        curs.execute("SELECT * FROM temps WHERE timestamp>datetime('2013-09-19 21:30:02','-%s hours') AND timestamp<=datetime('2013-09-19 21:31:02')" % interval)
 
     rows=curs.fetchall()
@@ -69,7 +86,7 @@ def create_table(rows):
 
 # print the javascript to generate the chart
 # pass the table generated from the database info
-def print_graph_script(table):
+def print_graph_script(table, table_radio):
 
     # google chart snippet
     chart_code="""
@@ -79,7 +96,7 @@ def print_graph_script(table):
       google.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Time', 'Temperature'],
+          ['Time', 'Temperature','Ext Temp],
 %s
         ]);
         var options = {
@@ -231,6 +248,7 @@ def main():
 
     # get data from the database
     records=get_data(option)
+    records_radio=get_data_radio(option)
 
     # print the HTTP header
     printHTTPheader()
@@ -242,11 +260,18 @@ def main():
         print "No data found"
         return
 
+    if len(records_radio) != 0:
+        # convert the data into a table
+        table_radio=create_table(records_radio)
+    else:
+        print "No data radio found"
+        return
+
     # start printing the page
     print "<html>"
     # print the head section including the table
     # used by the javascript for the chart
-    printHTMLHead("Raspberry Pi Temperature Logger", table)
+    printHTMLHead("Raspberry Pi Temperature Logger", table, table_radio)
 
     # print the page body
     print "<body>"
