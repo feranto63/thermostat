@@ -11,12 +11,6 @@ import sys
 import pprint
 
 
-#import library for logging
-import logging
-logging.basicConfig(filename='termostato.log', level=logging.WARNING)
-
-
-
 
 ################# gestione della interfaccia di GPIO   
 # wiringpi numbers  
