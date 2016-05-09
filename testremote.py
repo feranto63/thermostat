@@ -24,7 +24,7 @@ GPIO.setup(23,GPIO.IN)
 GPIO.setup(24,GPIO.IN)
 GPIO.setup(25,GPIO.IN)
 
-
+i=1
 while True:
     if GPIO.input(27):
         pin1 = "ON "
@@ -43,7 +43,8 @@ while True:
     else:
         pin4 = "OFF"
 
-    print str(pin1)+" - "+str(pin2)+" - "+str(pin3)+" - "+str(pin4)
+    print str(i)+"  "+str(pin1)+" - "+str(pin2)+" - "+str(pin3)+" - "+str(pin4)
     time.sleep(1)
+    i=i+1
     
 #    loop.run_forever()
