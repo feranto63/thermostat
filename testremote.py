@@ -35,7 +35,7 @@ GPIO.setup(24,GPIO.IN)
 GPIO.setup(25,GPIO.IN)
 
 
-While True:
+While True
     pin1 = GPIO.input(27)
     pin2 = GPIO.input(23)
     pin3 = GPIO.input(24)
