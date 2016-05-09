@@ -26,11 +26,23 @@ GPIO.setup(25,GPIO.IN)
 
 
 while True:
-    pin1 = GPIO.input(27)
-    pin2 = GPIO.input(23)
-    pin3 = GPIO.input(24)
-    pin4 = GPIO.input(25)
-    
+    if GPIO.input(27):
+        pin1 = "ON "
+    else:
+        pin1 = "OFF"
+    if GPIO.input(23):
+        pin2 = "ON "
+    else:
+        pin2 = "OFF"
+    if GPIO.input(24):
+        pin3 = "ON "
+    else:
+        pin3 = "OFF"
+    if GPIO.input(25):
+        pin4 = "ON "
+    else:
+        pin4 = "OFF"
+
     print str(pin1)+" - "+str(pin2)+" - "+str(pin3)+" - "+str(pin4)
     time.sleep(1)
     
