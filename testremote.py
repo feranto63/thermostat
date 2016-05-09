@@ -10,10 +10,6 @@ import email
 import sys
 import pprint
 
-import asyncio
-import telepot
-
-import requests
 
 #import library for logging
 import logging
