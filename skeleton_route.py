@@ -64,7 +64,7 @@ answerer = telepot.helper.Answerer(bot)
 
 bot.message_loop({'chat': on_chat_message,
                   'callback_query': on_callback_query,
-                  'inline_query': on_inline_query,
+#                  'inline_query': on_inline_query,
                   'chosen_inline_result': on_chosen_inline_result})
 print 'Listening ...'
 
