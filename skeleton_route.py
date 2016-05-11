@@ -21,41 +21,27 @@ def on_chat_message(msg):
     if content_type != 'text':
         return
 
-    command = msg['text'][-1:].lower()
+    command = msg['text'].lower()
 
-    if command == 'c':
-        markup = ReplyKeyboardMarkup(keyboard=[
-                     ['Plain text', KeyboardButton(text='Text only')],
-                     [dict(text='Phone', request_contact=True), KeyboardButton(text='Location', request_location=True)],
-                 ])
-        bot.sendMessage(chat_id, 'Custom keyboard with various buttons', reply_markup=markup)
-    elif command == 'i':
+    if command == 'apri':
         markup = InlineKeyboardMarkup(inline_keyboard=[
-                     [dict(text='Telegram URL', url='https://core.telegram.org/')],
-                     [InlineKeyboardButton(text='Callback - show notification', callback_data='notification')],
-                     [dict(text='Callback - show alert', callback_data='alert')],
-                     [InlineKeyboardButton(text='Callback - edit message', callback_data='edit')],
-                     [dict(text='Switch to using bot inline', switch_inline_query='initial query')],
+                     [InlineKeyboardButton(text=' SI ', callback_data='si')],
+                     [InlineKeyboardButton(text=' NO ', callback_data='no')]
                  ])
 
         global message_with_inline_keyboard
-        message_with_inline_keyboard = bot.sendMessage(chat_id, 'Inline keyboard with various buttons', reply_markup=markup)
-    elif command == 'h':
-        markup = ReplyKeyboardHide()
-        bot.sendMessage(chat_id, 'Hide custom keyboard', reply_markup=markup)
-    elif command == 'f':
-        markup = ForceReply()
-        bot.sendMessage(chat_id, 'Force reply', reply_markup=markup)
-
+        #markup = ForceReply()
+        message_with_inline_keyboard = bot.sendMessage(chat_id, 'Confermi?', reply_markup=markup)
+    
 
 def on_callback_query(msg):
     query_id, from_id, data = telepot.glance(msg, flavor='callback_query')
     print 'Callback query:', query_id, from_id, data
 
-    if data == 'notification':
-        bot.answerCallbackQuery(query_id, text='Notification at top of screen')
-    elif data == 'alert':
-        bot.answerCallbackQuery(query_id, text='Alert!', show_alert=True)
+    if data == 'si':
+        bot.answerCallbackQuery(query_id, text='apro il cancello')
+    elif data == 'no':
+        bot.answerCallbackQuery(query_id, text='annulllo apertura cancello')
     elif data == 'edit':
         global message_with_inline_keyboard
 
@@ -64,39 +50,6 @@ def on_callback_query(msg):
             bot.editMessageText(msgid, 'NEW MESSAGE HERE!!!!!')
         else:
             bot.answerCallbackQuery(query_id, text='No previous message to edit')
-
-
-def on_inline_query(msg):
-    def compute():
-        query_id, from_id, query_string = telepot.glance(msg, flavor='inline_query')
-        print '%s: Computing for: %s' % (threading.current_thread().name, query_string)
-
-        articles = [InlineQueryResultArticle(
-                        id='abcde', title='Telegram', input_message_content=InputTextMessageContent(message_text='Telegram is a messaging app')),
-                    dict(type='article',
-                        id='fghij', title='Google', input_message_content=dict(message_text='Google is a search engine'))]
-
-        photo1_url = 'https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf'
-        photo2_url = 'https://www.telegram.org/img/t_logo.png'
-        photos = [InlineQueryResultPhoto(
-                      id='12345', photo_url=photo1_url, thumb_url=photo1_url),
-                  dict(type='photo',
-                      id='67890', photo_url=photo2_url, thumb_url=photo2_url)]
-
-        result_type = query_string[-1:].lower()
-
-        if result_type == 'a':
-            return articles
-        elif result_type == 'p':
-            return photos
-        else:
-            results = articles if random.randint(0,1) else photos
-            if result_type == 'b':
-                return dict(results=results, switch_pm_text='Back to Bot', switch_pm_parameter='Optional start parameter')
-            else:
-                return dict(results=results)
-
-    answerer.answer(msg, compute)
 
 
 def on_chosen_inline_result(msg):
