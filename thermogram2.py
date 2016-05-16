@@ -740,7 +740,7 @@ while True:
     else:
         if DHT_PRESENCE:
             CurTemp = CurTempDHT
-        else
+        else:
             CurTemp = 99
     if CurHumidity == None:
         CurHumidity = 'N.A.'
