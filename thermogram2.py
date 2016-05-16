@@ -22,6 +22,8 @@ persona_BT=settings.get('SectionOne','persona_BT').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
+DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
+DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
 owner_found= settings.getboolean('SectionOne','owner_found')
 
 
@@ -174,7 +176,7 @@ def handle(msg):
     global last_report, report_interval     #parametri per il monitoraggio su file delle temperature
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
-    global mySchedule, CurTargetTemp, CurTempDHT, CurHumidity
+    global mySchedule, CurTemp, CurTargetTemp, CurTempDHT, CurHumidity
     global CHAT_ID, GATE_PRESENT
     global pulizie_status, pulizie_timer
     
@@ -187,7 +189,7 @@ def handle(msg):
         return
 
     command = msg['text'].strip().lower()
-    CurTemp = read_temp()
+    #CurTemp = read_temp()
     CurTargetTemp=current_target_temp()
 
     
@@ -721,14 +723,25 @@ if GATE_PRESENT:
 
 mail = connect() #apre la casella di posta
 
-CurTempDHT, CurHumidity = read_TandH()
+
+if DHT_PRESENCE:
+    CurTempDHT, CurHumidity = read_TandH()
+else:
+    CurTempDHT = 99
+    CurHumidity = None
 
 while True:
     now = time.time()
     #localtime = time.asctime( time.localtime(now) )
     localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     CurTargetTemp=current_target_temp()
-    CurTemp = read_temp()
+    if DS_PRESENCE:
+        CurTemp = read_temp()
+    else:
+        if DHT_PRESENCE:
+            CurTemp = CurTempDHT
+        else
+            CurTemp = 99
     if CurHumidity == None:
         CurHumidity = 'N.A.'
     if not heating_overwrite:
@@ -744,7 +757,11 @@ while True:
                 if CurTemp > (CurTargetTemp + 0.2):
                     TurnOffHeating()
     if report_interval is not None and last_report is not None and now - last_report >= report_interval:
-        CurTempDHT, CurHumidity = read_TandH()
+        if DHT_PRESENCE:
+            CurTempDHT, CurHumidity = read_TandH()
+        else:
+            CurTempDHT = 99
+            CurHumidity = 'N.A.'
 #        deviceID, msgType, value = get_temp_radio()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
@@ -764,6 +781,8 @@ while True:
     #check_presence_BT()
     if IP_PRESENCE:
         check_presence_IP() # controlla la presente con ping IP
+    if BT_PRESENCE:
+        check_presence_BT()
         
     time.sleep(60)
 
