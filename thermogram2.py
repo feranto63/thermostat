@@ -540,10 +540,10 @@ def check_presence_BT():
     for n in range (persone_della_casa):
         result = bluetooth.lookup_name(persona_BT[n], timeout=5)
         if (result != None):
-            if not persona_at_home[0]:
+            if not persona_at_home[n]:
                 set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
         else:
-            if persona_at_home[0]:
+            if persona_at_home[n]:
                 set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
 ###################################################
 
