@@ -653,8 +653,20 @@ def is_connected():
     return False
 ######### fine test internet connection
 
-#inizio programma
-######## legge da file lo stato di presenza delle persone della casa ###########
+# -------------------- inizio programma
+######## Inizializza le temperature
+if DS_PRESENCE:
+    CurTemp = read_temp()
+else:
+    CurTemp = 99
+    
+if DHT_PRESENCE:
+    CurTempDHT, CurHumidity = read_TandH()
+else:
+    CurTempDHT = 99
+    CurHumidity = None
+
+############ legge da file lo stato delle persone della casa ###############
 for n in range(persone_della_casa):
     try:
         f = open(persona[n]+"_at_home","r")  #apre il file dei dati in read mode
@@ -723,13 +735,6 @@ if GATE_PRESENT:
     bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard)
 
 mail = connect() #apre la casella di posta
-
-
-if DHT_PRESENCE:
-    CurTempDHT, CurHumidity = read_TandH()
-else:
-    CurTempDHT = 99
-    CurHumidity = None
 
 while True:
     now = time.time()
