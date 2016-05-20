@@ -237,8 +237,8 @@ def handle(msg):
         how_many_at_home=0
         for who_at_home in range(persone_della_casa):
             if persona_at_home[who_at_home]:
-                who_is_at_home+=persona[who_at_home]+" "
-                how_many_at_home+=1
+                who_is_at_home=who_is_at_home+persona[who_at_home]+" "
+                how_many_at_home=how_many_at_home+1
         if how_many_at_home != 0:
             if how_many_at_home == 1:
                 bot.sendMessage(CHAT_ID, who_is_at_home+"e' a casa")
@@ -497,8 +497,8 @@ def set_presence(presence_msg):
     how_many_at_home=0
     for n in range(persone_della_casa):
         if persona_at_home[n]:
-            who_is_at_home+=persona[n]+" "
-            how_many_at_home+=1
+            who_is_at_home=who_is_at_home+persona[n]+" "
+            how_many_at_home=how_many_at_home+1
     
     print str(how_many_at_home)+"  "+who_is_at_home
     
