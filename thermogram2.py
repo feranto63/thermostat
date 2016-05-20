@@ -499,9 +499,9 @@ def set_presence(presence_msg):
         if persona_at_home[n]:
             who_is_at_home+=persona[n]+" "
             how_many_at_home+=1
-    # inserito retur per debug
-    return
-            
+    
+    print str(how_many_at_home)+"  "+who_is_at_home
+    
     if how_many_at_home == 0: #nessuno in casa
         if heating_standby == False:  #standby termosifoni non attivo
             heating_standby = True
@@ -522,6 +522,8 @@ def set_presence(presence_msg):
                 TurnOnHeating()
                 #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
                 bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
+    # inserito retur per debug
+    return
     #return set_presence            
 
 ######################## check presence con ping IP su wifi
@@ -704,6 +706,8 @@ try:
         heating_standby = False
 except IOError:
     heating_standby = False  #se il file non e' presente imposto la presence a False
+
+heating_overwrite = False
 
 ######## legge da file lo programmazione del cronotermostato ###########
 initialize_schedule()
