@@ -491,8 +491,6 @@ def set_presence(presence_msg):
                     f.close()  #chiude il file dei dati e lo salva
         except ValueError: #non ho riconosciuto la persona
             bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
-    # inserito retur per debug
-    return
 
     # calcola chi e' a casa
     who_is_at_home=""
@@ -501,6 +499,9 @@ def set_presence(presence_msg):
         if persona_at_home[n]:
             who_is_at_home+=persona[n]+" "
             how_many_at_home+=1
+    # inserito retur per debug
+    return
+            
     if how_many_at_home == 0: #nessuno in casa
         if heating_standby == False:  #standby termosifoni non attivo
             heating_standby = True
