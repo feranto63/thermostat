@@ -447,7 +447,7 @@ def get_temp_radio():
 
 ##################### funzione per la gestione dei messaggi di presence
 def set_presence(presence_msg):
-    global persona_at_home, who_is_at_home, how_many_at_home
+    global persona_at_home, who_is_at_home, how_many_at_home, hide_notify
     global heating_status, heating_standby, heating_overwrite
     
     logging.debug('gestisco il messaggio di presence '+presence_msg)
