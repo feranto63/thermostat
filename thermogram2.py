@@ -177,7 +177,7 @@ def handle(msg):
     global heating_status, heating_standby, heating_overwrite  #stato di accensione dei termosifoni
     global who_is_at_home, how_many_at_home
     global mySchedule, CurTemp, CurTargetTemp, CurTempDHT, CurHumidity
-    global CHAT_ID, GATE_PRESENT
+    global CHAT_ID, GATE_PRESENT, GATE_PIN, GATE_ON, GATE_OFF
     global pulizie_status, pulizie_timer
     
     logging.debug('inizio la gestione di handle')
@@ -449,6 +449,7 @@ def get_temp_radio():
 def set_presence(presence_msg):
     global persona_at_home, who_is_at_home, how_many_at_home, hide_notify
     global heating_status, heating_standby, heating_overwrite
+    global CHAT_ID
     
     logging.debug('gestisco il messaggio di presence '+presence_msg)
     
@@ -482,7 +483,7 @@ def set_presence(presence_msg):
         if status == 'IN':
             if persona_at_home[n] == False:
                 persona_at_home[n] = True
-#                bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
+                bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
 #                bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
@@ -490,7 +491,7 @@ def set_presence(presence_msg):
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
-#                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
+                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
 #                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
@@ -559,6 +560,7 @@ def check_presence_BT():
 
 ##### connette o riconnette alla mail ###########
 def connect(retries=5, delay=3):
+    global EMAIL_ID, EMAIL_PASSWD
     while True:
         try:
             mail = imaplib.IMAP4_SSL(imap_host)
@@ -575,6 +577,7 @@ def connect(retries=5, delay=3):
 ############## gestione del riscaldamento ##################
 def TurnOnHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
+    global HEAT_PIN, HEAT_ON
 
     heating_status = True #print "HEATING ON "+localtime+"\n"
     f = open("heating_status","w")
@@ -597,6 +600,7 @@ def TurnOnHeating():
     
 def TurnOffHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
+    global HEAT_PIN, HEAT_OFF
     heating_status = False
     f = open("heating_status","w")
     f.write('OFF')
@@ -646,6 +650,7 @@ def read_gmail():
 import socket
 REMOTE_SERVER = "www.google.com"
 def is_connected():
+    global REMOTE_SERVER
     now = time.time()
     localtime = time.asctime( time.localtime(now) )
     try:
