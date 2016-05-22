@@ -298,9 +298,12 @@ def handle(msg):
             opengate_confirming=False
         else:
             opengate_confirming=False
-            show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
+            if str(chat_id) == str(CHAT_ID):
+                bot.sendMessage(CHAT_ID, "Annullo come richiesto Padrone", reply_markup=main_show_keyboard)
+            else:
+                show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
 #            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
-            bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
+                bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
     elif command == '/turnon':
         heating_overwrite = True
         TurnOnHeating()
