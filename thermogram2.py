@@ -501,7 +501,8 @@ def set_presence(presence_msg):
         if status == 'IN':
             if persona_at_home[n] == False:
                 persona_at_home[n] = True
-                bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
+                messaggio_IN="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
+                bot.sendMessage(CHAT_ID, messaggio_IN ,disable_notification=hide_notify)
 #                bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
@@ -509,7 +510,8 @@ def set_presence(presence_msg):
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
-                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti,disable_notification=hide_notify)
+                messaggio_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
+                bot.sendMessage(CHAT_ID, messaggio_OUT ,disable_notification=hide_notify)
 #                bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
