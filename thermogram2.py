@@ -170,6 +170,9 @@ def save_schedule():
 
 ################### fine gestione cronotermostato ######################
 
+# definisce la variabile per la conferma dell'apertura del cancello
+opengate_confirming = False
+
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
     global persona_at_home
@@ -179,6 +182,7 @@ def handle(msg):
     global mySchedule, CurTemp, CurTargetTemp, CurTempDHT, CurHumidity
     global CHAT_ID, GATE_PRESENT, GATE_PIN, GATE_ON, GATE_OFF
     global pulizie_status, pulizie_timer
+    global opengate_confirming
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -276,16 +280,26 @@ def handle(msg):
                 #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
             bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
     elif command == '/apri':
-        GPIO.output(GATE_PIN, GATE_ON)
-        if str(chat_id) == str(CHAT_ID):
-            bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
+        bot.sendMessage(chat_id, "Confermi?", reply_markup= {'keyboard': [['SI'],['NO']], 'resize_keyboard':True})
+        opengate_confirming=True
+    elif opengate_confirming:
+        if command == 'SI':
+            GPIO.output(GATE_PIN, GATE_ON)
+            if str(chat_id) == str(CHAT_ID):
+                bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
+            else:
+                show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
+                bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
+                bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
+                bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
+            time.sleep(2)
+            GPIO.output(GATE_PIN, GATE_OFF)
+            opengate_confirming=False
         else:
+            opengate_confirming=False
             show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
-            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
+#            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
             bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
-            bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
-        time.sleep(2)
-        GPIO.output(GATE_PIN, GATE_OFF)
     elif command == '/turnon':
         heating_overwrite = True
         TurnOnHeating()
