@@ -183,6 +183,7 @@ def handle(msg):
     global CHAT_ID, GATE_PRESENT, GATE_PIN, GATE_ON, GATE_OFF
     global pulizie_status, pulizie_timer
     global opengate_confirming
+    global main_show_keyboard
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -286,7 +287,7 @@ def handle(msg):
         if command == 'si':
             GPIO.output(GATE_PIN, GATE_ON)
             if str(chat_id) == str(CHAT_ID):
-                bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
+                bot.sendMessage(CHAT_ID, "Apro il cancello Padrone", reply_markup=main_show_keyboard)
             else:
                 show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
                 bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
@@ -744,7 +745,7 @@ help_or_gate = '/help'
 if GATE_PRESENT:
     help_or_gate = '/apri'
 
-show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
+main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
 
 if heating_status and not heating_standby:
@@ -757,7 +758,7 @@ else:
 
 GPIO.output(GATE_PIN, GATE_OFF) #pulisce il circuito di apertura cancello
 
-bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=show_keyboard)
+bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=main_show_keyboard)
 
 #predispone la tastiera per i visitatori della casa
 if GATE_PRESENT:
