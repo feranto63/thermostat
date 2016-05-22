@@ -283,7 +283,7 @@ def handle(msg):
         bot.sendMessage(chat_id, "Confermi?", reply_markup= {'keyboard': [['SI'],['NO']], 'resize_keyboard':True})
         opengate_confirming=True
     elif opengate_confirming:
-        if command == 'SI':
+        if command == 'si':
             GPIO.output(GATE_PIN, GATE_ON)
             if str(chat_id) == str(CHAT_ID):
                 bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
