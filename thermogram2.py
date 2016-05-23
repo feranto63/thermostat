@@ -232,7 +232,7 @@ def handle(msg):
             strCurTempDHT= str(CurTempDHT)
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
         messaggio+="L'umidita' misurata e' di "+strCurHumidity+"%\n"
-        messaggio+="La temperatura DHT e' di "+strCurTempDNT+" C\n"
+        messaggio+="La temperatura DHT e' di "+strCurTempDHT+" C\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
         if pulizie_status:
