@@ -214,8 +214,12 @@ def handle(msg):
         else:
             heatstat = "spento"
 #        CurTempDHT, CurHumidity = read_TandH()
+        if isnumeric(str(CurHumidity)):
+            strCurHumidity = str("%0.1f" % CurHumidity)
+        else:
+            strCurHumidity = str(CurHumidity)
         messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
-        messaggio+="L'umidita' misurata e' di "+str("%0.1f" % CurHumidity)+"%\n"
+        messaggio+="L'umidita' misurata e' di "+strCurHumidity+"%\n"
         messaggio+="La temperatura DHT e' di "+str("%0.1f" % CurTempDHT)+" C\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
