@@ -287,7 +287,8 @@ def handle(msg):
         if command == 'si':
             GPIO.output(GATE_PIN, GATE_ON)
             if str(chat_id) == str(CHAT_ID):
-                bot.sendMessage(CHAT_ID, "Apro il cancello Padrone", reply_markup=main_show_keyboard)
+                bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
+                bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard)
             else:
                 show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
                 bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
@@ -299,7 +300,8 @@ def handle(msg):
         else:
             opengate_confirming=False
             if str(chat_id) == str(CHAT_ID):
-                bot.sendMessage(CHAT_ID, "Annullo come richiesto Padrone", reply_markup=main_show_keyboard)
+                bot.sendMessage(CHAT_ID, "Annullo come richiesto Padrone")
+                bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard)
             else:
                 show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
 #            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
