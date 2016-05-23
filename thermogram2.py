@@ -170,6 +170,14 @@ def save_schedule():
 
 ################### fine gestione cronotermostato ######################
 
+def isnumeric(s):
+    try:
+        i = float(s)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
 # definisce la variabile per la conferma dell'apertura del cancello
 opengate_confirming = False
 
@@ -214,7 +222,7 @@ def handle(msg):
         else:
             heatstat = "spento"
 #        CurTempDHT, CurHumidity = read_TandH()
-        if str(CurHumidity).isnumeric():
+        if isnumeric(str(CurHumidity)):
             strCurHumidity = str("%0.1f" % CurHumidity)
         else:
             strCurHumidity = str(CurHumidity)
