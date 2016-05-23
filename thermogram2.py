@@ -226,7 +226,7 @@ def handle(msg):
             strCurHumidity = str("%0.1f" % CurHumidity)
         else:
             strCurHumidity = str(CurHumidity)
-        if isnumeric(str(CurTempDHT):
+        if isnumeric(str(CurTempDHT)):
             strCurTempDHT = str("%0.1f" % CurTempDHT)
         else:
             strCurTempDHT= str(CurTempDHT)
