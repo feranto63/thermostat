@@ -700,7 +700,7 @@ if DHT_PRESENCE:
     CurTempDHT, CurHumidity = read_TandH()
 else:
     CurTempDHT = 99
-    CurHumidity = None
+    CurHumidity = 'N.A.'
 
 ############ legge da file lo stato delle persone della casa ###############
 for n in range(persone_della_casa):
@@ -781,11 +781,9 @@ while True:
     CurTargetTemp=current_target_temp()
     if DS_PRESENCE:
         CurTemp = read_temp()
-    else:
-        if DHT_PRESENCE:
+    if DHT_PRESENCE:
+        if DS_PRESENT == False:
             CurTemp = CurTempDHT
-        else:
-            CurTemp = 99
     if CurHumidity == None:
         CurHumidity = 'N.A.'
     if not heating_overwrite:
