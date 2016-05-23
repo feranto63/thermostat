@@ -782,7 +782,7 @@ while True:
     if DS_PRESENCE:
         CurTemp = read_temp()
     if DHT_PRESENCE:
-        if DS_PRESENT == False:
+        if DS_PRESENCE == False:
             CurTemp = CurTempDHT
     if CurHumidity == None:
         CurHumidity = 'N.A.'
