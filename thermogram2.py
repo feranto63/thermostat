@@ -214,7 +214,7 @@ def handle(msg):
         else:
             heatstat = "spento"
 #        CurTempDHT, CurHumidity = read_TandH()
-        if str.isnumeric(str(CurHumidity)):
+        if str(CurHumidity).isnumeric():
             strCurHumidity = str("%0.1f" % CurHumidity)
         else:
             strCurHumidity = str(CurHumidity)
