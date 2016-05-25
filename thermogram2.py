@@ -76,6 +76,7 @@ GATE_OFF = 1
 DHT_PIN = 18
 dbname='/var/www/templog.db'
 hide_notify = False
+debug_notify = True
 
 lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -192,6 +193,7 @@ def handle(msg):
     global pulizie_status, pulizie_timer
     global opengate_confirming
     global main_show_keyboard
+    global debug_notify
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -239,17 +241,17 @@ def handle(msg):
             messaggio+="disattivato per pulizie"
         else:
             messaggio+=heatstat
-        bot.sendMessage(CHAT_ID, messaggio)
+        bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     elif command == '/annulla':
         heating_overwrite = False
         bot.sendMessage(CHAT_ID, "Annullo overwrite",disable_notification=True)
     elif command == '/ho_freddo':
-        bot.sendMessage(CHAT_ID, "Ho capito che hai freddo")
+        bot.sendMessage(CHAT_ID, "Ho capito che hai freddo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
     elif command == '/ho_caldo':
-        bot.sendMessage(CHAT_ID, "Ho capito che hai caldo")
+        bot.sendMessage(CHAT_ID, "Ho capito che hai caldo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
@@ -262,11 +264,11 @@ def handle(msg):
                 how_many_at_home=how_many_at_home+1
         if how_many_at_home != 0:
             if how_many_at_home == 1:
-                bot.sendMessage(CHAT_ID, who_is_at_home+"e' a casa")
+                bot.sendMessage(CHAT_ID, who_is_at_home+"e' a casa", disable_notification=debug_notify)
             else:
-                bot.sendMessage(CHAT_ID, who_is_at_home+"sono a casa")
+                bot.sendMessage(CHAT_ID, who_is_at_home+"sono a casa", disable_notification=debug_notify)
         else:
-            bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone")
+            bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone", disable_notification=debug_notify)
     elif command == '/help':
         # send message for help
         messaggio="Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n"
@@ -279,7 +281,7 @@ def handle(msg):
             messaggio+="attivato"
         else:
             messaggio+="disattivato"
-        bot.sendMessage(CHAT_ID, messaggio)
+        bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     elif command == '/pulizie':
         if not pulizie_status:
             # set 2 hours off for cleaning
@@ -288,7 +290,7 @@ def handle(msg):
             if heating_status:
                 TurnOffHeating()
                 #GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-            bot.sendMessage(CHAT_ID, "Disattivo il riscaldamento Padrone cosi' puoi fare le pulizie")
+            bot.sendMessage(CHAT_ID, "Disattivo il riscaldamento Padrone cosi' puoi fare le pulizie", disable_notification=debug_notify)
         else:
             # set 2 hours off for cleaning
             pulizie_status=False
@@ -304,7 +306,7 @@ def handle(msg):
             GPIO.output(GATE_PIN, GATE_ON)
             if str(chat_id) == str(CHAT_ID):
                 bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
-                bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard)
+                bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard, disable_notification=debug_notify)
             else:
                 show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
                 bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
@@ -489,6 +491,7 @@ def set_presence(presence_msg):
     global persona_at_home, who_is_at_home, how_many_at_home, hide_notify
     global heating_status, heating_standby, heating_overwrite
     global CHAT_ID
+    global debug_notify
     
     logging.debug('gestisco il messaggio di presence '+presence_msg)
     
@@ -786,24 +789,24 @@ if GATE_PRESENT:
     help_or_gate = '/apri'
 
 main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone')
+bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', disable_notification=debug_notify)
 
 if heating_status and not heating_standby:
     TurnOnHeating()
     #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-    bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone")
+    bot.sendMessage(CHAT_ID, "Rispristino il riscaldamento, Padrone", disable_notification=debug_notify)
 else:
     TurnOffHeating()
     #GPIO.output(HEAT_PIN, HEAT_OFF)
 
 GPIO.output(GATE_PIN, GATE_OFF) #pulisce il circuito di apertura cancello
 
-bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=main_show_keyboard)
+bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=main_show_keyboard, disable_notification=debug_notify)
 
 #predispone la tastiera per i visitatori della casa
 if GATE_PRESENT:
     show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
-    bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard)
+    bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard, disable_notification=debug_notify)
 
 mail = connect() #apre la casella di posta
 
@@ -823,7 +826,7 @@ while True:
         if pulizie_status:
             if now >= pulizie_timer:
                 pulizie_status=False
-                bot.sendMessage(CHAT_ID, "E' terminato il periodo per le pulizie, Padrone")
+                bot.sendMessage(CHAT_ID, "E' terminato il periodo per le pulizie, Padrone", disable_notification=debug_notify)
         else:
             if not heating_status:
                 if CurTemp < (CurTargetTemp - 0.2):
