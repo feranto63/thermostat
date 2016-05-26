@@ -487,7 +487,7 @@ def get_temp_radio():
 from socket import error as SocketError
 import errno
 
-def set_presence(presence_msg):
+def set_presence(n, presence_msg):
     global persona_at_home, who_is_at_home, how_many_at_home, hide_notify
     global heating_status, heating_standby, heating_overwrite
     global CHAT_ID
@@ -516,12 +516,13 @@ def set_presence(presence_msg):
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
 
-        try:
-            n=persona.index(nome)
-        except ValueError: #non ho riconosciuto la persona
-            bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
-            return
-        
+        if n == -1:
+            try:
+                n=persona.index(nome)
+            except ValueError: #non ho riconosciuto la persona
+                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+                return
+
         if status == 'IN':
             if persona_at_home[n] == False:
                 persona_at_home[n] = True
@@ -529,13 +530,7 @@ def set_presence(presence_msg):
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
                 messaggio_IN="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
-                try:
-                    bot.sendMessage(CHAT_ID, messaggio_IN ,disable_notification=hide_notify)
-#                    bot.sendMessage(CHAT_ID, "Benvenuto a casa "+nome+"\nSono le "+ora_minuti)
-                except SocketError as e:
-                    if e.errno != errno.ECONNRESET:
-                        raise # Not error we are looking for
-                    pass # Handle error here.
+                bot.sendMessage(CHAT_ID, messaggio_IN ,disable_notification=hide_notify)
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
@@ -543,45 +538,39 @@ def set_presence(presence_msg):
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
                 messaggio_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
-                try:
-                    bot.sendMessage(CHAT_ID, messaggio_OUT ,disable_notification=hide_notify)
-#                    bot.sendMessage(CHAT_ID, "Arrivederci a presto "+nome+"\nSono le "+ora_minuti)
-                except SocketError as e:
-                    if e.errno != errno.ECONNRESET:
-                        raise # Not error we are looking for
-                    pass # Handle error here.
+                bot.sendMessage(CHAT_ID, messaggio_OUT ,disable_notification=hide_notify)
 
-    # calcola chi e' a casa
-    who_is_at_home=""
-    how_many_at_home=0
-    for n in range(persone_della_casa):
-        if persona_at_home[n]:
-            who_is_at_home=who_is_at_home+persona[n]+" "
-            how_many_at_home=how_many_at_home+1
+        # calcola chi e' a casa
+        who_is_at_home=""
+        how_many_at_home=0
+        for n in range(persone_della_casa):
+            if persona_at_home[n]:
+                who_is_at_home=who_is_at_home+persona[n]+" "
+                how_many_at_home=how_many_at_home+1
     
-    print str(how_many_at_home)+"  "+who_is_at_home
+        print str(how_many_at_home)+"  "+who_is_at_home
     
-    if how_many_at_home == 0: #nessuno in casa
-        if heating_standby == False:  #standby termosifoni non attivo
-            heating_standby = True
-            f = open("heating_standby","w")
-            f.write('ON')
-            f.close()  #chiude il file dei dati e lo salva
-            if not heating_overwrite and heating_status: #se termosifoni attivi
-                TurnOffHeating()
-                #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
-                bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
-    else: #almeno una persona in casa
-        if heating_standby: #se standby attivo
-            heating_standby = False
-            f = open("heating_standby","w")
-            f.write('OFF')
-            f.close()  #chiude il file dei dati e lo salva
-            if not heating_overwrite and heating_status: #se termosifoni attivi prima dello standby
-                TurnOnHeating()
-                #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
-                bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
-    # inserito retur per debug
+        if how_many_at_home == 0: #nessuno in casa
+            if heating_standby == False:  #standby termosifoni non attivo
+                heating_standby = True
+                f = open("heating_standby","w")
+                f.write('ON')
+                f.close()  #chiude il file dei dati e lo salva
+                if not heating_overwrite and heating_status: #se termosifoni attivi
+                    TurnOffHeating()
+                    #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
+                    bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+        else: #almeno una persona in casa
+            if heating_standby: #se standby attivo
+                heating_standby = False
+                f = open("heating_standby","w")
+                f.write('OFF')
+                f.close()  #chiude il file dei dati e lo salva
+                if not heating_overwrite and heating_status: #se termosifoni attivi prima dello standby
+                    TurnOnHeating()
+                    #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
+                    bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
+        # inserito retur per debug
     return
     #return set_presence            
 
@@ -596,10 +585,10 @@ def check_presence_IP():
         result = subprocess.call(['ping','-c','1',persona_IP[n]])
         if (result == 0):
             if not persona_at_home[n]:
-                set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
         else:
             if persona_at_home[n]:
-                set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
 ####################################################
 
 ############# controlla la presence con ping BT #################        
@@ -609,10 +598,10 @@ def check_presence_BT():
         result = bluetooth.lookup_name(persona_BT[n], timeout=5)
         if (result != None):
             if not persona_at_home[n]:
-                set_presence(persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
         else:
             if persona_at_home[n]:
-                set_presence(persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
 ###################################################
 
 
@@ -695,7 +684,7 @@ def read_gmail():
                     if isinstance(response_part, tuple):
                         original = email.message_from_string(response_part[1])
                         subject_text=str(original['Subject'])
-                        set_presence(subject_text) #richiama la funzione per la gestisce della presence
+                        set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
                 logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except:
