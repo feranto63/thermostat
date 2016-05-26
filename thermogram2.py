@@ -525,6 +525,9 @@ def set_presence(presence_msg):
         if status == 'IN':
             if persona_at_home[n] == False:
                 persona_at_home[n] = True
+                f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("IN")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
                 messaggio_IN="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
                 try:
                     bot.sendMessage(CHAT_ID, messaggio_IN ,disable_notification=hide_notify)
@@ -533,12 +536,12 @@ def set_presence(presence_msg):
                     if e.errno != errno.ECONNRESET:
                         raise # Not error we are looking for
                     pass # Handle error here.
-                f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
-                f.write("IN")  #scrive la info di presence sul file
-                f.close()  #chiude il file dei dati e lo salva
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
+                f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
+                f.write("OUT")  #scrive la info di presence sul file
+                f.close()  #chiude il file dei dati e lo salva
                 messaggio_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
                 try:
                     bot.sendMessage(CHAT_ID, messaggio_OUT ,disable_notification=hide_notify)
@@ -547,9 +550,6 @@ def set_presence(presence_msg):
                     if e.errno != errno.ECONNRESET:
                         raise # Not error we are looking for
                     pass # Handle error here.
-                f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
-                f.write("OUT")  #scrive la info di presence sul file
-                f.close()  #chiude il file dei dati e lo salva
 
     # calcola chi e' a casa
     who_is_at_home=""
