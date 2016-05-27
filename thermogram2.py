@@ -364,16 +364,18 @@ except IOError:
 
 logging.info("caricata chatId.")
 
-try:
-    chatidFile = open(chatidgatepath,'r')
-    CHAT_ID_GATE = chatidFile.read().strip()
-    chatidFile.close()
-except IOError:
-    CHAT_ID_GATE = CHAT_ID #se non c'e' il cancello metto lo stesso chat_id principale
-    logging.error("Non ho trovato il file di chatId_cancello. E' necessario creare un file 'chatid' con la chatid telegram per il bot")
-    # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+if GATE_PRESENT:
+    try:
+        chatidFile = open(chatidgatepath,'r')
+        CHAT_ID_GATE = chatidFile.read().strip()
+        chatidFile.close()
+    except IOError:
+        CHAT_ID_GATE = CHAT_ID #se non c'e' il cancello metto lo stesso chat_id principale
+        logging.error("Non ho trovato il file di chatId_cancello. E' necessario creare un file 'chatid' con la chatid telegram per il bot")
+        sys.exit(9)
+        # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
 
-logging.info("caricata chatIdGate.")
+    logging.info("caricata chatIdGate.")
 
 
 # variables for periodic reporting
