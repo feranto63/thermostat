@@ -515,13 +515,17 @@ def set_presence(n, presence_msg):
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
-
+        
+        changed = False
+        
         if n == -1:
             try:
                 n=persona.index(nome)
             except ValueError: #non ho riconosciuto la persona
-                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
-                return
+                messaggio_IN_OUT = "Padrone verifica se ci sono sconosciuti in casa!"
+                changed = True
+#                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+                return changed, messaggio_IN_OUT
 
         if status == 'IN':
             if persona_at_home[n] == False:
@@ -529,16 +533,18 @@ def set_presence(n, presence_msg):
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                messaggio_IN="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
-                bot.sendMessage(CHAT_ID, messaggio_IN ,disable_notification=hide_notify)
+                messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
+                changed = True
+#                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                messaggio_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
-                bot.sendMessage(CHAT_ID, messaggio_OUT ,disable_notification=hide_notify)
+                messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
+                changed = True
+#                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
 
         # calcola chi e' a casa
         who_is_at_home=""
@@ -571,7 +577,7 @@ def set_presence(n, presence_msg):
                     #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
                     bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
         # inserito retur per debug
-    return
+    return changed, messaggio_IN_OUT
     #return set_presence            
 
 
@@ -580,28 +586,41 @@ import subprocess
 
 def check_presence_IP():
     global personaIP, persona_at_home, persone_della_casa
+    global CHATID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
         result = subprocess.call(['ping','-c','1',persona_IP[n]])
         if (result == 0):
             if not persona_at_home[n]:
-                set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                if changed:
+                    sendMessage(CHATID, messaggio_IN_OUT)
         else:
             if persona_at_home[n]:
-                set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                if changed:
+                    sendMessage(CHATID, messaggio_IN_OUT)
+
 ####################################################
 
 ############# controlla la presence con ping BT #################        
 def check_presence_BT():
     global persona_BT, persona_at_home, persone_della_casa
+    global CHATID
     for n in range (persone_della_casa):
         result = bluetooth.lookup_name(persona_BT[n], timeout=5)
         if (result != None):
             if not persona_at_home[n]:
-                set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+                if changed:
+                    sendMessage(CHATID, messaggio_IN_OUT)
+
         else:
             if persona_at_home[n]:
-                set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                if changed:
+                    sendMessage(CHATID, messaggio_IN_OUT)
+
 ###################################################
 
 
@@ -667,6 +686,7 @@ def TurnOffHeating():
 #connect to gmail
 def read_gmail():
     global mail
+    global CHATID
     logging.debug('leggo mail')
     
     try:
@@ -684,7 +704,9 @@ def read_gmail():
                     if isinstance(response_part, tuple):
                         original = email.message_from_string(response_part[1])
                         subject_text=str(original['Subject'])
-                        set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
+                        changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
+                        if changed:
+                            sendMessage(CHATID, messaggio_IN_OUT)
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
                 logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except:
