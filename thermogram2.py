@@ -90,10 +90,10 @@ import time
 import imaplib
 import email
 #import for Telegram API
-import pprint
+# import pprint
 import telepot
 
-import requests
+# import requests
 
 import bluetooth
 
