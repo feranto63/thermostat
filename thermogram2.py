@@ -586,7 +586,7 @@ import subprocess
 
 def check_presence_IP():
     global personaIP, persona_at_home, persone_della_casa
-    global CHATID
+    global CHAT_ID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
         result = subprocess.call(['ping','-c','1',persona_IP[n]])
@@ -594,32 +594,32 @@ def check_presence_IP():
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
                 if changed:
-                    bot.sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
                 if changed:
-                    bot.sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ####################################################
 
 ############# controlla la presence con ping BT #################        
 def check_presence_BT():
     global persona_BT, persona_at_home, persone_della_casa
-    global CHATID
+    global CHAT_ID
     for n in range (persone_della_casa):
         result = bluetooth.lookup_name(persona_BT[n], timeout=5)
         if (result != None):
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
                 if changed:
-                    bot.sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
                 if changed:
-                    bot.sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ###################################################
 
@@ -686,7 +686,7 @@ def TurnOffHeating():
 #connect to gmail
 def read_gmail():
     global mail
-    global CHATID
+    global CHAT_ID
     logging.debug('leggo mail')
     
     try:
@@ -706,7 +706,7 @@ def read_gmail():
                         subject_text=str(original['Subject'])
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
                         if changed:
-                            bot.sendMessage(CHATID, messaggio_IN_OUT)
+                            bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
                 logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except:
