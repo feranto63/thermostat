@@ -594,12 +594,12 @@ def check_presence_IP():
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
                 if changed:
-                    sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHATID, messaggio_IN_OUT)
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
                 if changed:
-                    sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHATID, messaggio_IN_OUT)
 
 ####################################################
 
@@ -613,13 +613,13 @@ def check_presence_BT():
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
                 if changed:
-                    sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHATID, messaggio_IN_OUT)
 
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
                 if changed:
-                    sendMessage(CHATID, messaggio_IN_OUT)
+                    bot.sendMessage(CHATID, messaggio_IN_OUT)
 
 ###################################################
 
@@ -706,7 +706,7 @@ def read_gmail():
                         subject_text=str(original['Subject'])
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
                         if changed:
-                            sendMessage(CHATID, messaggio_IN_OUT)
+                            bot.sendMessage(CHATID, messaggio_IN_OUT)
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
                 logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except:
