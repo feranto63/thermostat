@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+import urllib3
+
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
