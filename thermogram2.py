@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-import urllib3
-
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
@@ -29,40 +27,6 @@ DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
 owner_found= settings.getboolean('SectionOne','owner_found')
 
-
-#if PROPRIETARIO == 'Ferruccio':
-#    persone_della_casa = 4
-#    persona=['Ferruccio','Claudia','Riccardo','Lorenzo']
-#    persona_at_home=[True, True, True, True]
-#    imap_host = 'imap.gmail.com'
-#    EMAIL_ID='MaggiordomoBot@gmail.com'
-#    EMAIL_PASSWD='cldbzz00'
-#    Ferruccio_BT = 'F0:5B:7B:43:42:68'       #Galaxy S6 edge+
-#    #80:19:34:A3:7A:A9       NBW72009135393 (PC portatile ASUS)
-#    Claudia_BT = '50:FC:9F:85:BE:F2'         #Claudia Note 3
-#    #8C:C8:CD:31:D1:B1       DTVBluetooth TV Sony
-#    Citroen_C3_BT = '00:26:7E:C7:0B:07'      #Parrot MINIKIT+ v1.22
-#    Lorenzo_BT = 'B4:3A:28:CC:C6:07'         #Lorenzo S5
-#    persona_IP=['192.168.1.38','192.168.1.5','192.168.1.2','192.168.1.37'] #IP address of smartphone; fixed assignment by router
-#    persona_BT=['F0:5B:7B:43:42:68','50:FC:9F:85:BE:F2','00:00:00:00:00:00','B4:3A:28:CC:C6:07'] #BT mac address of smartphone
-#    GATE_PRESENT = False
-#    IP_PRESENCE = True
-#    BT_PRESENCE = False
-#    owner_found=True
-
-#if PROPRIETARIO == 'Piero':
-#    persone_della_casa = 2
-#    persona=['Piero','Annamaria']
-#    persona_at_home=[True, True]
-#    imap_host = 'imap.gmail.com'
-#    EMAIL_ID='BattistaMaggiordomoBot@gmail.com'
-#    EMAIL_PASSWD='peterbel'
-#    persona_IP=['192.168.0.0','192.168.0.0','192.168.0.0','192.168.0.0'] #IP address of smartphone; fixed assignment by router
-#    persona_BT=['00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00','00:00:00:00:00:00'] #BT mac address of smartphone
-#    GATE_PRESENT = True
-#    IP_PRESENCE = False
-#    BT_PRESENCE = False
-#    owner_found=True
 
 if not owner_found:
     sys.exit("owner not found")
@@ -535,21 +499,21 @@ def set_presence(n, presence_msg):
         if status == 'IN':
             if persona_at_home[n] == False:
                 persona_at_home[n] = True
+                messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
+                changed = True
+                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
-                changed = True
-#                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
+                messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
+                changed = True
+                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
-                changed = True
-#                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
 
         # calcola chi e' a casa
         who_is_at_home=""
@@ -598,13 +562,13 @@ def check_presence_IP():
         if (result == 0):
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
-                if changed:
-                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+#                if changed:
+#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
-                if changed:
-                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+#                if changed:
+#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ####################################################
 
@@ -617,14 +581,14 @@ def check_presence_BT():
         if (result != None):
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
-                if changed:
-                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+ #               if changed:
+ #                   bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
         else:
             if persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
-                if changed:
-                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+ #               if changed:
+ #                   bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ###################################################
 
@@ -710,8 +674,8 @@ def read_gmail():
                         original = email.message_from_string(response_part[1])
                         subject_text=str(original['Subject'])
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
-                        if changed:
-                            bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+ #                       if changed:
+ #                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
                 logging.info("Ho gestito "+str(n)+" messaggi di presence")
     except:
@@ -869,8 +833,8 @@ while True:
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-    if is_connected():
-        read_gmail()
+#    if is_connected():
+#        read_gmail()
             
     #check_presence_BT()
     if IP_PRESENCE:
