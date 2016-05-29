@@ -3,6 +3,13 @@
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
+import logging
+import telegram
+from telegram.error import NetworkError, Unauthorized
+from time import sleep
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+
 #PROPRIETARIO = sys.argv[1]  # get user from command-line
 owner_found = False
 
@@ -62,11 +69,11 @@ import telepot
 def handle(msg):
     global CHAT_ID
 
-    msg_type, chat_type, chat_id = telepot.glance(msg)
+    #msg_type, chat_type, chat_id = telepot.glance(msg)
     msg_sender = msg['from']['first_name']
     
-    if msg_type != 'text':
-        return
+    #if msg_type != 'text':
+    #    return
 
     command = msg['text'].strip().lower()
     
@@ -160,8 +167,19 @@ for n in range(persone_della_casa):
         persona_at_home[n] = False  #se il file non e' presente imposto la presence a False
 
 ######## inizializza il bot Telegram ###########
-bot = telepot.Bot(TOKEN)
-bot.message_loop(handle)
+#bot = telepot.Bot(TOKEN)
+bot = telegram.Bot(TOKEN)
+
+updater = Updater(bot)
+#updater = Updater(TOKEN, workers=2)
+
+# Get the dispatcher to register handlers
+dp = updater.dispatcher
+
+dp.addTelegramCommandHandler("now", handle)
+#bot.message_loop(handle)
+#bot.telegram.ext.handler(handle)
+
 logging.info("Listening ...")
 
 
