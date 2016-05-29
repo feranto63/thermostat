@@ -165,7 +165,7 @@ bot.message_loop(handle)
 print "Listening ..."
 
 
-main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
+main_show_keyboard = {'keyboard': [['/now']]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', disable_notification=debug_notify)
 
 
