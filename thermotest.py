@@ -162,7 +162,7 @@ for n in range(persone_della_casa):
 ######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
 bot.message_loop(handle)
-logging.info("Listening ...")
+print "Listening ..."
 
 
 main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
