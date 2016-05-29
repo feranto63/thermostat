@@ -420,10 +420,10 @@ def read_TandH():
     # guarantee the timing of calls to read the sensor).
     # If this happens try again!
     if humidity is not None and temperature is not None:
-#        print 'Temp={0:0.1f}*C  Humidity={1:0.1f}'.format(temperature, humidity)
+        print ( 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
         return (temperature, humidity)
     else:
-        print 'Failed to get reading. Try again!'
+        print ('Failed to get reading. Try again!')
         return (None, None)
 
 ########## fine gestione sensore DHT11 ############################
