@@ -523,7 +523,7 @@ def set_presence(n, presence_msg):
                 who_is_at_home=who_is_at_home+persona[n]+" "
                 how_many_at_home=how_many_at_home+1
     
-        print str(how_many_at_home)+"  "+who_is_at_home
+        print (str(how_many_at_home)+"  "+who_is_at_home)
     
         if how_many_at_home == 0: #nessuno in casa
             if heating_standby == False:  #standby termosifoni non attivo
