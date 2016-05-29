@@ -167,7 +167,7 @@ for n in range(persone_della_casa):
         persona_at_home[n] = False  #se il file non e' presente imposto la presence a False
 
 ######## inizializza il bot Telegram ###########
-<<<<<<< HEAD
+
 #bot = telepot.Bot(TOKEN)
 bot = telegram.Bot(TOKEN)
 
