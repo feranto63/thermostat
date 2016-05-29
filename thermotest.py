@@ -171,7 +171,7 @@ for n in range(persone_della_casa):
 #bot = telepot.Bot(TOKEN)
 bot = telegram.Bot(TOKEN)
 
-updater = Updater(bot)
+updater = Updater(TOKEN)
 #updater = Updater(TOKEN, workers=2)
 
 # Get the dispatcher to register handlers
