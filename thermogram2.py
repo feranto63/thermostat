@@ -7,7 +7,7 @@ import sys
 owner_found = False
 
 
-import ConfigParser
+import configparser as ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
