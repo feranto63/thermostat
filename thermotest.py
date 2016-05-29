@@ -167,6 +167,7 @@ for n in range(persone_della_casa):
         persona_at_home[n] = False  #se il file non e' presente imposto la presence a False
 
 ######## inizializza il bot Telegram ###########
+<<<<<<< HEAD
 #bot = telepot.Bot(TOKEN)
 bot = telegram.Bot(TOKEN)
 
@@ -181,9 +182,14 @@ dp.addTelegramCommandHandler("now", handle)
 #bot.telegram.ext.handler(handle)
 
 logging.info("Listening ...")
+=======
+bot = telepot.Bot(TOKEN)
+bot.message_loop(handle)
+print "Listening ..."
+>>>>>>> origin/master
 
 
-main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
+main_show_keyboard = {'keyboard': [['/now']]} #tastiera personalizzata
 bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', disable_notification=debug_notify)
 
 
