@@ -181,12 +181,14 @@ dp.addTelegramCommandHandler("now", handle)
 #bot.message_loop(handle)
 #bot.telegram.ext.handler(handle)
 
-logging.info("Listening ...")
-=======
-bot = telepot.Bot(TOKEN)
-bot.message_loop(handle)
+#logging.info("Listening ...")
+
+#bot = telepot.Bot(TOKEN)
+#bot.message_loop(handle)
+
+update_queue = updater.start_polling(poll_interval=1, timeout=5)
+
 print "Listening ..."
->>>>>>> origin/master
 
 
 main_show_keyboard = {'keyboard': [['/now']]} #tastiera personalizzata
