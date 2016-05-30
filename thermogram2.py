@@ -657,42 +657,42 @@ def read_gmail():
     global CHAT_ID
     print('leggo mail')
     
-    try:
-        mail.select('inbox')
-        print('mail.select')
-        mail.list()
-        print('mail.list')
-        # Any Emails? 
-        n=0
-        (retcode, messages) = mail.search(None, '(UNSEEN)')
-        print('mail.search')
-        if retcode == 'OK':
-            for num in messages[0].split() :
-                print('Processing new emails...')
-                n=n+1
-                typ, data = mail.fetch(num,'(RFC822)')
-                print('mail.fetch')
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        print('isistance')
-                        print('response_part')
-                        print(response_part)
+#    try:
+    mail.select('inbox')
+    print('mail.select')
+    mail.list()
+    print('mail.list')
+    # Any Emails? 
+    n=0
+    (retcode, messages) = mail.search(None, '(UNSEEN)')
+    print('mail.search')
+    if retcode == 'OK':
+        for num in messages[0].split() :
+            print('Processing new emails...')
+            n=n+1
+            typ, data = mail.fetch(num,'(RFC822)')
+            print('mail.fetch')
+            for response_part in data:
+                if isinstance(response_part, tuple):
+                    print('isistance')
+                    print('response_part')
+                    print(response_part)
 #                        original = email.message_from_string(response_part[1])
-                        original = email.message_from_string(response_part)
-                        print('original')
-                        print(original)
-                        subject_text=str(original['Subject'])
-                        print("subject_text:"+subject_text)
-                        changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
+                    original = email.message_from_string(response_part)
+                    print('original')
+                    print(original)
+                    subject_text=str(original['Subject'])
+                    print("subject_text:"+subject_text)
+                    changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
  #                       if changed:
  #                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
-                        print('set_presence')
-                        typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
-                        print('mail.store')
-                print(("Ho gestito "+str(n)+" messaggi di presence"))
-    except:
-        print('Errore nella lettura della mail')
-        mail = connect()
+                    print('set_presence')
+                    typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
+                    print('mail.store')
+            print(("Ho gestito "+str(n)+" messaggi di presence"))
+#    except:
+#        print('Errore nella lettura della mail')
+#        mail = connect()
 
 ############################### fine gestione presence via email #######################
 
