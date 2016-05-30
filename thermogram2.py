@@ -675,7 +675,11 @@ def read_gmail():
                 for response_part in data:
                     if isinstance(response_part, tuple):
                         print('isistance')
+                        print('response_part')
+                        print(response_part)
                         original = email.message_from_string(response_part[1])
+                        print('original')
+                        print(original)
                         subject_text=str(original['Subject'])
                         print("subject_text:"+subject_text)
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
