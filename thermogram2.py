@@ -598,6 +598,7 @@ def connect(retries=5, delay=3):
         try:
             mail = imaplib.IMAP4_SSL(imap_host)
             mail.login(EMAIL_ID,EMAIL_PASSWD)
+            print ("ho connesso la mail")
             return mail
         except imaplib.IMAP4_SSL.abort:
             if retries > 0:
@@ -654,7 +655,7 @@ def TurnOffHeating():
 def read_gmail():
     global mail
     global CHAT_ID
-    logging.debug('leggo mail')
+    print('leggo mail')
     
     try:
         mail.select('inbox')
@@ -675,9 +676,9 @@ def read_gmail():
  #                       if changed:
  #                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
-                logging.info("Ho gestito "+str(n)+" messaggi di presence")
+                print(("Ho gestito "+str(n)+" messaggi di presence"))
     except:
-        logging.debug('Errore nella lettura della mail')
+        print('Errore nella lettura della mail')
         mail = connect()
 
 ############################### fine gestione presence via email #######################
