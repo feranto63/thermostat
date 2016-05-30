@@ -453,8 +453,6 @@ def get_temp_radio():
 
 
 ##################### funzione per la gestione dei messaggi di presence
-from socket import error as SocketError
-import errno
 
 def set_presence(n, presence_msg):
     global persona_at_home, who_is_at_home, how_many_at_home, hide_notify
@@ -833,8 +831,8 @@ while True:
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-    if is_connected():
-        read_gmail()
+#    if is_connected():
+    read_gmail()
             
     #check_presence_BT()
     if IP_PRESENCE:
