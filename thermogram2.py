@@ -45,8 +45,8 @@ dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
 
-lucchetto_chiuso = u'\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
-lucchetto_aperto = u'\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
+lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
+lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
 
 
 #imports for thermometer reading
@@ -300,7 +300,7 @@ def handle(msg):
         TurnOffHeating()
         bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
     else:
-        bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
+        bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti", reply_markup=main_show_keyboard)
 
 
 
