@@ -833,8 +833,8 @@ while True:
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-#    if is_connected():
-#        read_gmail()
+    if is_connected():
+        read_gmail()
             
     #check_presence_BT()
     if IP_PRESENCE:
