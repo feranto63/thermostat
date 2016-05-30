@@ -672,6 +672,7 @@ def read_gmail():
                     if isinstance(response_part, tuple):
                         original = email.message_from_string(response_part[1])
                         subject_text=str(original['Subject'])
+                        print("subject_text:"+subject_text)
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
  #                       if changed:
  #                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
