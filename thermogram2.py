@@ -420,10 +420,10 @@ def read_TandH():
     # guarantee the timing of calls to read the sensor).
     # If this happens try again!
     if humidity is not None and temperature is not None:
-        print ( 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
+        print (( 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)))
         return (temperature, humidity)
     else:
-        print ('Failed to get reading. Try again!')
+        print (('Failed to get reading. Try again!'))
         return (None, None)
 
 ########## fine gestione sensore DHT11 ############################
@@ -521,7 +521,7 @@ def set_presence(n, presence_msg):
                 who_is_at_home=who_is_at_home+persona[n]+" "
                 how_many_at_home=how_many_at_home+1
     
-        print (str(how_many_at_home)+"  "+who_is_at_home)
+        print ((str(how_many_at_home)+"  "+who_is_at_home))
     
         if how_many_at_home == 0: #nessuno in casa
             if heating_standby == False:  #standby termosifoni non attivo
