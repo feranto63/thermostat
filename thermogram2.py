@@ -679,7 +679,7 @@ def read_gmail():
                     print(response_part)
                     print('------------- [1]')
                     print(response_part[1])
-                    original = email.message_from_string(response_part[1])
+                    original = email.message_from_bytes(response_part[1])
 #                    original = email.message_from_string(response_part)
                     print('original')
                     print(original)
