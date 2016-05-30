@@ -677,6 +677,8 @@ def read_gmail():
                     print('isistance')
                     print('response_part')
                     print(response_part)
+                    print('------------- [1]')
+                    print(response_part[1])
                     original = email.message_from_string(response_part[1])
 #                    original = email.message_from_string(response_part)
                     print('original')
