@@ -66,7 +66,10 @@ import bluetooth
 
 #import library for logging
 import logging
-logging.basicConfig(filename='termostato.log', level=logging.WARNING)
+logging.basicConfig(
+        filename='termostato.log',
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO)
 
 
 ###################### database per la memorizzazione delle temperature ###############
@@ -491,7 +494,7 @@ def set_presence(n, presence_msg):
             except ValueError: #non ho riconosciuto la persona
                 messaggio_IN_OUT = "Padrone verifica se ci sono sconosciuti in casa!"
                 changed = True
-#                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
+                bot.sendMessage(CHAT_ID, "Padrone verifica se ci sono sconosciuti in casa!")
                 return changed, messaggio_IN_OUT
 
         if status == 'IN':
@@ -499,7 +502,8 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = True
                 messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
                 changed = True
-                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                print(res)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -508,7 +512,8 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = False
                 messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
                 changed = True
-                bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                print(res)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -807,7 +812,7 @@ if GATE_PRESENT:
 mail = connect() #apre la casella di posta
 
 while True:
-    bot.sendMessage(CHAT_ID, ".")
+#    bot.sendMessage(CHAT_ID, ".")
     now = time.time()
     #localtime = time.asctime( time.localtime(now) )
     localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
