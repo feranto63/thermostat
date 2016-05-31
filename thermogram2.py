@@ -502,8 +502,11 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = True
                 messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
                 changed = True
-                res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
-                print(res)
+                try:
+                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                    print(res)
+                except:
+                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -512,8 +515,11 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = False
                 messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
                 changed = True
-                res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
-                print(res)
+                try:
+                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                    print(res)
+                except:
+                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -537,7 +543,10 @@ def set_presence(n, presence_msg):
                 if not heating_overwrite and heating_status: #se termosifoni attivi
                     TurnOffHeating()
                     #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
-                    bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+                    try:
+                        bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+                    except:
+                        bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
         else: #almeno una persona in casa
             if heating_standby: #se standby attivo
                 heating_standby = False
@@ -547,7 +556,10 @@ def set_presence(n, presence_msg):
                 if not heating_overwrite and heating_status: #se termosifoni attivi prima dello standby
                     TurnOnHeating()
                     #GPIO.output(HEAT_PIN, HEAT_ON) # riaccende i termosifoni
-                    bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
+                    try:
+                        bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
+                    except:
+                        bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
         # inserito retur per debug
     return changed, messaggio_IN_OUT
     #return set_presence            
