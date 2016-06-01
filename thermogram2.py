@@ -464,6 +464,8 @@ def set_presence(n, presence_msg):
     global debug_notify
     
     logging.debug('gestisco il messaggio di presence '+presence_msg)
+    changed = False
+    messaggio_IN_OUT = "null"
     
     if len(presence_msg) !=0:
         words = presence_msg.split(' ', 2)
