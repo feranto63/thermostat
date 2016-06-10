@@ -69,7 +69,7 @@ import logging
 logging.basicConfig(
         filename='termostato.log',
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO)
+        level=logging.DEBUG)
 
 
 ###################### database per la memorizzazione delle temperature ###############
@@ -508,7 +508,7 @@ def set_presence(n, presence_msg):
                     res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                     print(res)
                 except:
-                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                    res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -521,7 +521,7 @@ def set_presence(n, presence_msg):
                     res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
                     print(res)
                 except:
-                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                    res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -548,7 +548,7 @@ def set_presence(n, presence_msg):
                     try:
                         bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
                     except:
-                        bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+                        bot.sendMessage(CHAT_ID, ".Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
         else: #almeno una persona in casa
             if heating_standby: #se standby attivo
                 heating_standby = False
@@ -561,7 +561,7 @@ def set_presence(n, presence_msg):
                     try:
                         bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
                     except:
-                        bot.sendMessage(CHAT_ID, "Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
+                        bot.sendMessage(CHAT_ID, ".Ho riavviato il riscaldamento per il tuo confort, Padrone",disable_notification=True)
         # inserito retur per debug
     return changed, messaggio_IN_OUT
     #return set_presence            
@@ -842,7 +842,10 @@ while True:
         if pulizie_status:
             if now >= pulizie_timer:
                 pulizie_status=False
-                bot.sendMessage(CHAT_ID, "E' terminato il periodo per le pulizie, Padrone", disable_notification=debug_notify)
+                try:
+                    bot.sendMessage(CHAT_ID, "E' terminato il periodo per le pulizie, Padrone", disable_notification=debug_notify)
+                except:
+                    bot.sendMessage(CHAT_ID, ".E' terminato il periodo per le pulizie, Padrone", disable_notification=debug_notify)
         else:
             if not heating_status:
                 if CurTemp < (CurTargetTemp - 0.2):
@@ -869,8 +872,8 @@ while True:
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
-#    if is_connected():
-    read_gmail()
+    if is_connected():
+        read_gmail()
             
     #check_presence_BT()
     if IP_PRESENCE:
