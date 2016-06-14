@@ -11,6 +11,8 @@ import configparser as ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
+nome_maggiordomo = settings.get('SectionOne','nome_maggiordomo')
+male_maggiordomo = settings.getboolean('SectionOne','male_maggiordomo')
 persone_della_casa = settings.getint('SectionOne','persone_della_casa')
 persona= settings.get('SectionOne','persona').split("\n")
 #persona_at_home=settings.getboolean('SectionOne','persona_at_home').split("\n")
@@ -164,6 +166,7 @@ def handle(msg):
     global opengate_confirming
     global main_show_keyboard
     global debug_notify
+    global nome_maggiordomo, male_maggiordomo
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -238,10 +241,15 @@ def handle(msg):
             else:
                 bot.sendMessage(CHAT_ID, who_is_at_home+"sono a casa", disable_notification=debug_notify)
         else:
-            bot.sendMessage(CHAT_ID, "Sono solo a casa, Padrone", disable_notification=debug_notify)
+            if male_maggiordomo:
+                sex_indicator = "o"
+            else:
+                sex_indicator = "a"
+            who_is_at_home = nome_maggiordomo+" e' sol"+sex_indicator+" a casa, Padrone"
+            bot.sendMessage(CHAT_ID, who_is_at_home, disable_notification=debug_notify)
     elif command == '/help':
         # send message for help
-        messaggio="Sono il Maggiordomo e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n"
+        messaggio="il mio nome e' "+nome_maggiordomo+" e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n"
         messaggio+="/now - mostra la temperatura\n"
         messaggio+="/ho_freddo - accende il riscaldamento\n"
         messaggio+="/ho_caldo - spegne il riscaldamento\n"
@@ -804,7 +812,12 @@ if GATE_PRESENT:
     help_or_gate = '/apri'
 
 main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
-bot.sendMessage(CHAT_ID, 'Mi sono appena svegliato, Padrone', disable_notification=debug_notify)
+if male_maggiordomo:
+    sex_indicator="o"
+else:
+    sex_indicator="a"
+welcome_message = nome_maggiordomo+" si e' appena svegliat"+sex_indicator+", Padrone"
+bot.sendMessage(CHAT_ID, welcome_message, disable_notification=debug_notify)
 
 if heating_status and not heating_standby:
     TurnOnHeating()
