@@ -625,7 +625,7 @@ def check_presence_arp():
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
         tmp_ip_address = persona_IP[n]+'/32'
-        result = subprocess.call(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address])
+        result = subprocess.call(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address, '|grep', persona_IP[n],'|uniq|grep','-c', persona_IP[n]])
         print(tmp_ip_address)
         print (result)
         if (result != 0):
