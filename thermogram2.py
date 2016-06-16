@@ -626,7 +626,7 @@ def check_presence_arp():
 #        result = os.system("ping -c 2 " + persona_IP[n])
         tmp_ip_address = persona_IP[n]+'/32'
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
-        result = subprocess.call(['sudo','/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address+'|grep '+persona_IP[n]+'|uniq|grep -c '+persona_IP[n]])
+        result = subprocess.call(['sudo','/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',persona_IP[n]+'/32|grep '+persona_IP[n]+'|uniq|grep -c '+persona_IP[n]])
         print(tmp_ip_address)
         print (result)
         if (result != 0):
