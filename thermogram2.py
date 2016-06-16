@@ -25,6 +25,7 @@ persona_BT=settings.get('SectionOne','persona_BT').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
+ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
 DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
 owner_found= settings.getboolean('SectionOne','owner_found')
@@ -617,6 +618,26 @@ def check_presence_BT():
 
 ###################################################
 
+######################## check presence con ping IP su wifi
+def check_presence_arp():
+    global personaIP, persona_at_home, persone_della_casa
+    global CHAT_ID
+    for n in range(persone_della_casa):
+#        result = os.system("ping -c 2 " + persona_IP[n])
+        result = subprocess.call(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',persona_IP[n]+'/32'])
+        if (result != 0):
+            if not persona_at_home[n]:
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+#                if changed:
+#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+        else:
+            if persona_at_home[n]:
+                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+#                if changed:
+#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+
+####################################################
+
 
 ##### connette o riconnette alla mail ###########
 def connect(retries=5, delay=3):
@@ -893,6 +914,8 @@ while True:
         check_presence_IP() # controlla la presente con ping IP
     if BT_PRESENCE:
         check_presence_BT()
+    if ARP_PRESENCE:
+        check_presence_arp()
         
     time.sleep(60)
 
