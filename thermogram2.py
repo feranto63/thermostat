@@ -618,13 +618,16 @@ def check_presence_BT():
 
 ###################################################
 
-######################## check presence con ping IP su wifi
+######################## check presence con ping arp su wifi
 def check_presence_arp():
     global personaIP, persona_at_home, persone_della_casa
     global CHAT_ID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
-        result = subprocess.call(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',persona_IP[n]+'/32'])
+        tmp_ip_address = persona_IP[n]+'/32'
+        result = subprocess.call(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address])
+        print(tmp_ip_address)
+        print (result)
         if (result != 0):
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
