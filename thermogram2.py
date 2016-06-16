@@ -628,10 +628,10 @@ def check_presence_arp():
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
         arp_result = subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address])
         print(arp_result)
-        result = persona_IP[n] in arp_result
+        result = arp_result.find(persona_IP[n])
         print(tmp_ip_address)
         print (result)
-        if result:
+        if result > 0:
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
 #                if changed:
