@@ -17,6 +17,7 @@ persone_della_casa = settings.getint('SectionOne','persone_della_casa')
 persona= settings.get('SectionOne','persona').split("\n")
 #persona_at_home=settings.getboolean('SectionOne','persona_at_home').split("\n")
 persona_at_home=[True, True, True, True, True, True, True, True, True]
+persona_retry=[0,0,0,0,0,0,0,0,0]
 imap_host = settings.get('SectionOne','imap_host')
 EMAIL_ID=settings.get('SectionOne','EMAIL_ID')
 EMAIL_PASSWD=settings.get('SectionOne','EMAIL_PASSWD')
@@ -47,6 +48,8 @@ DHT_PIN = 18
 dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
+
+PRESENCE_RETRY = 5
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -620,7 +623,7 @@ def check_presence_BT():
 
 ######################## check presence con ping arp su wifi
 def check_presence_arp():
-    global personaIP, persona_at_home, persone_della_casa
+    global personaIP, persona_at_home, persone_della_casa, persona_retry
     global CHAT_ID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
@@ -790,6 +793,7 @@ else:
 
 ############ legge da file lo stato delle persone della casa ###############
 for n in range(persone_della_casa):
+    persona_retry[n]=0
     try:
         f = open(persona[n]+"_at_home","r")  #apre il file dei dati in read mode
         pres=f.read().strip()   #legge la info di presence sul file
