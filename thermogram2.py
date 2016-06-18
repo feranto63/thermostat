@@ -630,18 +630,22 @@ def check_presence_arp():
         tmp_ip_address = persona_IP[n]+'/32'
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
         arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
-        print(arp_result)
+#        print(arp_result)
         result = arp_result.find(persona_IP[n])
-        print(tmp_ip_address)
-        print (result)
-        if result > 0:
+#        print(tmp_ip_address)
+#        print (result)
+        if result > 0:  #persona at home
+            persona_retry[n]=0
             if not persona_at_home[n]:
                 changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
 #                if changed:
 #                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
         else:
             if persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                persona_retry[n]+=1
+                if persona_retry[n]>=PRESENCE_RETRY:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                    persona_retry[n]=0
 #                if changed:
 #                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
