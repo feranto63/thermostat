@@ -75,7 +75,7 @@ import logging
 logging.basicConfig(
         filename='termostato.log',
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG)
+        level=logging.WARN)
 
 
 ###################### database per la memorizzazione delle temperature ###############
