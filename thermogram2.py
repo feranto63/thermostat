@@ -29,6 +29,7 @@ BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
 ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
 DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
+PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 owner_found= settings.getboolean('SectionOne','owner_found')
 
 
@@ -49,7 +50,7 @@ dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
 
-PRESENCE_RETRY = 5
+
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
