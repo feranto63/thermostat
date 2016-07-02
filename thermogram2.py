@@ -315,6 +315,10 @@ def handle(msg):
         heating_overwrite = True
         TurnOffHeating()
         bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
+    elif command == '/restart':
+        bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
+        result = subprocess.call(['sudo','supervisorctl','restart','thermogram2')
+        sys.exit("Riavvio richiesto")
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti", reply_markup=main_show_keyboard)
 
