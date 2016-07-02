@@ -844,6 +844,13 @@ initialize_schedule()
 
 ######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
+
+#clear queue
+updates = bot.getUpdates()
+if updates:
+    last_update_id = updates[-1]['update_id']
+    bot.getUpdates(offset=last_update_id+1)
+
 bot.message_loop(handle)
 logging.info("Listening ...")
 
