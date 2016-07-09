@@ -94,6 +94,32 @@ def log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
     conn.commit()
     conn.close()
 
+# store the presence in the database
+def log_presence(orario, nome, verso):
+
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    dati_da_inserire = [orario, nome, verso]
+    curs.execute("INSERT INTO presence values (?,?,?)", dati_da_inserire)
+    # commit the changes
+    conn.commit()
+
+    with conn:
+
+        curs = conn.cursor()    
+        if verso=="IN":
+            incasa = True
+        else:
+            incasa = False
+        curs.execute("SELECT * FROM persona WHERE nome = 'Claudia'")
+        rows = curs.fetchone()
+        if rows == None:
+            curs.execute("INSERT INTO persona values (orario, incasa, nome)")        
+        else:
+            curs.execute("UPDATE persona SET timestamp=?, incasa=? WHERE nome=?", (orario, incasa, nome))        
+        conn.commit()
+    conn.close()
+
 ################### gestione cronotermostato ###########################
 import calendar
 
@@ -534,6 +560,7 @@ def set_presence(n, presence_msg):
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
+                log_presence(localtime, pesona[n], status)
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
@@ -547,6 +574,7 @@ def set_presence(n, presence_msg):
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
+                log_presence(localtime, pesona[n], status)
 
         # calcola chi e' a casa
         who_is_at_home=""
@@ -803,7 +831,7 @@ if DHT_PRESENCE:
     CurTempDHT, CurHumidity = read_TandH()
 else:
     CurTempDHT = 99
-    CurHumidity = 'N.A.'
+    CurHumidity = 0
 
 ############ legge da file lo stato delle persone della casa ###############
 for n in range(persone_della_casa):
@@ -902,7 +930,7 @@ while True:
         if DS_PRESENCE == False:
             CurTemp = CurTempDHT
     if CurHumidity == None:
-        CurHumidity = 'N.A.'
+        CurHumidity = 0
     if not heating_overwrite:
         if pulizie_status:
             if now >= pulizie_timer:
@@ -923,7 +951,7 @@ while True:
             CurTempDHT, CurHumidity = read_TandH()
         else:
             CurTempDHT = 99
-            CurHumidity = 'N.A.'
+            CurHumidity = 0
 #        deviceID, msgType, value = get_temp_radio()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
