@@ -113,7 +113,7 @@ def log_presence(orario, nome, verso):
             incasa = False
         dati_da_inserire = [nome, incasa, orario]
         dati_da_aggiornare = [orario, incasa, nome]
-        curs.execute("SELECT * FROM persona WHERE nome = ?",nome)
+        curs.execute("SELECT * FROM persona WHERE nome = ?",(nome))
         rows = curs.fetchone()
         if rows == None:
             curs.execute("INSERT INTO persona values (?,?,?)", dati_da_inserire)        
