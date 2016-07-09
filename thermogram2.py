@@ -111,13 +111,14 @@ def log_presence(orario, nome, verso):
             incasa = True
         else:
             incasa = False
-        dati_da_inserire = [orario, incasa, nome]
-        curs.execute("SELECT * FROM persona WHERE nome = 'Claudia'")
+        dati_da_inserire = [nome, incasa, orario]
+        dati_da_aggiornare = [orario, incasa, nome]
+        curs.execute("SELECT * FROM persona WHERE nome = ?",nome)
         rows = curs.fetchone()
         if rows == None:
             curs.execute("INSERT INTO persona values (?,?,?)", dati_da_inserire)        
         else:
-            curs.execute("UPDATE persona SET timestamp=?, incasa=? WHERE nome=?", dati_da_inserire)        
+            curs.execute("UPDATE persona SET timestamp=?, incasa=? WHERE nome=?", dati_da_aggiornare)        
         conn.commit()
     conn.close()
 
