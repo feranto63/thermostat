@@ -352,6 +352,8 @@ def handle(msg):
     elif command == '/cold_off':
         result = subprocess.call(['irsend','SEND_ONCE','BION','TURN_OFF'])
         bot.sendMessage(CHAT_ID, "Spengo il condizionatore",disable_notification=True)
+    elif command == '/image':
+        result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti", reply_markup=main_show_keyboard)
 
