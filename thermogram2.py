@@ -560,7 +560,7 @@ def set_presence(n, presence_msg):
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                log_presence(localtime, pesona[n], status)
+                log_presence(localtime, persona[n], status)
         elif status == 'OUT':
             if persona_at_home[n]:
                 persona_at_home[n] = False
@@ -574,7 +574,7 @@ def set_presence(n, presence_msg):
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
-                log_presence(localtime, pesona[n], status)
+                log_presence(localtime, persona[n], status)
 
         # calcola chi e' a casa
         who_is_at_home=""
