@@ -292,7 +292,7 @@ def handle(msg):
             messaggio+="attivato"
         else:
             messaggio+="disattivato"
-        show_keyboard = {'hide_keyboard':True} #tastiera personalizzata
+        show_keyboard = {'hide_keyboard':False} #tastiera personalizzata
         result = bot.sendPhoto(CHAT_ID, open('MAGGIORDOMO.jpg', 'rb'), reply_markup=show_keyboard, disable_notification=debug_notify)
         bot.sendMessage(CHAT_ID, messaggio, reply_markup=show_keyboard, disable_notification=debug_notify)
     elif command == '/pulizie':
