@@ -293,7 +293,7 @@ def handle(msg):
         else:
             messaggio+="disattivato"
         show_keyboard = {'hide_keyboard':True} #tastiera personalizzata
-        result = bot.sendPhoto(CHAT_ID, open('MAGGIORDOMO.jpg', 'rb'), reply_markup=show_keyboard,, disable_notification=debug_notify)
+        result = bot.sendPhoto(CHAT_ID, open('MAGGIORDOMO.jpg', 'rb'), reply_markup=show_keyboard, disable_notification=debug_notify)
         bot.sendMessage(CHAT_ID, messaggio, reply_markup=show_keyboard, disable_notification=debug_notify)
     elif command == '/pulizie':
         if not pulizie_status:
