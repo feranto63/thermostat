@@ -31,4 +31,4 @@ while 1:
     bot.sendMessage(USER_ID, 'Heartbeat')
     bot.sendMessage(USER_ID, 'Heartbeat')
     bot.sendMessage(USER_ID, '---------')
-    time.sleep(180)
+    time.sleep(240)
