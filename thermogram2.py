@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import telepot.api
+import urllib3
 
 telepot.api._pools = {
     'default': urllib3.PoolManager(num_pools=3, maxsize=10, retries=3, timeout=30),
