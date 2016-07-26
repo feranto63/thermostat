@@ -1,5 +1,11 @@
 #!/usr/bin/python
 
+import telepot.api
+
+telepot.api._pools = {
+    'default': urllib3.PoolManager(num_pools=3, maxsize=10, retries=3, timeout=30),
+}
+
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
