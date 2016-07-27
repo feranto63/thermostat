@@ -364,7 +364,8 @@ def handle(msg):
     elif command == '/image':
         result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
     else:
-        bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti", reply_markup=main_show_keyboard)
+        bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
+        bot.sendMessage(CHAT_ID, "Come ti posso aiutare?",disable_notification=True, reply_markup=main_show_keyboard)
 
 
 
