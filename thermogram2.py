@@ -35,6 +35,7 @@ IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
 ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
 DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
+DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 owner_found= settings.getboolean('SectionOne','owner_found')
@@ -471,7 +472,12 @@ import Adafruit_DHT
 # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
 def read_TandH():
     global DHT_PIN
-    sensor = Adafruit_DHT.DHT22
+    global DHT_TYPE
+    
+    if DHT_TYPE == 11:
+        sensor = Adafruit_DHT.DHT11
+    else:
+        sensor = Adafruit_DHT.DHT22
     # Example using a Raspberry Pi with DHT sensor
     # connected to GPIO4.
     pin = DHT_PIN
