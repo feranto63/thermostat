@@ -3,6 +3,7 @@
 import telepot.api
 import urllib3
 
+# posto retry = 3 per evitare exception sul send.message casuale
 telepot.api._pools = {
     'default': urllib3.PoolManager(num_pools=3, maxsize=10, retries=3, timeout=30),
 }
@@ -30,6 +31,7 @@ EMAIL_ID=settings.get('SectionOne','EMAIL_ID')
 EMAIL_PASSWD=settings.get('SectionOne','EMAIL_PASSWD')
 persona_IP=settings.get('SectionOne','persona_IP').split("\n")
 persona_BT=settings.get('SectionOne','persona_BT').split("\n")
+persona_ARP=settings.getboolean('SectionOne','persona_ARP').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
@@ -641,71 +643,74 @@ def set_presence(n, presence_msg):
 import subprocess
 
 def check_presence_IP():
-    global personaIP, persona_at_home, persone_della_casa
+    global persona_IP, persona_at_home, persone_della_casa, persona_ARP
     global CHAT_ID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
-        result = subprocess.call(['ping','-c','1',persona_IP[n]])
-        if (result == 0):
-            if not persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
-#                if changed:
-#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
-        else:
-            if persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
-#                if changed:
-#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+        if persona_ARP[n]:
+            result = subprocess.call(['ping','-c','1',persona_IP[n]])
+            if (result == 0):
+                if not persona_at_home[n]:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+#                   if changed:
+#                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+            else:
+                if persona_at_home[n]:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+#                    if changed:
+#                        bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ####################################################
 
 ############# controlla la presence con ping BT #################        
 def check_presence_BT():
-    global persona_BT, persona_at_home, persone_della_casa
+    global persona_BT, persona_at_home, persone_della_casa, persona_ARP
     global CHAT_ID
     for n in range (persone_della_casa):
-        result = bluetooth.lookup_name(persona_BT[n], timeout=5)
-        if (result != None):
-            if not persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
- #               if changed:
- #                   bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+        if persona_ARP[n]:
+            result = bluetooth.lookup_name(persona_BT[n], timeout=5)
+            if (result != None):
+                if not persona_at_home[n]:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+ #                   if changed:
+ #                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
-        else:
-            if persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
- #               if changed:
- #                   bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+            else:
+                if persona_at_home[n]:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+ #                   if changed:
+ #                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ###################################################
 
 ######################## check presence con ping arp su wifi
 def check_presence_arp():
-    global personaIP, persona_at_home, persone_della_casa, persona_retry
+    global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP
     global CHAT_ID
     for n in range(persone_della_casa):
-#        result = os.system("ping -c 2 " + persona_IP[n])
-        tmp_ip_address = persona_IP[n]+'/32'
+        if persona_ARP[n]:
+#            result = os.system("ping -c 2 " + persona_IP[n])
+            tmp_ip_address = persona_IP[n]+'/32'
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
-        arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
-#        print(arp_result)
-        result = arp_result.find(persona_IP[n])
+            arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
+#           print(arp_result)
+            result = arp_result.find(persona_IP[n])
 #        print(tmp_ip_address)
 #        print (result)
-        if result > 0:  #persona at home
-            persona_retry[n]=0
-            if not persona_at_home[n]:
-                changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
-#                if changed:
-#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
-        else:
-            if persona_at_home[n]:
-                persona_retry[n]+=1
-                if persona_retry[n]>=PRESENCE_RETRY:
-                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
-                    persona_retry[n]=0
-#                if changed:
-#                    bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+            if result > 0:  #persona at home
+                persona_retry[n]=0
+                if not persona_at_home[n]:
+                    changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
+#                    if changed:
+#                        bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+            else:
+                if persona_at_home[n]:
+                    persona_retry[n]+=1
+                    if persona_retry[n]>=PRESENCE_RETRY:
+                        changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
+                        persona_retry[n]=0
+#                    if changed:
+#                        bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ####################################################
 
