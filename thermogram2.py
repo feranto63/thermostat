@@ -31,7 +31,7 @@ EMAIL_ID=settings.get('SectionOne','EMAIL_ID')
 EMAIL_PASSWD=settings.get('SectionOne','EMAIL_PASSWD')
 persona_IP=settings.get('SectionOne','persona_IP').split("\n")
 persona_BT=settings.get('SectionOne','persona_BT').split("\n")
-persona_ARP=settings.get('SectionOne','persona_ARP').split("\n")
+persona_ARP=settings.getint('SectionOne','persona_ARP').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
@@ -652,7 +652,7 @@ def check_presence_IP():
     global CHAT_ID
     for n in range(persone_della_casa):
 #        result = os.system("ping -c 2 " + persona_IP[n])
-        if persona_ARP[n]:
+        if persona_ARP[n] == 1:
             result = subprocess.call(['ping','-c','1',persona_IP[n]])
             if (result == 0):
                 if not persona_at_home[n]:
@@ -672,7 +672,7 @@ def check_presence_BT():
     global persona_BT, persona_at_home, persone_della_casa, persona_ARP
     global CHAT_ID
     for n in range (persone_della_casa):
-        if persona_ARP[n]:
+        if persona_ARP[n]==1:
             result = bluetooth.lookup_name(persona_BT[n], timeout=5)
             if (result != None):
                 if not persona_at_home[n]:
@@ -693,7 +693,7 @@ def check_presence_arp():
     global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP
     global CHAT_ID
     for n in range(persone_della_casa):
-        if persona_ARP[n]:
+        if persona_ARP[n]==1:
 #            result = os.system("ping -c 2 " + persona_IP[n])
             tmp_ip_address = persona_IP[n]+'/32'
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
