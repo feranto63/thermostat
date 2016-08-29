@@ -47,10 +47,7 @@ if not owner_found:
     sys.exit("owner not found")
 
 for n in range(persone_della_casa):
-    if persona_ARP[n]:
-        print(str(n)+":True")
-    else:
-        print(str(n)+":False")
+    print (persona[n]+" - "+persona_ARP[n]+"\n")
 
 FILESCHEDULE="fileschedule"
 FILEHEATING="fileheating"
