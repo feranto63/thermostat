@@ -31,11 +31,13 @@ EMAIL_ID=settings.get('SectionOne','EMAIL_ID')
 EMAIL_PASSWD=settings.get('SectionOne','EMAIL_PASSWD')
 persona_IP=settings.get('SectionOne','persona_IP').split("\n")
 persona_BT=settings.get('SectionOne','persona_BT').split("\n")
+persona_WIFI=settings.get('SectionOne','persona_WIFI').split("\n")
 persona_ARP=settings.get('SectionOne','persona_ARP').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
 ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
+PRESENCE_MAC = settings.getboolean('SectionOne','PRESENCE_MAC')
 DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
 DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
@@ -687,16 +689,22 @@ def check_presence_BT():
 
 ######################## check presence con ping arp su wifi
 def check_presence_arp():
-    global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP
+    global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP, persona_WIFI, presence_MAC
     global CHAT_ID
+
+    arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','-l','-r','10']))
+
     for n in range(persone_della_casa):
         if persona_ARP[n]=="1":
 #            result = os.system("ping -c 2 " + persona_IP[n])
-            tmp_ip_address = persona_IP[n]+'/32'
+###            tmp_ip_address = persona_IP[n]+'/32'
 #iphone=$(/usr/bin/arp-scan --interface=eth0 -r 10 -q $ip_iphone/32|grep $ip_iphone|uniq|grep -c $ip_iphone)
-            arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
+###            arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
 #           print(arp_result)
-            result = arp_result.find(persona_IP[n])
+            if PRESENCE_MAC:
+                result = arp_result.find(persona_WIFI[n])
+            else:                
+                result = arp_result.find(persona_IP[n])
 #        print(tmp_ip_address)
 #        print (result)
             if result > 0:  #persona at home
