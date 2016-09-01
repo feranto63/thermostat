@@ -693,7 +693,8 @@ def check_presence_arp():
     global CHAT_ID
 
     arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','-l','-r','10']))
-
+    print (arp_result)
+    
     for n in range(persone_della_casa):
         if persona_ARP[n]=="1":
 #            result = os.system("ping -c 2 " + persona_IP[n])
@@ -707,6 +708,8 @@ def check_presence_arp():
                 result = arp_result.find(persona_IP[n])
 #        print(tmp_ip_address)
 #        print (result)
+            print('result['+str(n)+']='+str(result))
+            
             if result > 0:  #persona at home
                 persona_retry[n]=0
                 if not persona_at_home[n]:
