@@ -687,6 +687,8 @@ def check_presence_BT():
 
 ###################################################
 
+import binascii
+
 ######################## check presence con ping arp su wifi
 def check_presence_arp():
     global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP, persona_WIFI, presence_MAC
