@@ -694,8 +694,8 @@ def check_presence_arp():
     global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP, persona_WIFI, presence_MAC
     global CHAT_ID
 
-    arp_result_b = str(subprocess.check_output(['/usr/bin/arp-scan','-l','-r','11']))
-    arp_result = art_result_b.decode('ascii')
+    arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','-l','-r','11']))
+#    arp_result = art_result_b.decode('ascii')
     print (arp_result)
     
     for n in range(persone_della_casa):
@@ -706,8 +706,10 @@ def check_presence_arp():
 ###            arp_result = str(subprocess.check_output(['/usr/bin/arp-scan','--interface=wlan0','-r','10','-q',tmp_ip_address]))
 #           print(arp_result)
             if PRESENCE_MAC:
+                print(persona_WIFI[n])
                 result = arp_result.find(persona_WIFI[n])
-            else:                
+            else:   
+                print(persona_IP[n])
                 result = arp_result.find(persona_IP[n])
 #        print(tmp_ip_address)
 #        print (result)
