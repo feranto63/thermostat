@@ -15,10 +15,10 @@ def get_tempschedule():
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
    curs.execute("SELECT * FROM tempschedule")
-   for i in range (0,7):
+   for i in range (7):
       data=curs.fetchone()
       print (data)
-      for j in range (23):
+      for j in range (24):
          mySchedule[i][j]=data[j+1]
          print (mySchedule[i][j])
          print("-")
