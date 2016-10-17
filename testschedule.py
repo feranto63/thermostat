@@ -6,7 +6,7 @@ dbname='/var/www/templog.db'
 # schedulazione della programmazione della temperatura
 #mySchedule is a matrix [7 x 24] [lunedi' is first row]
 mySchedule = [['17' for x in range(24)] for x in range(7)] 
-print mySchedule
+print (mySchedule)
 
 import sqlite3
 
