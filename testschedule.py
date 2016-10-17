@@ -20,7 +20,7 @@ def get_tempschedule():
       print (data)
       for j in range (23):
          mySchedule[i][j]=data[j+1]
-         print (mySchedule[i])
+         print (mySchedule[i][j])
          print("-")
       print("\n")
          
