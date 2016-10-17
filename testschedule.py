@@ -32,6 +32,6 @@ while 1:
    day = int(input ("giorno :"))
    hour= int(input ("ora    :"))
    temp= float(input ("temp   :"))
-   mySchedule[hour][day] = temp
+   mySchedule[day][hour] = temp
    print (mySchedule)
 
