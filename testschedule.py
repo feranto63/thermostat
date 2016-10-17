@@ -28,3 +28,10 @@ def get_tempschedule():
 
 get_tempschedule()
 
+while 1:
+   input "giorno :", day
+   input "ora    :", hour
+   input "temp   :", temp
+   mySchedule[hour][day] = temp
+   print (mySchedule)
+
