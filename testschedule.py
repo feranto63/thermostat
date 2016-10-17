@@ -29,9 +29,9 @@ def get_tempschedule():
 get_tempschedule()
 
 while 1:
-   input "giorno :", day
-   input "ora    :", hour
-   input "temp   :", temp
+   day = input ("giorno :")
+   hour= input ("ora    :")
+   temp= input ("temp   :")
    mySchedule[hour][day] = temp
    print (mySchedule)
 
