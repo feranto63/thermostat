@@ -12,7 +12,6 @@ import sqlite3
 
 # store the temperature in the database
 def get_termoschedule():
-
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
    curs.execute("SELECT * FROM termoschedule")
@@ -23,5 +22,5 @@ def get_termoschedule():
          
    conn.close()
 
+get_termoschedule()
 
-get_thermoschedule()
