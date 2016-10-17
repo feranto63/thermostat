@@ -16,8 +16,12 @@ def get_tempschedule():
    curs=conn.cursor()
    curs.execute("SELECT * FROM tempschedule")
    for i in range (0,7):
-      mySchedule[i]=curs.fetchone()
-      print (mySchedule[i])
+      data=curs.fetchone()
+      print (data)
+      for j in range (23):
+         mySchedule[i][j]=data[j+1]
+         print (mySchedule[i])
+         print("-")
       print("\n")
          
    conn.close()
