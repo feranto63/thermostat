@@ -19,7 +19,7 @@ def get_termoschedule():
    for i in range (0,7):
       mySchedule[i]=curs.fetchone()
       print (mySchedule[i])
-      print"\n"
+      print("\n")
          
    conn.close()
 
