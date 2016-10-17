@@ -10,7 +10,7 @@ print (mySchedule)
 
 import sqlite3
 
-# store the temperature in the database
+# read the comfort temperature table fron database
 def get_tempschedule():
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
@@ -26,6 +26,21 @@ def get_tempschedule():
          
    conn.close()
 
+def put_tempschedule(day,time,temp):
+   conn=sqlite3.connect(dbname)
+   curs=conn.cursor()
+#   curs.execute("SELECT * FROM tempschedule")
+#   for i in range (7):
+#      data=curs.fetchone()
+#      print (data)
+#      for j in range (24):
+#         mySchedule[i][j]=data[j+1]
+#         print (mySchedule[i][j])
+#         print("-")
+#      print("\n")
+         
+   conn.close()
+   
 get_tempschedule()
 
 while 1:
