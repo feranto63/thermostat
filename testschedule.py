@@ -3,6 +3,10 @@ import calendar
 
 dbname='/var/www/templog.db'
 
+week_name=['LUN','MAR','MER','GIO','VEN','SAB','DOM'] #lun = 0
+
+today = 2
+
 # schedulazione della programmazione della temperatura
 #mySchedule is a matrix [7 x 24] [lunedi' is first row]
 mySchedule = [['17' for x in range(24)] for x in range(7)] 
@@ -27,8 +31,15 @@ def get_tempschedule():
    conn.close()
 
 def put_tempschedule(day,time,temp):
+   day_index = week_name[day]
+   if time < 10:
+      column_name = "h0"+str(time)
+   else
+      column_name = "h"+str(time)
+   
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
+   curs.execute("UPDATE tempschedule SET "+column_name+" VALUE ? WHERE giorno == ?", (temp, day_index)) 
 #   curs.execute("SELECT * FROM tempschedule")
 #   for i in range (7):
 #      data=curs.fetchone()
@@ -48,5 +59,6 @@ while 1:
    hour= int(input ("ora    :"))
    temp= float(input ("temp   :"))
    mySchedule[day][hour] = temp
+   put_tempschedule(day,hour,temp)
    print (mySchedule)
 
