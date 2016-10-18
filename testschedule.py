@@ -34,7 +34,7 @@ def put_tempschedule(day,time,temp):
    day_index = week_name[day]
    if time < 10:
       column_name = "h0"+str(time)
-   else
+   else:
       column_name = "h"+str(time)
    
    conn=sqlite3.connect(dbname)
