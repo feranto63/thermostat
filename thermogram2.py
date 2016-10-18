@@ -64,7 +64,8 @@ dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
 
-
+week_name=['LUN','MAR','MER','GIO','VEN','SAB','DOM'] #lun = 0
+delta_temp = 0.2
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -188,6 +189,32 @@ def save_schedule():
         fileschedule.write("\n")#scrive la info di presence ed il timestam sul file
     fileschedule.close()  #chiude il file dei dati e lo salva
 
+    
+# read the comfort temperature table to database
+def get_tempschedule():
+    global mySchedule
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    curs.execute("SELECT * FROM tempschedule")
+    for i in range (7):
+        data=curs.fetchone()
+        for j in range (24):
+            mySchedule[i][j]=data[j+1]
+    conn.close()
+
+# write the modified comfort temperature table to database
+def put_tempschedule(day,time,temp):
+    day_index = week_name[day]
+    if time < 10:
+        column_name = "h0"+str(time)
+    else:
+        column_name = "h"+str(time)
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
+    curs.execute(command, (temp, day_index)) 
+    conn.close()
+
 ################### fine gestione cronotermostato ######################
 
 def isnumeric(s):
@@ -231,6 +258,9 @@ def handle(msg):
     orario = time.localtime(time.time())
     localtime = time.asctime( orario )
     giorno_ora_minuti = time.strftime("%a %H:%M", orario)
+    ora_attuale = int(time.strftime("%H", orario))
+    giorno_attuale = int(time.strftime("%w", orario))
+    ############################## WORKING HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     if heating_status:
         heatstat = "acceso"
     else:
@@ -676,14 +706,14 @@ def check_presence_BT():
             if (result != None):
                 if not persona_at_home[n]:
                     changed, messaggio_IN_OUT= set_presence(n, persona[n]+' IN') #richiama la funzione per la gestisce della presence
- #                   if changed:
- #                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+#                   if changed:
+#                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
             else:
                 if persona_at_home[n]:
                     changed, messaggio_IN_OUT= set_presence(n, persona[n]+' OUT') #richiama la funzione per la gestisce della presence
- #                   if changed:
- #                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+#                   if changed:
+#                       bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 
 ###################################################
 
@@ -830,8 +860,8 @@ def read_gmail():
                         subject_text=str(original['Subject'])
 #                        print("subject_text:"+subject_text)
                         changed, messaggio_IN_OUT= set_presence(-1, subject_text) #richiama la funzione per la gestisce della presence
- #                       if changed:
- #                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
+#                       if changed:
+#                           bot.sendMessage(CHAT_ID, messaggio_IN_OUT)
 #                        print('set_presence')
                         typ, data = mail.store(num,'+FLAGS','\\Seen') #segna la mail come letta
 #                        print('mail.store')
@@ -916,7 +946,8 @@ except IOError:
 heating_overwrite = False
 
 ######## legge da file lo programmazione del cronotermostato ###########
-initialize_schedule()
+#### old initialize_schedule()
+get_tempschedule():
 
 ######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
