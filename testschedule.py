@@ -39,7 +39,8 @@ def put_tempschedule(day,time,temp):
    
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
-   curs.execute("UPDATE tempschedule SET "+column_name+" VALUE ? WHERE giorno == ?", (temp, day_index)) 
+   command="UPDATE tempschedule SET "+column_name+" VALUE ? WHERE giorno = ?"
+   curs.execute(command, (temp, day_index)) 
 #   curs.execute("SELECT * FROM tempschedule")
 #   for i in range (7):
 #      data=curs.fetchone()
