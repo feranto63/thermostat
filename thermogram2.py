@@ -192,30 +192,32 @@ def save_schedule():
     
 # read the comfort temperature table to database
 def get_tempschedule():
-    global mySchedule, dbname
+    global mySchedule, week_name, dbname
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     curs.execute("SELECT * FROM tempschedule")
     for i in range (7):
         data=curs.fetchone()
+        day_index=week_name.index(data[0])
         for j in range (24):
-            mySchedule[i][j]=data[j+1]
+            mySchedule[day_index][j]=data[j+1]
     conn.close()
 
 # write the modified comfort temperature table to database
-def put_tempschedule(day,time,temp):
+def put_tempschedule(int day,int time,int temp):
     global mySchedule, week_name, dbname
     day_index = week_name[day]
-    if time < 10:
-        column_name = "h0"+str(time)
+    inttime=int(time)
+    if inttime < 10:
+        column_name = "h0"+str(inttime)
     else:
-        column_name = "h"+str(time)
+        column_name = "h"+str(inttime)
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
     curs.execute(command, (temp, day_index)) 
     conn.close()
-    mySchedule[day][time]=temp
+    mySchedule[day][inttime]=temp
 
 ################### fine gestione cronotermostato ######################
 
