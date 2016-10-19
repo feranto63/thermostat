@@ -204,7 +204,7 @@ def get_tempschedule():
     conn.close()
 
 # write the modified comfort temperature table to database
-def put_tempschedule(int day,int time,int temp):
+def put_tempschedule(day, time, temp):
     global mySchedule, week_name, dbname
     day_index = week_name[day]
     inttime=int(time)
