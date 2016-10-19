@@ -192,7 +192,7 @@ def save_schedule():
     
 # read the comfort temperature table to database
 def get_tempschedule():
-    global mySchedule
+    global mySchedule, dbname
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     curs.execute("SELECT * FROM tempschedule")
@@ -204,7 +204,7 @@ def get_tempschedule():
 
 # write the modified comfort temperature table to database
 def put_tempschedule(day,time,temp):
-    global mySchedule
+    global mySchedule, week_name, dbname
     day_index = week_name[day]
     if time < 10:
         column_name = "h0"+str(time)
@@ -303,16 +303,16 @@ def handle(msg):
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
         # modifica la temperatura di comfort
-        put_tempschedule(giorno_attuale,ora_attuale,CurTargetTemp+DELTA_TEMP)
-        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+":"+str("%0.1f" % (CurTargetTemp+DELTA_TEMP)), disable_notification=debug_notify)
+        put_tempschedule(giorno_attuale,ora_attuale,"%0.1f" % (CurTargetTemp+DELTA_TEMP))
+        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp+DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/ho_caldo':
         bot.sendMessage(CHAT_ID, "Ho capito che hai caldo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
         # modifica la temperatura di comfort
-        put_tempschedule(giorno_attuale,ora_attuale,CurTargetTemp-DELTA_TEMP)
-        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+":"+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
+        put_tempschedule(giorno_attuale,ora_attuale,"%0.1f" % (CurTargetTemp-DELTA_TEMP))
+        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
