@@ -208,6 +208,7 @@ def put_tempschedule(day, time, temp):
     global mySchedule, week_name, dbname
     day_index = week_name[day]
     inttime=int(time)
+    floattemp=float(temp)
     if inttime < 10:
         column_name = "h0"+str(inttime)
     else:
@@ -215,9 +216,9 @@ def put_tempschedule(day, time, temp):
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
-    curs.execute(command, (temp, day_index)) 
+    curs.execute(command, (floattemp, day_index)) 
     conn.close()
-    mySchedule[day][inttime]=temp
+    mySchedule[day][inttime]=floattemp
 
 ################### fine gestione cronotermostato ######################
 
