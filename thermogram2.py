@@ -204,6 +204,7 @@ def get_tempschedule():
 
 # write the modified comfort temperature table to database
 def put_tempschedule(day,time,temp):
+    global mySchedule
     day_index = week_name[day]
     if time < 10:
         column_name = "h0"+str(time)
@@ -214,6 +215,7 @@ def put_tempschedule(day,time,temp):
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
     curs.execute(command, (temp, day_index)) 
     conn.close()
+    mySchedule[day][time]=temp
 
 ################### fine gestione cronotermostato ######################
 
