@@ -3,7 +3,7 @@ import calendar
 
 dbname='/var/www/templog.db'
 
-week_name=['LUN','MAR','MER','GIO','VEN','SAB','DOM'] #lun = 0
+week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
 
 today = 2
 
@@ -16,15 +16,17 @@ import sqlite3
 
 # read the comfort temperature table fron database
 def get_tempschedule():
+   global mySchedule, week_name, dbname
    conn=sqlite3.connect(dbname)
    curs=conn.cursor()
    curs.execute("SELECT * FROM tempschedule")
    for i in range (7):
       data=curs.fetchone()
+      day_index=week_name.index(data[0])
       print (data)
       for j in range (24):
-         mySchedule[i][j]=data[j+1]
-         print (mySchedule[i][j])
+         mySchedule[day_index][j]=data[j+1]
+         print (mySchedule[dayindex][j])
          print("-")
       print("\n")
          
