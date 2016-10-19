@@ -221,7 +221,7 @@ def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
-    curs.execute(command, (nuova_temp, day_index))
+    curs.execute(command, [nuova_temp, day_index])
     curs.commit()
     conn.close()
     mySchedule[giorno_attuale][ora_attuale]=nuova_temp
