@@ -222,7 +222,7 @@ def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
     curs.execute(command, [nuova_temp, day_index])
-    curs.commit()
+    conn.commit()
     conn.close()
     mySchedule[giorno_attuale][ora_attuale]=nuova_temp
     print(str(giorno_attuale)+" "+str(ora_attuale) + "=="+str(mySchedule[giorno_attuale][ora_attuale]))
