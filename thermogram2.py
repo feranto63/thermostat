@@ -64,8 +64,8 @@ dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
 
-week_name=['LUN','MAR','MER','GIO','VEN','SAB','DOM'] #lun = 0
-delta_temp = 0.2
+week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
+DELTA_TEMP = 0.2
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -260,7 +260,7 @@ def handle(msg):
     giorno_ora_minuti = time.strftime("%a %H:%M", orario)
     ora_attuale = int(time.strftime("%H", orario))
     giorno_attuale = int(time.strftime("%w", orario))
-    ############################## WORKING HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
     if heating_status:
         heatstat = "acceso"
     else:
@@ -300,11 +300,17 @@ def handle(msg):
         f = open("heating_update","a")
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
+        # modifica la temperatura di comfort
+        put_tempschedule(giorno_attuale,ora_attuale,CurTargetTemp+DELTA_TEMP)
+        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+":"+str("%0.1f" % (CurTargetTemp+DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/ho_caldo':
         bot.sendMessage(CHAT_ID, "Ho capito che hai caldo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
+        # modifica la temperatura di comfort
+        put_tempschedule(giorno_attuale,ora_attuale,CurTargetTemp-DELTA_TEMP)
+        bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+":"+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
