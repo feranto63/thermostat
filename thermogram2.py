@@ -306,7 +306,7 @@ def handle(msg):
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
         # modifica la temperatura di comfort
-        put_tempschedule(giorno_attuale,ora_attuale,"%0.1f" % (CurTargetTemp+DELTA_TEMP))
+        put_tempschedule(int(giorno_attuale),int(ora_attuale),float(CurTargetTemp+DELTA_TEMP))
         bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp+DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/ho_caldo':
         bot.sendMessage(CHAT_ID, "Ho capito che hai caldo", disable_notification=debug_notify)
@@ -314,7 +314,7 @@ def handle(msg):
         f.write("C,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
         f.close()  #chiude il file dei dati e lo salva
         # modifica la temperatura di comfort
-        put_tempschedule(giorno_attuale,ora_attuale,"%0.1f" % (CurTargetTemp-DELTA_TEMP))
+        put_tempschedule(int(giorno_attuale),int(ora_attuale),float(CurTargetTemp-DELTA_TEMP))
         bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
     elif command == '/casa':
         who_is_at_home=""
