@@ -175,7 +175,7 @@ def current_target_temp():
     curr_hour=int(time.strftime("%H",orario))
 
     localtime = time.asctime( orario )
-    day_of_week= int(time.strftime("%w", orario)
+    day_of_week= int(time.strftime("%w", orario))
 
     target_temp=mySchedule[day_of_week][curr_hour]
     print("in current_target_temp  day_of_week:"+str(day_of_week)+" curr_hour:"+str(curr_hour))
