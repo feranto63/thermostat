@@ -953,7 +953,7 @@ heating_overwrite = False
 
 ######## legge da file lo programmazione del cronotermostato ###########
 #### old initialize_schedule()
-get_tempschedule():
+get_tempschedule()
 
 ######## inizializza il bot Telegram ###########
 bot = telepot.Bot(TOKEN)
