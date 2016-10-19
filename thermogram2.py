@@ -168,7 +168,7 @@ def current_target_temp():
     
     now = time.time()
     orario = time.localtime(now)
-   
+
     curr_year=int(time.strftime("%Y",orario))
     curr_month=int(time.strftime("%m",orario)) 
     curr_day=int(time.strftime("%e",orario))
@@ -179,9 +179,11 @@ def current_target_temp():
 
     target_temp=mySchedule[day_of_week][curr_hour]
     print("in current_target_temp  day_of_week:"+str(day_of_week)+" curr_hour:"+str(curr_hour))
+    print("mySchedule = "+str(mySchedule[day_of_week][curr_hour]))
                      
     return(float(target_temp))
 
+                     
 def save_schedule():
     global mySchedule, FILESCHEDULE
     
