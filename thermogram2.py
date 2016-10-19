@@ -204,21 +204,21 @@ def get_tempschedule():
     conn.close()
 
 # write the modified comfort temperature table to database
-def put_tempschedule(day, time, temp):
+def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     global mySchedule, week_name, dbname
     day_index = week_name[day]
-    inttime=int(time)
-    floattemp=float(temp)
-    if inttime < 10:
-        column_name = "h0"+str(inttime)
+    if ora_attuale < 10:
+        column_name = "h0"+str(ora_attuale)
     else:
-        column_name = "h"+str(inttime)
+        column_name = "h"+str(ora_attuale)
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
-    curs.execute(command, (floattemp, day_index)) 
+    curs.execute(command, (nuova_temp, day_index))
+    curs.commit()
     conn.close()
-    mySchedule[day][inttime]=floattemp
+    mySchedule[giorno_attuale][ora_attuale]=nuova_temp
+    print(str(giorno_attuale)+" "+str(ora_attuale) + "->"+str(mySchedule[giorno_attuale][ora_attuale]))
 
 ################### fine gestione cronotermostato ######################
 
