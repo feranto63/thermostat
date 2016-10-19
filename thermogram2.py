@@ -165,6 +165,9 @@ def initialize_schedule():
 
 def current_target_temp():
     global mySchedule
+    
+    print(mySchedule)
+    
     now = time.time()
     orario = time.localtime(now)
    
@@ -226,6 +229,7 @@ def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     conn.close()
     mySchedule[giorno_attuale][ora_attuale]=nuova_temp
     print(str(giorno_attuale)+" "+str(ora_attuale) + "=="+str(mySchedule[giorno_attuale][ora_attuale]))
+    print(mySchedule)
 
 ################### fine gestione cronotermostato ######################
 
