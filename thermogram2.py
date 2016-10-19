@@ -102,7 +102,6 @@ def log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
 
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
-#    curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
     dati_da_inserire = [orario,temp,tempDHT,humidity, ExtTemp, HeatOn, TargetTemp]
     curs.execute("INSERT INTO temps values (?,?,?,?,?,?,?)", dati_da_inserire)
     # commit the changes
@@ -169,18 +168,12 @@ def current_target_temp():
     now = time.time()
     orario = time.localtime(now)
 
-    curr_year=int(time.strftime("%Y",orario))
-    curr_month=int(time.strftime("%m",orario)) 
-    curr_day=int(time.strftime("%e",orario))
     curr_hour=int(time.strftime("%H",orario))
 
     localtime = time.asctime( orario )
     day_of_week= int(time.strftime("%w", orario))
 
     target_temp=mySchedule[day_of_week][curr_hour]
-    print("in current_target_temp  day_of_week:"+str(day_of_week)+" curr_hour:"+str(curr_hour))
-    print("mySchedule = "+str(mySchedule[day_of_week][curr_hour]))
-                     
     return(float(target_temp))
 
                      
@@ -217,12 +210,6 @@ def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
         column_name = "h0"+str(ora_attuale)
     else:
         column_name = "h"+str(ora_attuale)
-    
-    print("day_index "+str(day_index))
-    print("ora_attuale "+str(ora_attuale))
-    print("column_name "+column_name)
-    print("nuova_temp "+str(nuova_temp))
-    
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
     command="UPDATE tempschedule SET "+column_name+" = ? WHERE giorno = ?"
@@ -230,8 +217,6 @@ def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     conn.commit()
     conn.close()
     mySchedule[giorno_attuale][ora_attuale]=nuova_temp
-    print(str(giorno_attuale)+" "+str(ora_attuale) + "=="+str(mySchedule[giorno_attuale][ora_attuale]))
-    print(mySchedule)
 
 ################### fine gestione cronotermostato ######################
 
