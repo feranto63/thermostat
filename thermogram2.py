@@ -166,8 +166,6 @@ def initialize_schedule():
 def current_target_temp():
     global mySchedule
     
-    print(mySchedule)
-    
     now = time.time()
     orario = time.localtime(now)
    
@@ -177,9 +175,11 @@ def current_target_temp():
     curr_hour=int(time.strftime("%H",orario))
 
     localtime = time.asctime( orario )
-    day_of_week= calendar.weekday(curr_year,curr_month,curr_day)
+    day_of_week= int(time.strftime("%w", orario)
 
     target_temp=mySchedule[day_of_week][curr_hour]
+    print("in current_target_temp  day_of_week:"+str(day_of_week)+" curr_hour:"+str(curr_hour))
+                     
     return(float(target_temp))
 
 def save_schedule():
