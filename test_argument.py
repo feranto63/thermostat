@@ -19,7 +19,7 @@ def handle(msg):
     num_args = len(words)
     print("command=",command)
     print("num_args=",num_args)
-    for i in num_args:
+    for i in range(num_args):
         print(words[i]," - ")
 
 
