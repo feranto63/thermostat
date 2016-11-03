@@ -21,6 +21,8 @@ def handle(msg):
     print("num_args=",num_args)
     for i in range(num_args):
         print(words[i]," - ")
+    if "@" in words[0]:
+        main_command, bot_name = words[0].split("@")
 
 
 TOKEN, USER_ID = sys.argv[1], int(sys.argv[2])
