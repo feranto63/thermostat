@@ -252,8 +252,17 @@ def handle(msg):
     # ignore non-text message
     if msg_type != 'text':
         return
-
-    command = msg['text'].strip().lower()
+    
+    full_command = msg['text']
+    command_list = full_command.split()
+    num_args = len(command_list)
+    if "@" in command_list[0]:    #command_list[>0] sono gli argomenti associati al comando
+        main_command, bot_name = command_list[0].split("@")
+    else:
+        main_command = command_list[0]
+        
+    command = main_command.strip().lower()
+    
     #CurTemp = read_temp()
     CurTargetTemp=current_target_temp()
 
