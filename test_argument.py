@@ -23,6 +23,8 @@ def handle(msg):
         print(words[i]," - ")
     if "@" in words[0]:
         main_command, bot_name = words[0].split("@")
+        print("main command=",main_command)
+        print("bot_name=",bot_name)
 
 
 TOKEN, USER_ID = sys.argv[1], int(sys.argv[2])
