@@ -56,6 +56,7 @@ FILEHEATING="fileheating"
 HEAT_ON  = 0
 HEAT_OFF = 1
 HEAT_PIN = 17
+HEAT2_PIN = 27
 GATE_PIN = 22
 GATE_ON = 0
 GATE_OFF = 1
@@ -490,6 +491,7 @@ import RPi.GPIO as GPIO
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(HEAT_PIN,GPIO.OUT)
+GPIO.setup(HEAT2_PIN,GPIO.OUT)
 GPIO.setup(GATE_PIN,GPIO.OUT)
 
 #Find temperature from thermometer
@@ -801,7 +803,7 @@ def connect(retries=5, delay=3):
 ############## gestione del riscaldamento ##################
 def TurnOnHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
-    global HEAT_PIN, HEAT_ON
+    global HEAT_PIN, HEAT2_PIN, HEAT_ON
 
     heating_status = True #print "HEATING ON "+localtime+"\n"
     f = open("heating_status","w")
@@ -809,7 +811,7 @@ def TurnOnHeating():
     f.close()  #chiude il file dei dati e lo salva
     
     if not heating_overwrite and heating_standby:
-       bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+        bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
     else:
         GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
         bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
