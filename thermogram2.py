@@ -34,13 +34,14 @@ persona_BT=settings.get('SectionOne','persona_BT').split("\n")
 persona_WIFI=settings.get('SectionOne','persona_WIFI').split("\n")
 persona_ARP=settings.get('SectionOne','persona_ARP').split("\n")
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
+SECONDARY_HEAT = setting.getboolean('SectionOne','SECONDARY_HEAT') #indica se e' presente la fonte di riscaldamento secondaria
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
 ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
-PRESENCE_MAC = settings.getboolean('SectionOne','PRESENCE_MAC')
-DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE')
+PRESENCE_MAC = settings.getboolean('SectionOne','PRESENCE_MAC')  #indica se se la presenza e' su base WiFi MAC Address
+DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE') #indica se e' presente il sensore DHT
 DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
-DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE')
+DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' presente il sensore di temperatura 18DS20
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 owner_found= settings.getboolean('SectionOne','owner_found')
 
@@ -55,8 +56,8 @@ FILESCHEDULE="fileschedule"
 FILEHEATING="fileheating"
 HEAT_ON  = 0
 HEAT_OFF = 1
-HEAT_PIN = 17
-HEAT2_PIN = 27
+HEAT_PIN = 17   # GPIO della caldaia (heating principale)
+HEAT2_PIN = 27  # GPIO della stufa (heating secondario)
 GATE_PIN = 22
 GATE_ON = 0
 GATE_OFF = 1
@@ -67,6 +68,9 @@ debug_notify = True
 
 week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
 DELTA_TEMP = 0.2
+
+
+MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1]  # indica se usare la caldaia principale nell'ora x
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -278,7 +282,7 @@ def handle(msg):
         heatstat = "acceso"
     else:
         heatstat = "spento"
-   
+    
     logging.debug('elaboro il comando '+command)
     
     if command == '/now':
@@ -803,7 +807,11 @@ def connect(retries=5, delay=3):
 ############## gestione del riscaldamento ##################
 def TurnOnHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
-    global HEAT_PIN, HEAT2_PIN, HEAT_ON
+    global HEAT_PIN, HEAT2_PIN, HEAT_ON, HEAT_OFF, SECONDARY_HEAT, MAIN_HEAT
+
+    orario = time.localtime(time.time())
+    ora_attuale = int(time.strftime("%H", orario))
+    giorno_attuale = int(time.strftime("%w", orario))
 
     heating_status = True #print "HEATING ON "+localtime+"\n"
     f = open("heating_status","w")
@@ -813,7 +821,15 @@ def TurnOnHeating():
     if not heating_overwrite and heating_standby:
         bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
     else:
-        GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
+        if SECONDARY_HEAT:
+            if MAIN_HEAT[ora_attuale] == 1: # devo utilizzare la caldaia principale
+                GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
+                GPIO.output(HEAT_PIN, HEAT_ON) # accendo la caldaia primaria
+            else: # devo utilizzare la caldaia secondaria
+                GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+                GPIO.output(HEAT2_PIN, HEAT_ON) # accendo la stufa secondaria
+        else: # c'e' solo la caldaia primaria e l'accendo
+            GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
         bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
         orario = time.localtime(time.time())
         localtime = time.asctime( orario )
@@ -826,13 +842,17 @@ def TurnOnHeating():
     
 def TurnOffHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
-    global HEAT_PIN, HEAT_OFF
+    global HEAT_PIN, HEAT2_PIN, HEAT_ON, HEAT_OFF, SECONDARY_HEAT, MAIN_HEAT
+
     heating_status = False
     f = open("heating_status","w")
     f.write('OFF')
     f.close()  #chiude il file dei dati e lo salva
     
-    GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (0V, off) per spegnere i termosifoni
+    GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+    if SECONDARY_HEAT: # se c'e' la stufa secondaria, la spengo
+        GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
+    
     bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
     orario = time.localtime(time.time())
     localtime = time.asctime( orario )
