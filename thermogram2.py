@@ -824,12 +824,17 @@ def TurnOnHeating():
         if SECONDARY_HEAT:
             if MAIN_HEAT[ora_attuale] == 1: # devo utilizzare la caldaia principale
                 GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
+                print('spengo la stufa secondaria')
                 GPIO.output(HEAT_PIN, HEAT_ON) # accendo la caldaia primaria
+                print('accendo la caldaia primaria')
             else: # devo utilizzare la caldaia secondaria
                 GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+                print('spengo la caldaia primaria')
                 GPIO.output(HEAT2_PIN, HEAT_ON) # accendo la stufa secondaria
+                print('accendo la stufa secondaria')
         else: # c'e' solo la caldaia primaria e l'accendo
             GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
+            print('accendo la caldaia unica')
         bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
         orario = time.localtime(time.time())
         localtime = time.asctime( orario )
@@ -850,8 +855,10 @@ def TurnOffHeating():
     f.close()  #chiude il file dei dati e lo salva
     
     GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+    print('spengo la caldaia primaria o unica')
     if SECONDARY_HEAT: # se c'e' la stufa secondaria, la spengo
         GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
+        print('spengo la stufa secondaria')
     
     bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
     orario = time.localtime(time.time())
