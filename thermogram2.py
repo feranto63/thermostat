@@ -210,6 +210,7 @@ def get_tempschedule():
 def put_tempschedule(giorno_attuale, ora_attuale, nuova_temp):
     global mySchedule, week_name, dbname
 
+    nuova_temp=round(nuova_temp,1)
     day_index = week_name[giorno_attuale]
     if ora_attuale < 10:
         column_name = "h0"+str(ora_attuale)
