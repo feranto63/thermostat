@@ -407,10 +407,12 @@ def handle(msg):
                 bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
     elif command == '/turnon':
         heating_overwrite = True
+        heating_status = True
         TurnOnHeating()
         bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
     elif command == '/turnoff':
         heating_overwrite = True
+        heating_status = False
         TurnOffHeating()
         bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
     elif command == '/restart':
@@ -821,6 +823,8 @@ def TurnOnHeating():
     
     if not heating_overwrite and heating_standby:
         bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+        GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+        GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
     else:
         if SECONDARY_HEAT:
             if MAIN_HEAT[ora_attuale] == 1: # devo utilizzare la caldaia principale
@@ -915,8 +919,8 @@ def read_gmail():
 #                        print('mail.store')
                 print(("Ho gestito "+str(n)+" messaggi di presence"))
     except:
-       print('Errore nella lettura della mail')
-       mail = connect()
+        print('Errore nella lettura della mail')
+        mail = connect()
 
 ############################### fine gestione presence via email #######################
 
@@ -1040,11 +1044,17 @@ if GATE_PRESENT:
 
 mail = connect() #apre la casella di posta
 
+now = time.time()
+orario = time.localtime(now)
+curr_hour=int(time.strftime("%H",orario))
+previous_heat = MAIN_HEAT[curr_hour] #previous_heat e' la caldaia dell'ora precedente
+
 while True:
-#    bot.sendMessage(CHAT_ID, ".")
     now = time.time()
-    #localtime = time.asctime( time.localtime(now) )
     localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+    orario = time.localtime(now)
+    curr_hour=int(time.strftime("%H",orario))
+    
     CurTargetTemp=current_target_temp()
     if DS_PRESENCE:
         CurTemp = read_temp()
@@ -1053,6 +1063,13 @@ while True:
             CurTemp = CurTempDHT
     if CurHumidity == None:
         CurHumidity = 0
+        
+    current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
+    change_heat = current_heat != previous_heat
+    if change_heat:
+        previous_heat = current_heat
+    if heating_overwrite and heating_status and change_heat:
+        TurnOnHeating()
     if not heating_overwrite:
         if pulizie_status:
             if now >= pulizie_timer:
