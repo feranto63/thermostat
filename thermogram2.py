@@ -70,7 +70,7 @@ week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
 DELTA_TEMP = 0.2
 
 
-MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1]  # indica se usare la caldaia principale nell'ora x
+MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  # indica se usare la caldaia principale nell'ora x
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
