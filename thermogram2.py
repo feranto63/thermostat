@@ -1099,7 +1099,7 @@ while True:
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
-        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, 0, (heating_status AND NOT heating_standby), CurTargetTemp)
+        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, 0, (heating_status and not heating_standby), CurTargetTemp)
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
