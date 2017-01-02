@@ -69,7 +69,7 @@ debug_notify = True
 week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
 DELTA_TEMP = 0.2
 
-overwrite_duration = -1 #ore di attivazione dell'overwrite; se = -1 è permanente
+overwrite_duration = 1000 #ore di attivazione dell'overwrite; se = 1000 è permanente
 overwrite_temp = 25 #temperatura in gradi di funzionamento in overwrite da settare sia per /turnon che per /turnoff
 
 
@@ -415,15 +415,18 @@ def handle(msg):
     elif command == '/turnon':
         overwrite_duration = 1000 #default forever = 1000 ore
         overwrite_temp = 25     #default 25 gradi centigradi
-        if num_args != 0:
+        if num_args > 1:
             overwrite_duration = int(command_list[1])
-            if num_args > 1:
+            if num_args > 2:
                 overwrite_temp = int(command_list[2])
         overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
         if overwrite_duration == 1000:
             overwrite_message = "sempre"
         else:
-            overwrite_message = str(overwrite_duration)+" ore"
+            if overwrite_duration == 1:
+                overwrite_message = str(overwrite_duration)+" ora"
+            else:
+                overwrite_message = str(overwrite_duration)+" ore"            
         heating_overwrite = True
         heating_status = True
         TurnOnHeating()
@@ -431,15 +434,18 @@ def handle(msg):
     elif command == '/turnoff':
         overwrite_duration = 1000 #default forever = 1000 ore
         overwrite_temp = -5     #default 5 gradi centigradi (il segno meno e' per indicare turnOFF)
-        if num_args != 0:
+        if num_args > 1:
             overwrite_duration = int(command_list[1])
-            if num_args > 1:
+            if num_args > 2:
                 overwrite_temp = -int(command_list[2]) #il segno meno e' per indicare turnOFF
         overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
         if overwrite_duration == 1000:
             overwrite_message = "sempre"
         else:
-            overwrite_message = str(overwrite_duration)+" ore"
+            if overwrite_duration == 1:
+                overwrite_message = str(overwrite_duration)+" ora"
+            else:
+                overwrite_message = str(overwrite_duration)+" ore"            
         heating_overwrite = True
         heating_status = False
         TurnOffHeating()
