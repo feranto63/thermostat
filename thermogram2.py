@@ -1133,7 +1133,7 @@ while True:
             else:
                 if CurTemp > (CurTargetTemp + 0.2):
                     TurnOffHeating()
-if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+    if report_interval is not None and last_report is not None and now - last_report >= report_interval:
         if DHT_PRESENCE:
             CurTempDHT, CurHumidity = read_TandH()
         else:
