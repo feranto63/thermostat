@@ -1093,16 +1093,13 @@ while True:
         else:
             CurTempDHT = 99
             CurHumidity = 0
-#        deviceID, msgType, value = get_temp_radio()
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
         #scrive la temperatura coreente ed il timestam sul file
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
-#        if deviceID != '--':
-#            filedati.write("ID="+deviceID+",msgType="+msgType+",value="+str(value))
         #chiude il file dei dati e lo salva
         filedati.close()
-        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, 0, heating_status, CurTargetTemp)
+        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, 0, (heating_status AND NOT heating_standby), CurTargetTemp)
 #        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
