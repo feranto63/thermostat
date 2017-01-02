@@ -314,6 +314,8 @@ def handle(msg):
             messaggio+="disattivato per pulizie"
         else:
             messaggio+=heatstat
+            if heating_overwrite:
+                messaggio+=" per overwrite"
         bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     elif command == '/annulla':
         heating_overwrite = False
