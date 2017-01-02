@@ -69,6 +69,9 @@ debug_notify = True
 week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
 DELTA_TEMP = 0.2
 
+overwrite_duration = -1 #ore di attivazione dell'overwrite; se = -1 è permanente
+overwrite_temp = 25 #temperatura in gradi di funzionamento in overwrite da settare sia per /turnon che per /turnoff
+
 
 MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # indica se usare la caldaia principale nell'ora x
 #           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -251,6 +254,7 @@ def handle(msg):
     global main_show_keyboard
     global debug_notify
     global nome_maggiordomo, male_maggiordomo
+    global overwrite_duration, overwrite_temp, overwrite_timer
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -407,15 +411,37 @@ def handle(msg):
 #            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
                 bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
     elif command == '/turnon':
+        overwrite_duration = 1000 #default forever = 1000 ore
+        overwrite_temp = 25     #default 25 gradi centigradi
+        if num_args != 0:
+            overwrite_duration = int(command_list[1])
+            if num_args > 1:
+                overwrite_temp = int(command_list[2])
+        overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
+        if overwrite_duration == 1000:
+            overwrite_message = "sempre"
+        else:
+            overwrite_message = str(overwrite_duration)+" ore"
         heating_overwrite = True
         heating_status = True
         TurnOnHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
+        bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
     elif command == '/turnoff':
+        overwrite_duration = 1000 #default forever = 1000 ore
+        overwrite_temp = -5     #default 5 gradi centigradi (il segno meno e' per indicare turnOFF)
+        if num_args != 0:
+            overwrite_duration = int(command_list[1])
+            if num_args > 1:
+                overwrite_temp = -int(command_list[2]) #il segno meno e' per indicare turnOFF
+        overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
+        if overwrite_duration == 1000:
+            overwrite_message = "sempre"
+        else:
+            overwrite_message = str(overwrite_duration)+" ore"
         heating_overwrite = True
         heating_status = False
         TurnOffHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite",disable_notification=True)
+        bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
     elif command == '/restart':
         bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
         result = subprocess.call(['sudo','supervisorctl','restart','thermogram2'])
@@ -1069,10 +1095,30 @@ while True:
     change_heat = (current_heat != previous_heat)
     if change_heat:
         previous_heat = current_heat
+        
 #    if heating_overwrite and heating_status and change_heat:
     if heating_status and change_heat:
         TurnOnHeating()
-    if not heating_overwrite:
+    if heating_overwrite:
+        if now >= overwrite_timer:
+            heating_overwrite = False
+            bot.sendMessage(CHAT_ID, "E'terminato il periodo di overwrite",disable_notification=True)
+        else: #ancora non e' terminato il periodo di overwrite
+            if overwrite_temp > 0:  #overwrite settato a turnON
+                if not heating_status:
+                    if CurTemp < (overwrite_temp - 0.2):
+                        TurnOnHeating()
+                else:
+                    if CurTemp > (overwrite_temp + 0.2):
+                        TurnOffHeating()
+            else: #overwrite settato a turnOFF
+                if not heating_status:
+                    if CurTemp < (-overwrite_temp - 0.2):
+                        TurnOnHeating()
+                else:
+                    if CurTemp > (-overwrite_temp + 0.2):
+                        TurnOffHeating()
+    else:  #not heating_overwrite
         if pulizie_status:
             if now >= pulizie_timer:
                 pulizie_status=False
@@ -1087,7 +1133,7 @@ while True:
             else:
                 if CurTemp > (CurTargetTemp + 0.2):
                     TurnOffHeating()
-    if report_interval is not None and last_report is not None and now - last_report >= report_interval:
+if report_interval is not None and last_report is not None and now - last_report >= report_interval:
         if DHT_PRESENCE:
             CurTempDHT, CurHumidity = read_TandH()
         else:
