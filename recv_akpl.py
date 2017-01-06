@@ -3,7 +3,7 @@ import time
 
 pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
-radio = NRF24()
+radio = NRF24(15,24)
 #radio.begin(0, 0, 17)
 radio.begin(1, 0, "P8_23", "P8_24")
 
