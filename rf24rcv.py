@@ -8,7 +8,7 @@ pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
 radio = NRF24()
 #radio.begin(0, 0, "P8_23", "P8_24")
-radio.begin(0, 0, 15, 24)
+radio.begin(0, 0, 15)
 
 radio.setRetries(15,15)
 
@@ -32,15 +32,15 @@ radio.printDetails()
 
 radio.startListening()
 
-while True:
-	pipe = [0]
-    	while not radio.available(pipe, True):
-        	time.sleep(1000/1000000.0)
+#while True:
+#	pipe = [0]
+#    	while not radio.available(pipe, True):
+#        	time.sleep(1000/1000000.0)
 
-    	recv_buffer = []
-    	radio.read(recv_buffer)
+#    	recv_buffer = []
+#    	radio.read(recv_buffer)
 
-    	print recv_buffer
+#    	print recv_buffer
 
 #c=1
 #while True:
