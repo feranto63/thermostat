@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # python da convertire
 
 from nrf24 import NRF24
