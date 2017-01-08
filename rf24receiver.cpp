@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <sqlite3.h> 
+
 /**
  * g++ -L/usr/lib main.cc -I/usr/include -o main -lrrd
  **/
@@ -29,6 +31,23 @@ struct message_t {
 
 int main(int argc, char** argv)
 {
+
+	sqlite3 *db;
+   	char *zErrMsg = 0;
+   	int rc;
+
+   	rc = sqlite3_open("/var/www/templog.db", &db);
+
+   	if( rc ){
+      		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+      		return(0);
+   	}else{
+      		fprintf(stderr, "Opened database successfully\n");
+   	}
+   	sqlite3_close(db);
+
+	
+	
 	// Initialize all radio related modules
 	radio.begin();
 	delay(5);
