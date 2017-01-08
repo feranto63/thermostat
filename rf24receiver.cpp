@@ -46,7 +46,7 @@ struct message_t {
 int main(int argc, char** argv)
 {
 
-	char *sql;
+	char sql[200];
 	sqlite3 *db;
    	char *zErrMsg = 0;
    	int rc;
