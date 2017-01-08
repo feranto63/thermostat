@@ -112,7 +112,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				printf("Current time = %s", t_stamp);
 
-				sprintf(sql,"INSERT INTO w_temps ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
+				sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
 				printf(sql);
    				/* Execute SQL statement */
    				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
