@@ -103,7 +103,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 				time_t curtime;
 				time(&curtime);
 /*				printf("Current time = %s", ctime(&curtime));*/
-				t_stamp = ctime(&curtime)
+				t_stamp = ctime(&curtime);
 
 				sql = "INSERT INTO w_temps (%s,%i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity;
 				printf(sql);
