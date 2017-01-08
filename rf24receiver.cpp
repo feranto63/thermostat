@@ -8,6 +8,18 @@
 
 #include <sqlite3.h> 
 
+
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+   int i;
+   for(i=0; i<argc; i++){
+      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+   }
+   printf("\n");
+   return 0;
+}
+
+
 /**
  * g++ -L/usr/lib main.cc -I/usr/include -o main -lrrd
  **/
@@ -32,11 +44,13 @@ struct message_t {
 int main(int argc, char** argv)
 {
 
+	char *sql;
 	sqlite3 *db;
    	char *zErrMsg = 0;
    	int rc;
 
-   	rc = sqlite3_open("/var/www/templog.db", &db);
+   	/* open database */
+	rc = sqlite3_open("/var/www/templog.db", &db);
 
    	if( rc ){
       		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
@@ -44,7 +58,6 @@ int main(int argc, char** argv)
    	}else{
       		fprintf(stderr, "Opened database successfully\n");
    	}
-   	sqlite3_close(db);
 
 	
 	
@@ -58,7 +71,8 @@ int main(int argc, char** argv)
 	printf("Ready to receive...\n");
 	
 	// Now do this forever (until cancelled by user)
-	while(1)
+	int i=0;
+	while(i < 10)
 	{
 		// Get the latest network info
 		network.update();
@@ -77,6 +91,23 @@ int main(int argc, char** argv)
 				// Print it out
 				printf("Temperature received from node %i: %f \n", header.from_node, message.temperature);
 				printf("Humidity received from node %i: %f \n", header.from_node, message.humidity);
+				   /* Create SQL statement */
+/*
+CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humidity NUMERIC);
+*/
+   				sql = "INSERT INTO w_temps (timestamp,sensor_id, temp, humidity) "  \
+         				"VALUES (1, 'Paul', 32, 'California', 20000.00 ); ";
+
+   				/* Execute SQL statement */
+   				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+   				if( rc != SQLITE_OK ){
+      					fprintf(stderr, "SQL error: %s\n", zErrMsg);
+      					sqlite3_free(zErrMsg);
+   				}else{
+      					fprintf(stdout, "Records created successfully\n");
+   				}
+				
+				
 			} else {
 				// This is not a type we recognize
 				network.read(header, &message, sizeof(message));
@@ -86,7 +117,10 @@ int main(int argc, char** argv)
 	
 		// Wait a bit before we start over again
 		delay(2000);
+		i=i+1;
 	}
+
+	sqlite3_close(db);
 
 	// last thing we do before we end things
 	return 0;
