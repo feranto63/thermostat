@@ -53,6 +53,11 @@ int main(int argc, char** argv)
 
 	struct tm t; /* variable for timestamp */
 	char *t_stamp;
+	
+	time_t rawtime;
+	time_t curtime;
+   	struct tm *info;
+   	char buffer[80];
 
    	/* open database */
 	rc = sqlite3_open("/var/www/templog.db", &db);
@@ -100,12 +105,14 @@ int main(int argc, char** argv)
 /*
 CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humidity NUMERIC);
 */
-				time_t curtime;
-				time(&curtime);
-				t_stamp = ctime(&curtime);
+
+				time( &rawtime );
+				info = localtime( &rawtime );
+				strftime(t_stamp,80,"%Y-%m-%d %H:%M:%S", info);
+
 				printf("Current time = %s", t_stamp);
 
-				sprintf(sql,"INSERT INTO w_temps (%s, %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
+				sprintf(sql,"INSERT INTO w_temps ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
 				printf(sql);
    				/* Execute SQL statement */
    				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
