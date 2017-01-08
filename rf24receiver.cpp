@@ -52,7 +52,7 @@ int main(int argc, char** argv)
    	int rc;
 
 	struct tm t; /* variable for timestamp */
-	char *t_stamp;
+	char t_stamp[80];
 	
 	time_t rawtime;
 	time_t curtime;
