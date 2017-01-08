@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 	
 	// Now do this forever (until cancelled by user)
 	int i=0;
-	while(i < 10)
+	while(1)
 	{
 		// Get the latest network info
 		network.update();
