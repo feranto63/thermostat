@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+
 
 #include <sqlite3.h> 
 
@@ -48,6 +50,9 @@ int main(int argc, char** argv)
 	sqlite3 *db;
    	char *zErrMsg = 0;
    	int rc;
+
+	struct tm t; /* variable for timestamp */
+	char *t_stamp;
 
    	/* open database */
 	rc = sqlite3_open("/var/www/templog.db", &db);
@@ -95,9 +100,13 @@ int main(int argc, char** argv)
 /*
 CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humidity NUMERIC);
 */
-   				sql = "INSERT INTO w_temps (timestamp,sensor_id, temp, humidity) "  \
-         				"VALUES (1, 'Paul', 32, 'California', 20000.00 ); ";
+				time_t curtime;
+				time(&curtime);
+/*				printf("Current time = %s", ctime(&curtime));*/
+				t_stamp = ctime(&curtime)
 
+				sql = "INSERT INTO w_temps (%s,%i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity;
+				printf(sql);
    				/* Execute SQL statement */
    				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
    				if( rc != SQLITE_OK ){
