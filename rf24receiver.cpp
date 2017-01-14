@@ -152,7 +152,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    				}
 				
 				// write temperature in shared memory
-				memcpy(shared_memory, str(message.temperature), sizeof(str(message.temperature)));
+				memcpy(shared_memory, to_string(message.temperature), sizeof(to_string(message.temperature)));
 
 				
 			} else {
