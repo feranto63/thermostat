@@ -82,32 +82,6 @@ int main(int argc, char** argv)
       		fprintf(stderr, "Opened database successfully\n");
    	}
 
-// shared memory section
-//	int shmid;
-//	// give your shared memory an id, anything will do
-//	key_t key = 123456;
-//	char *shared_memory;
-//
-//	// Setup shared memory, 11 is the size
-//	if ((shmid = shmget(key, 11, IPC_CREAT | 0666)) < 0)
-//	{
-//		printf("Error getting shared memory id");
-//		exit(1);
-//	}
-//	// Attached shared memory
-//	if ((shared_memory = shmat(&shmid, NULL, 0)) == (char *) -1)
-//	{
-//		printf("Error attaching shared memory id");
-//   		exit(1);
-//   	}
-//	// copy "hello world" to shared memory
-//	memcpy(shared_memory, "Hello World", sizeof("Hello World"));
-//	// sleep so there is enough time to run the reader!
-//	//sleep(10);
-//	// Detach and remove shared memory
-//	//shmdt(shmid);
-//	//shmctl(shmid, IPC_RMID, NULL);
-//	
 
 //OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
 	FILE *file1;
@@ -166,7 +140,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    				}else{
       					fprintf(stdout, "Records created successfully\n");
    				}
-				file1 = fopen(filename1, "w+");
+				file1 = fopen(filename1, "a");
 				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
 				fwrite(file_data, 1, sizeof(file_data), file1) ;
 				fclose(file1);
