@@ -167,7 +167,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
       					fprintf(stdout, "Records created successfully\n");
    				}
 				file1 = fopen(filename1, "w+");
-				sprintf(file_data, "%s %f\n",t_stamp, message.temperature)
+				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
 				fwrite(file_data, 1, sizeof(file_data), file1) ;
 				fclose(file1);
 				file1 = NULL;
