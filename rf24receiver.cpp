@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 		exit(1);
 	}
 	// Attached shared memory
-	if ((shared_memory = shmat(shmid, NULL, 0)) == (char *) -1)
+	if ((shared_memory = shmat(&shmid, NULL, 0)) == (char *) -1)
 	{
 		printf("Error attaching shared memory id");
    		exit(1);
