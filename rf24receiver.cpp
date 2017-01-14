@@ -108,7 +108,14 @@ int main(int argc, char** argv)
 //	//shmdt(shmid);
 //	//shmctl(shmid, IPC_RMID, NULL);
 //	
-//	// Initialize all radio related modules
+
+//OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
+	FILE *file1;
+	unsigned char file_data[100];
+	const char *filename1 = "sensor.log";
+
+	
+	// Initialize all radio related modules
 	radio.begin();
 	delay(5);
 	network.begin(90, pi_node);
@@ -159,7 +166,13 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    				}else{
       					fprintf(stdout, "Records created successfully\n");
    				}
-				
+				file1 = fopen(filename1, "w+");
+				sprintf(file_data, "%s %f\n",t_stamp, message.temperature)
+				fwrite(file_data, 1, sizeof(file_data), file1) ;
+				fclose(file1);
+				file1 = NULL;
+
+
 //				// write temperature in shared memory
 //				memcpy(shared_memory, ntoa(message.temperature), sizeof(ntoa(message.temperature)));
 
