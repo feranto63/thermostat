@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 	char file_data[100] = "";
 	const char *filename1 = "sensor1.log";
 	const char *filename2 = "sensor2.log";
-	char filename[];
+	char filename[20];
 
 	
 	// Initialize all radio related modules
