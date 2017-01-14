@@ -145,7 +145,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 				if (header.from_node == 1) {
 					strcpy(filename, filename1);
 				}else{
-					strcpy(filename = filename2);
+					strcpy(filename, filename2);
 				}
 				file1 = fopen(filename, "w");
 				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
