@@ -11,15 +11,15 @@
 //#include <sys/ipc.h>
 //#include <sys/shm.h>
 
-#include <math.h>
+//#include <math.h>
 
-char* ntoa(double num)
-{ 
-    /* log10(num) gives the number of digits; + 1 for the null terminator */
-    int size = log10(num) + 1;
-    char *x = malloc(size);
-    snprintf(x, size, "%f", num);
-}
+//char* ntoa(double num)
+//{ 
+//    /* log10(num) gives the number of digits; + 1 for the null terminator */
+//    int size = log10(num) + 1;
+//    char *x = malloc(size);
+//    snprintf(x, size, "%f", num);
+//}
 
 #include <sqlite3.h> 
 
