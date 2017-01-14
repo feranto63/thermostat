@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 
 //OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
 	FILE *file1;
-	char file_data[100];
+	char file_data[100] = "";
 	const char *filename1 = "sensor.log";
 
 	
