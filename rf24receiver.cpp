@@ -11,6 +11,15 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#include <math.h>
+
+char* ntoa(double num)
+{ 
+    /* log10(num) gives the number of digits; + 1 for the null terminator */
+    int size = log10(num) + 1;
+    char *x = malloc(size);
+    snprintf(x, size, "%f", num);
+}
 
 #include <sqlite3.h> 
 
@@ -152,7 +161,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    				}
 				
 				// write temperature in shared memory
-				memcpy(shared_memory, to_string(message.temperature), sizeof(to_string(message.temperature)));
+				memcpy(shared_memory, ntoa(message.temperature), sizeof(ntoa(message.temperature)));
 
 				
 			} else {
