@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 	char file_data[100] = "";
 	const char *filename1 = "sensor1.log";
 	const char *filename2 = "sensor2.log";
-	char *filename;
+	char filename[];
 
 	
 	// Initialize all radio related modules
@@ -143,9 +143,9 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
       					fprintf(stdout, "Records created successfully\n");
    				}
 				if (header.from_node == 1) {
-					filename = filename1;
+					strcpy(filename, filename1);
 				}else{
-					filename = filename2;
+					strcpy(filename = filename2);
 				}
 				file1 = fopen(filename, "w");
 				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
