@@ -86,7 +86,9 @@ int main(int argc, char** argv)
 //OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
 	FILE *file1;
 	char file_data[100] = "";
-	const char *filename1 = "sensor.log";
+	const char *filename1 = "sensor1.log";
+	const char *filename2 = "sensor2.log";
+	char filename = "";
 
 	
 	// Initialize all radio related modules
@@ -140,7 +142,12 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    				}else{
       					fprintf(stdout, "Records created successfully\n");
    				}
-				file1 = fopen(filename1, "a");
+				if (header.node == 1) {
+					filename = filename1;
+				}else{
+					filename = filename2;
+				}
+				file1 = fopen(filename, "w");
 				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
 				fwrite(file_data, 1, sizeof(file_data), file1) ;
 				fclose(file1);
