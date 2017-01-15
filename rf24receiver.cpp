@@ -26,7 +26,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
    return 0;
 }
 
-void log_w_sensor (sqlite3 *db, char t_stamp, int node_id, float temp, float humid) {
+void log_w_sensor (sqlite3 db, char t_stamp, int node_id, float temp, float humid) {
 	char sql[200];
    	char *zErrMsg = 0;
    	int rc;
