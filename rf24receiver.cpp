@@ -24,6 +24,7 @@
 #include <stdbool.h>
 //#include <stdlib.h>
 
+#include "../common_dht_read.h"
 #include "pi_2_dht_read.h"
 #include "pi_2_mmio.h"
 
