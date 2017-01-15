@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 	int i=0;
 	time( &rawtime );
 	info = localtime( &rawtime );
-	time_t timeout = info + SAMPLE;
+	time_t timeout = rawtime + SAMPLE;
 		
 	while(1)
 	{
@@ -137,7 +137,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				printf("Current time = %s", t_stamp);
 
-				if (difftime(info,timeout) >= 0)
+				if (difftime(rawtime,timeout) >= 0)
 				{
 					sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
 					printf(sql);
@@ -149,7 +149,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
    					}else{
       						fprintf(stdout, "Records created successfully\n");
    					}
-					timeout = info + SAMPLE;
+					timeout = rawtime + SAMPLE;
 				}
 
 				
