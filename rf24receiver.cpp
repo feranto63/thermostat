@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <wiringPi.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+#include <stdint.h>
+#include "bcm2835.h"
 
 //char* ntoa(double num)
 //{ 
@@ -59,10 +64,6 @@ struct message_t {
  *	read temperature and humidity from DHT11 or DHT22 sensor
  */
 
-#include <wiringPi.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-#include <stdint.h>
 
 #define MAX_TIMINGS	85
 #define DHT_PIN		1	/* GPIO-18 */
