@@ -57,7 +57,7 @@ const uint16_t pi_node = 0;
 
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
-const time_t SAMPLE = 600000; // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
+const int SAMPLE = 600; // intervallo in secondi per la memorizzazione delle temp nel db 10 minuti 10*60
 const int NUM_SENSORI = 2;
 
 // Structure of our message
