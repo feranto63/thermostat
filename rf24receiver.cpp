@@ -128,6 +128,7 @@ int main(int argc, char** argv)
 		// Get the latest network info
 		network.update();
 		printf(".");
+		fflush(stdout);
 		// Enter this loop if there is data available to be read,
 		// and continue it as long as there is more data to read
 		while ( network.available() ) {
