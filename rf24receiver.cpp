@@ -9,8 +9,8 @@
 //#include <wiringPi.h>
 //#include <stdio.h>
 //#include <stdlib.h>
-#include <stdint.h>
-#include "bcm2835.h"
+//#include <stdint.h>
+//#include "bcm2835.h"
 
 //char* ntoa(double num)
 //{ 
@@ -19,6 +19,151 @@
 //    char *x = malloc(size);
 //    snprintf(x, size, "%f", num);
 //}
+
+// gestione DHT xx Adafruit
+#include <stdbool.h>
+//#include <stdlib.h>
+
+#include "pi_2_dht_read.h"
+#include "pi_2_mmio.h"
+
+// This is the only processor specific magic value, the maximum amount of time to
+// spin in a loop before bailing out and considering the read a timeout.  This should
+// be a high value, but if you're running on a much faster platform than a Raspberry
+// Pi or Beaglebone Black then it might need to be increased.
+#define DHT_MAXCOUNT 32000
+
+// Number of bit pulses to expect from the DHT.  Note that this is 41 because
+// the first pulse is a constant 50 microsecond pulse, with 40 pulses to represent
+// the data afterwards.
+#define DHT_PULSES 41
+
+int pi_2_dht_read(int type, int pin, float* humidity, float* temperature) {
+  // Validate humidity and temperature arguments and set them to zero.
+  if (humidity == NULL || temperature == NULL) {
+    return DHT_ERROR_ARGUMENT;
+  }
+  *temperature = 0.0f;
+  *humidity = 0.0f;
+
+  // Initialize GPIO library.
+  if (pi_2_mmio_init() < 0) {
+    return DHT_ERROR_GPIO;
+  }
+
+  // Store the count that each DHT bit pulse is low and high.
+  // Make sure array is initialized to start at zero.
+  int pulseCounts[DHT_PULSES*2] = {0};
+
+  // Set pin to output.
+  pi_2_mmio_set_output(pin);
+
+  // Bump up process priority and change scheduler to try to try to make process more 'real time'.
+  set_max_priority();
+
+  // Set pin high for ~500 milliseconds.
+  pi_2_mmio_set_high(pin);
+  sleep_milliseconds(500);
+
+  // The next calls are timing critical and care should be taken
+  // to ensure no unnecssary work is done below.
+
+  // Set pin low for ~20 milliseconds.
+  pi_2_mmio_set_low(pin);
+  busy_wait_milliseconds(20);
+
+  // Set pin at input.
+  pi_2_mmio_set_input(pin);
+  // Need a very short delay before reading pins or else value is sometimes still low.
+  for (volatile int i = 0; i < 50; ++i) {
+  }
+
+  // Wait for DHT to pull pin low.
+  uint32_t count = 0;
+  while (pi_2_mmio_input(pin)) {
+    if (++count >= DHT_MAXCOUNT) {
+      // Timeout waiting for response.
+      set_default_priority();
+      return DHT_ERROR_TIMEOUT;
+    }
+  }
+
+  // Record pulse widths for the expected result bits.
+  for (int i=0; i < DHT_PULSES*2; i+=2) {
+    // Count how long pin is low and store in pulseCounts[i]
+    while (!pi_2_mmio_input(pin)) {
+      if (++pulseCounts[i] >= DHT_MAXCOUNT) {
+        // Timeout waiting for response.
+        set_default_priority();
+        return DHT_ERROR_TIMEOUT;
+      }
+    }
+    // Count how long pin is high and store in pulseCounts[i+1]
+    while (pi_2_mmio_input(pin)) {
+      if (++pulseCounts[i+1] >= DHT_MAXCOUNT) {
+        // Timeout waiting for response.
+        set_default_priority();
+        return DHT_ERROR_TIMEOUT;
+      }
+    }
+  }
+
+  // Done with timing critical code, now interpret the results.
+
+  // Drop back to normal priority.
+  set_default_priority();
+
+  // Compute the average low pulse width to use as a 50 microsecond reference threshold.
+  // Ignore the first two readings because they are a constant 80 microsecond pulse.
+  uint32_t threshold = 0;
+  for (int i=2; i < DHT_PULSES*2; i+=2) {
+    threshold += pulseCounts[i];
+  }
+  threshold /= DHT_PULSES-1;
+
+  // Interpret each high pulse as a 0 or 1 by comparing it to the 50us reference.
+  // If the count is less than 50us it must be a ~28us 0 pulse, and if it's higher
+  // then it must be a ~70us 1 pulse.
+  uint8_t data[5] = {0};
+  for (int i=3; i < DHT_PULSES*2; i+=2) {
+    int index = (i-3)/16;
+    data[index] <<= 1;
+    if (pulseCounts[i] >= threshold) {
+      // One bit for long pulse.
+      data[index] |= 1;
+    }
+    // Else zero bit for short pulse.
+  }
+
+  // Useful debug info:
+  //printf("Data: 0x%x 0x%x 0x%x 0x%x 0x%x\n", data[0], data[1], data[2], data[3], data[4]);
+
+  // Verify checksum of received data.
+  if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
+    if (type == DHT11) {
+      // Get humidity and temp for DHT11 sensor.
+      *humidity = (float)data[0];
+      *temperature = (float)data[2];
+    }
+    else if (type == DHT22) {
+      // Calculate humidity and temp for DHT22 sensor.
+      *humidity = (data[0] * 256 + data[1]) / 10.0f;
+      *temperature = ((data[2] & 0x7F) * 256 + data[3]) / 10.0f;
+      if (data[2] & 0x80) {
+        *temperature *= -1.0f;
+      }
+    }
+    return DHT_SUCCESS;
+  }
+  else {
+    return DHT_ERROR_CHECKSUM;
+  }
+}
+
+// fine gestione DHT Adafruit
+
+
+
 
 #include <sqlite3.h> 
 
@@ -56,107 +201,6 @@ struct message_t {
 };
 
 
-/* dht sensor reading values
-*/
-
-/*
- *  dht.c:
- *	read temperature and humidity from DHT11 or DHT22 sensor
- */
-
-
-#define MAX_TIMINGS	85
-#define DHT_PIN		1	/* GPIO-18 */
-
-int data[5] = { 0, 0, 0, 0, 0 };
-
-message_t read_dht_data()
-{
-	uint8_t laststate	= HIGH;
-	uint8_t counter		= 0;
-	uint8_t j		= 0, i;
-	message_t result;
-
-	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
-
-	/* pull pin down for 18 milliseconds */
-	pinMode( DHT_PIN, OUTPUT );
-	digitalWrite( DHT_PIN, LOW );
-	delay( 18 );
-
-	/* prepare to read the pin */
-	pinMode( DHT_PIN, INPUT );
-
-	/* detect change and read data */
-	for ( i = 0; i < MAX_TIMINGS; i++ )
-	{
-		counter = 0;
-		while ( digitalRead( DHT_PIN ) == laststate )
-		{
-			counter++;
-			delayMicroseconds( 1 );
-			if ( counter == 255 )
-			{
-				break;
-			}
-		}
-		laststate = digitalRead( DHT_PIN );
-
-		if ( counter == 255 )
-			break;
-
-		/* ignore first 3 transitions */
-		if ( (i >= 4) && (i % 2 == 0) )
-		{
-			/* shove each bit into the storage bytes */
-			data[j / 8] <<= 1;
-			if ( counter > 16 )
-				data[j / 8] |= 1;
-			j++;
-		}
-	}
-
-	/*
-	 * check we read 40 bits (8bit x 5 ) + verify checksum in the last byte
-	 * print it out if data is good
-	 */
-	if ( (j >= 40) &&
-	     (data[4] == ( (data[0] + data[1] + data[2] + data[3]) & 0xFF) ) )
-	{
-		float h = (float)((data[0] << 8) + data[1]) / 10;
-		if ( h > 100 )
-		{
-			h = data[0];	// for DHT11
-		}
-		float c = (float)(((data[2] & 0x7F) << 8) + data[3]) / 10;
-		if ( c > 125 )
-		{
-			c = data[2];	// for DHT11
-		}
-		if ( data[2] & 0x80 )
-		{
-			c = -c;
-		}
-		float f = c * 1.8f + 32;
-		printf( "Humidity = %.1f %% Temperature = %.1f *C (%.1f *F)\n", h, c, f );
-		result.temperature = c;
-		result.humidity = h;
-	}else  {
-		printf( "Data not good, skip\n" );
-		result.temperature = NULL;
-		result.humidity = NULL;
-	}
-	return result;
-}
-
-
-//----- END OF DHT PROCEDURE
-
-
-
-/**
- * g++ -L/usr/lib main.cc -I/usr/include -o main -lrrd
- **/
 
 // CE Pin, CSN Pin, SPI Speed
 RF24 radio(RPI_BPLUS_GPIO_J8_15,RPI_BPLUS_GPIO_J8_24, BCM2835_SPI_SPEED_8MHZ);
