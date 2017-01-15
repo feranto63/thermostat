@@ -114,7 +114,7 @@ int main(int argc, char** argv)
 	int i=0;
 	time( &rawtime );
 	info = localtime( &rawtime );
-	time_t timeout[NUM_SENSORI] = rawtime + SAMPLE;
+	time_t timeout[NUM_SENSORI] = {rawtime};
 		
 	while(1)
 	{
