@@ -118,7 +118,7 @@ int main(int argc, char** argv)
 	info = localtime( &rawtime );
 	time_t timeout[NUM_SENSORI] = {rawtime};
 	
-	for i=1 to NUM_SENSORI {
+	for (int i=1, i<= NUM_SENSORI, i=i+1) {
 		printf("timeout[%i]=%i\n", i, timeout[i];
 	}
 		
