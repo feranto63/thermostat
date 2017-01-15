@@ -116,10 +116,11 @@ int main(int argc, char** argv)
 	int i=0;
 	rawtime = time(NULL);
 	info = localtime( &rawtime );
-	time_t timeout[NUM_SENSORI] = {rawtime};
+	time_t timeout[NUM_SENSORI];
 	
 	for (int i=1; i<= NUM_SENSORI; i++) {
-		printf("timeout[%i]=%s\n", i, ctime(&timeout[i]));
+		timeout[i]=rawtime;
+		printf("timeout[%i]=%ld\n", i, timeout[i]);
 	}
 		
 	while(1)
