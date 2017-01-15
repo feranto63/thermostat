@@ -219,11 +219,11 @@ const int NUM_SENSORI = 2;
 
 int main(int argc, char** argv)
 {
-	float* humidity;
+/*	float* humidity;
 	float* temperature;
 	int esito_dht = pi_2_dht_read(DHT22, 18, humidity, temperature);
 	printf("esito: %i; temperatura: %f; umidità: %f\n", esito_dht, temperature, humidity);
-	
+*/	
 //	char sql[200];
 	sqlite3 *db;
 //   	char *zErrMsg = 0;
