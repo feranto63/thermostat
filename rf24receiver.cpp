@@ -49,7 +49,7 @@ const uint16_t pi_node = 0;
 
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
-const unsigned long SAMPLE = 600000 // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
+const unsigned long SAMPLE = 600000; // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
 
 // Structure of our message
 struct message_t {
@@ -137,7 +137,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				printf("Current time = %s", t_stamp);
 
-				if (info >= timeout)
+				if (difftime(info,timeout) >= 0)
 				{
 					sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
 					printf(sql);
