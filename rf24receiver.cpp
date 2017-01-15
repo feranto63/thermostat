@@ -7,12 +7,6 @@
 #include <time.h>
 #include <string.h>
 
-//#include <sys/types.h>
-//#include <sys/ipc.h>
-//#include <sys/shm.h>
-
-//#include <math.h>
-
 //char* ntoa(double num)
 //{ 
 //    /* log10(num) gives the number of digits; + 1 for the null terminator */
@@ -23,8 +17,6 @@
 
 #include <sqlite3.h> 
 
-
-
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
    int i;
    for(i=0; i<argc; i++){
@@ -34,6 +26,22 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
    return 0;
 }
 
+void log_w_sensor (sqlite3 *db, char t_stamp, int node_id, float temp, float humid) {
+	char sql[200];
+   	char *zErrMsg = 0;
+   	int rc;
+
+	sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, node_id, temp, humid);
+	printf(sql);
+   	/* Execute SQL statement */
+   	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+   	if( rc != SQLITE_OK ){
+      		fprintf(stderr, "SQL error: %s\n", zErrMsg);
+      		sqlite3_free(zErrMsg);
+   	}else{
+      		fprintf(stdout, "Records created successfully\n");
+   	}
+}
 
 /**
  * g++ -L/usr/lib main.cc -I/usr/include -o main -lrrd
@@ -139,16 +147,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				if (difftime(rawtime,timeout) >= 0)
 				{
-					sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
-					printf(sql);
-   					/* Execute SQL statement */
-   					rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-   					if( rc != SQLITE_OK ){
-      						fprintf(stderr, "SQL error: %s\n", zErrMsg);
-      						sqlite3_free(zErrMsg);
-   					}else{
-      						fprintf(stdout, "Records created successfully\n");
-   					}
+					log_w_sensor (db, t_stamp, header.from_node, message.temperature, message.humidity);
 					timeout = rawtime + SAMPLE;
 				}
 
