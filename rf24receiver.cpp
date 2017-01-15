@@ -114,9 +114,13 @@ int main(int argc, char** argv)
 	
 	// Now do this forever (until cancelled by user)
 	int i=0;
-	time( &rawtime );
+	rawtime = time(NULL);
 	info = localtime( &rawtime );
 	time_t timeout[NUM_SENSORI] = {rawtime};
+	
+	for i=1 to NUM_SENSORI {
+		printf("timeout[%i]=%i\n", i, timeout[i];
+	}
 		
 	while(1)
 	{
