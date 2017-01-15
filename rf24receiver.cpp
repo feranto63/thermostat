@@ -81,6 +81,8 @@ int main(int argc, char** argv)
 //	time_t curtime;
    	struct tm *info;
 //   	char buffer[80];
+	
+	int elapsed =0;
 
    	/* open database */
 	rc = sqlite3_open("/var/www/templog.db", &db);
@@ -144,9 +146,13 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 				info = localtime( &rawtime );
 				strftime(t_stamp,80,"%Y-%m-%d %H:%M:%S", info);
 
-				printf("Current time = %s", t_stamp);
-
-				if (difftime(rawtime,timeout[header.from_node]) >= 0)
+				printf("Current time = %s \n", t_stamp);
+				printf("Sensor ID = %i\n", header.from_node);
+				
+				elapsed = difftime(rawtime,timeout[header.from_node]);
+				printf("elapsed = %i\n", elapsed);
+				
+				if (elapsed >= 0)
 				{
 					log_w_sensor (db, t_stamp, header.from_node, message.temperature, message.humidity);
 					timeout[header.from_node] = rawtime + SAMPLE;
