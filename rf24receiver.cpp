@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	time_t timeout[NUM_SENSORI] = {rawtime};
 	
 	for (int i=1; i<= NUM_SENSORI; i++) {
-		printf("timeout[%i]=%i\n", i, timeout[i]);
+		printf("timeout[%i]=%s\n", i, ctime(timeout[i]));
 	}
 		
 	while(1)
