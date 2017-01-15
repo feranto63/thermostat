@@ -58,7 +58,7 @@ const uint16_t pi_node = 0;
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
 const time_t SAMPLE = 600000; // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
-const unsigned int NUM_SENSORI = 2;
+const int NUM_SENSORI = 2;
 
 // Structure of our message
 struct message_t {
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	time_t timeout[NUM_SENSORI] = {rawtime};
 	
 	for (int i=1; i<= NUM_SENSORI; i++) {
-		printf("timeout[%i]=%s\n", i, ctime(timeout[i]));
+		printf("timeout[%i]=%s\n", i, ctime(&timeout[i]));
 	}
 		
 	while(1)
