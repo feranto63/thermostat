@@ -49,6 +49,7 @@ const uint16_t pi_node = 0;
 
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
+const unsigned long SAMPLE = 600000 // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
 
 // Structure of our message
 struct message_t {
@@ -102,6 +103,10 @@ int main(int argc, char** argv)
 	
 	// Now do this forever (until cancelled by user)
 	int i=0;
+	time( &rawtime );
+	info = localtime( &rawtime );
+	time_t timeout = info + SAMPLE;
+		
 	while(1)
 	{
 		// Get the latest network info
@@ -132,16 +137,22 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				printf("Current time = %s", t_stamp);
 
-				sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
-				printf(sql);
-   				/* Execute SQL statement */
-   				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-   				if( rc != SQLITE_OK ){
-      					fprintf(stderr, "SQL error: %s\n", zErrMsg);
-      					sqlite3_free(zErrMsg);
-   				}else{
-      					fprintf(stdout, "Records created successfully\n");
-   				}
+				if (info >= timeout)
+				{
+					sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, header.from_node, message.temperature,message.humidity);
+					printf(sql);
+   					/* Execute SQL statement */
+   					rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+   					if( rc != SQLITE_OK ){
+      						fprintf(stderr, "SQL error: %s\n", zErrMsg);
+      						sqlite3_free(zErrMsg);
+   					}else{
+      						fprintf(stdout, "Records created successfully\n");
+   					}
+					timeout = info + SAMPLE;
+				}
+
+				
 				if (header.from_node == 1) {
 					strcpy(filename, filename1);
 				}else{
