@@ -58,6 +58,7 @@ const uint16_t pi_node = 0;
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
 const unsigned long SAMPLE = 600000; // intervallo per la memorizzazione delle temp nel db 10 minuti 10*60*1000
+const unsigned int NUM_SENSORI = 2;
 
 // Structure of our message
 struct message_t {
@@ -68,7 +69,7 @@ struct message_t {
 int main(int argc, char** argv)
 {
 
-	char sql[200];
+//	char sql[200];
 	sqlite3 *db;
    	char *zErrMsg = 0;
    	int rc;
@@ -113,7 +114,7 @@ int main(int argc, char** argv)
 	int i=0;
 	time( &rawtime );
 	info = localtime( &rawtime );
-	time_t timeout = rawtime + SAMPLE;
+	time_t timeout[NUM_SENSORI] = rawtime + SAMPLE;
 		
 	while(1)
 	{
@@ -145,10 +146,10 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 
 				printf("Current time = %s", t_stamp);
 
-				if (difftime(rawtime,timeout) >= 0)
+				if (difftime(rawtime,timeout[header.from_node]) >= 0)
 				{
 					log_w_sensor (db, t_stamp, header.from_node, message.temperature, message.humidity);
-					timeout = rawtime + SAMPLE;
+					timeout[header.from_node] = rawtime + SAMPLE;
 				}
 
 				
