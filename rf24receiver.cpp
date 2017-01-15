@@ -24,10 +24,10 @@
 #include <stdbool.h>
 //#include <stdlib.h>
 
-#include "../common_dht_read.h"
 #include "pi_2_dht_read.h"
 #include "pi_2_mmio.h"
 
+/*
 // This is the only processor specific magic value, the maximum amount of time to
 // spin in a loop before bailing out and considering the read a timeout.  This should
 // be a high value, but if you're running on a much faster platform than a Raspberry
@@ -162,7 +162,7 @@ int pi_2_dht_read(int type, int pin, float* humidity, float* temperature) {
 }
 
 // fine gestione DHT Adafruit
-
+*/
 
 
 
