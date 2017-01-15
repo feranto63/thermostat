@@ -71,16 +71,16 @@ int main(int argc, char** argv)
 
 //	char sql[200];
 	sqlite3 *db;
-   	char *zErrMsg = 0;
+//   	char *zErrMsg = 0;
    	int rc;
 
-	struct tm t; /* variable for timestamp */
+//	struct tm t; /* variable for timestamp */
 	char t_stamp[80];
 	
 	time_t rawtime;
-	time_t curtime;
+//	time_t curtime;
    	struct tm *info;
-   	char buffer[80];
+//   	char buffer[80];
 
    	/* open database */
 	rc = sqlite3_open("/var/www/templog.db", &db);
