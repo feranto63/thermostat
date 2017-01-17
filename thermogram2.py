@@ -618,7 +618,7 @@ def read_sensors():
             f = open("sensor"+str(i)+".log","r")  #apre il file dei dati in read mode
             value = f.read().split()  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
-            sensor_value[i]= "%.1f" % value[2]
+            sensor_value[i]= "%.1f" % float(value[2])
         except IOError:
             sensor_value[i] = -99  #se il file non e' presente imposto il sensore a -99
 
