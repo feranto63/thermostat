@@ -468,7 +468,7 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, "Spengo il condizionatore",disable_notification=True)
     elif command == '/image':
         result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
-    elif comman == '/all':
+    elif command == '/all':
         messaggio=""
         for i in range (NUM_SENSORI):
             messaggio+="La temperatura ("+sensori[i]+") e'di "+str("%0.1f" % sensor_value[i])+" C\n"
