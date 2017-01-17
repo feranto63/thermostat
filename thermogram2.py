@@ -46,7 +46,7 @@ DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' pre
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
-sensori = settings.get('SectionOne','sensori')
+sensori = settings.get('SectionOne','sensori').split("\n")
 main_sensor = settings.get('SectionOne','main_sensor')
 sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
