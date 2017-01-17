@@ -44,6 +44,12 @@ DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE') #indica se e' pr
 DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' presente il sensore di temperatura 18DS20
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
+
+NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
+sensori = settings.get('SectionOne','sensori')
+main_sensor = settings.get('SectionOne','main_sensor')
+sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
 owner_found= settings.getboolean('SectionOne','owner_found')
 
 
@@ -462,6 +468,11 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, "Spengo il condizionatore",disable_notification=True)
     elif command == '/image':
         result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
+    elif comman == /all:
+        messaggio=""
+        for i in range (NUM_SENSORI):
+            messaggio+="La temperatura ("+sensori[i]+") e'di "+str("%0.1f" % sensor_value[i])+" C\n"
+        bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
         bot.sendMessage(CHAT_ID, "Come ti posso aiutare?",disable_notification=True, reply_markup=main_show_keyboard)
@@ -598,28 +609,21 @@ def read_TandH():
 
 ########## fine gestione sensore DHT11 ############################
 
-########## gestione sensori Radio CISECO ###############
-import serial
+######### lettura sensori di temperatura #################
+
+def read_sensors():
+    global sensori, NUM_SENSORI, sensor_value, main_sensor
+    for i in range (NUM_SENSORI):
+        try:
+            f = open("sensor"+str(i)+".log","r")  #apre il file dei dati in read mode
+            value = f.read().split()  #legge la info del sensore sul file e divide per data, ora e valore
+            f.close()  #chiude il file dei dati e lo salva
+            sensor_value[i]= "%.1f" % value[2]
+        except IOError:
+            sensor_value[i] = -99  #se il file non e' presente imposto il sensore a -99
 
 
-def get_temp_radio():
-    DEVICE = '/dev/ttyAMA0'
-    BAUD = 9600
-
-    ser = serial.Serial(DEVICE, BAUD)
-    n = ser.inWaiting()
-    if n != 0:
-        msg = ser.read(n)
-        deviceID = msg[1:3]
-        messType = msg[3:7]
-        value = msg[7:12]
-    else:
-        deviceID = "--"
-        messType = "NULL"
-        value = 0
-    return deviceID, messType, value
-    
-################### fine gestione sensori Radio CISECO ##############
+######### FINE lettura sensori di temperatura ###########
 
 
 ##################### funzione per la gestione dei messaggi di presence
@@ -1099,7 +1103,9 @@ while True:
             CurTemp = CurTempDHT
     if CurHumidity == None:
         CurHumidity = 0
-        
+    
+    read_sensor()
+    
     current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
     change_heat = (current_heat != previous_heat)
     if change_heat:
