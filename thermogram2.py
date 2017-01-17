@@ -1104,7 +1104,7 @@ while True:
     if CurHumidity == None:
         CurHumidity = 0
     
-    read_sensor()
+    read_sensors()
     
     current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
     change_heat = (current_heat != previous_heat)
