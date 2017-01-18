@@ -46,13 +46,25 @@ DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' pre
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
-sensori = settings.get('SectionOne','sensori').split("\n")
+sensor_type = settings.get('SectionOne','sensor_type').split("\n")
+# sensori = settings.get('SectionOne','sensori').split("\n")
+
+TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
+# 0 = living
+# 1 = giardino
+# 2 = zona notte
+# 3 = cucina
+# 4 = bagno
+# 5 = sala hobby
+
 main_sensor = settings.get('SectionOne','main_sensor')
 sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
-
+for i in range (NUM_SENSORI):
+    sensori[i] = TIPO_SENSORE[sensor_type[i]]
+    
 if not owner_found:
     sys.exit("owner not found")
 
