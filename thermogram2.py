@@ -1099,11 +1099,17 @@ while True:
     if DS_PRESENCE:
         CurTemp = read_temp()
     if DHT_PRESENCE:
+        CurTempDHT, CurHumidity = read_TandH()
         if DS_PRESENCE == False:
             CurTemp = CurTempDHT
     if CurHumidity == None:
         CurHumidity = 0
-    
+
+    ######## scrive il file del sensore 0 ---- da spostare nella routine che gestisce la lettura delle temperature        
+    f = open("sensor0.log","w")  #apre il file dei dati in read mode
+    f.write(localtime+" "+str(CurTemp))  #legge la info del sensore sul file e divide per data, ora e valore
+    f.close()  #chiude il file dei dati e lo salva
+            
     read_sensors()
     
     current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
