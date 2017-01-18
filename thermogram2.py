@@ -63,7 +63,7 @@ sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 owner_found= settings.getboolean('SectionOne','owner_found')
 
 for i in range (NUM_SENSORI):
-    sensori[i] = TIPO_SENSORE[sensor_type[i]]
+    sensori[i] = TIPO_SENSORE[int(sensor_type[i])]
     
 if not owner_found:
     sys.exit("owner not found")
