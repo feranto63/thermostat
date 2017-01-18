@@ -275,6 +275,7 @@ def handle(msg):
     global debug_notify
     global nome_maggiordomo, male_maggiordomo
     global overwrite_duration, overwrite_temp, overwrite_timer
+    global sensor_value, sensor_type, sensori, NUM_SENSORI
     
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
@@ -325,9 +326,10 @@ def handle(msg):
             strCurTempDHT = str("%0.1f" % CurTempDHT)
         else:
             strCurTempDHT= str(CurTempDHT)
-        messaggio="La temperatura misurata e' di "+str("%0.1f" % CurTemp)+" C\n"
+        messaggio=""
+        for i in range (NUM_SENSORI):
+            messaggio+="La temperatura ("+sensori[i]+") e' di "+str("%0.1f" % float(sensor_value[i]))+" C\n"
         messaggio+="L'umidita' misurata e' di "+strCurHumidity+"%\n"
-        messaggio+="La temperatura DHT e' di "+strCurTempDHT+" C\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
         if pulizie_status:
