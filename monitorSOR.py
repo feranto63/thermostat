@@ -107,9 +107,15 @@ def main():
             		if msgType=="TEMP":
 				######## scrive il file del sensore 1        
     				f = open("sensor1.log","w")  #apre il file dei dati in read mode
-    				f.write(localtime+" "+str(value))  #legge la info del sensore sul file e divide per data, ora e valore
+    				f.write(localtime+" "+str(value)+"\n")  #legge la info del sensore sul file e divide per data, ora e valore
     				f.close()  #chiude il file dei dati e lo salva
 			elif msgType=="BATT":
+				message="La batteria del sensore con ID:"+str(deviceID)+" e' "
+				if value==0:
+					message+="bassa"
+				else:
+					message+=str(value)
+			elif msgType=="SLEE":
 				message="La batteria del sensore con ID:"+str(deviceID)+" e' "
 				if value==0:
 					message+="bassa"
