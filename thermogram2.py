@@ -62,6 +62,7 @@ sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
+sensori = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
 for i in range (NUM_SENSORI):
     sensori[i] = TIPO_SENSORE[int(sensor_type[i])]
     
