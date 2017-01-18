@@ -471,7 +471,7 @@ def handle(msg):
     elif command == '/all':
         messaggio=""
         for i in range (NUM_SENSORI):
-            messaggio+="La temperatura ("+sensori[i]+") e'di "+str("%0.1f" % float(sensor_value[i]))+" C\n"
+            messaggio+="La temperatura ("+sensori[i]+") e' di "+str("%0.1f" % float(sensor_value[i]))+" C\n"
         bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
