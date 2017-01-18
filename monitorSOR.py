@@ -104,12 +104,12 @@ def main():
         	if deviceID != '??':
             		log_temp_radio(localtime,deviceID,msgType,value)
             		print "ID="+deviceID+",msgType="+msgType+",value="+str(value)
-            		if msgType="TEMP":
+            		if msgType=="TEMP":
 				######## scrive il file del sensore 1        
     				f = open("sensor1.log","w")  #apre il file dei dati in read mode
     				f.write(localtime+" "+str(value))  #legge la info del sensore sul file e divide per data, ora e valore
     				f.close()  #chiude il file dei dati e lo salva
-			elif msgType="BATT":
+			elif msgType=="BATT":
 				message="La batteria del sensore con ID:"+str(deviceID)+" e' "
 				if value==0:
 					message+="bassa"
