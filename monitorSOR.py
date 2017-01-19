@@ -103,7 +103,7 @@ def main():
     		TOKEN = tokenFile.read().strip()
     		tokenFile.close()
 	except IOError: 
-    		logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    		print("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     		exit()
 
 	logging.info("caricata token.")
@@ -112,7 +112,7 @@ def main():
     		CHAT_ID = chatidFile.read().strip()
     		chatidFile.close()
 	except IOError:
-    		logging.error("Non ho trovato il file di chatId. E' necessario creare un file 'chatid' con la chatid telegram per il bot")	
+    		print("Non ho trovato il file di chatId. E' necessario creare un file 'chatid' con la chatid telegram per il bot")	
 	
 	######## inizializza il bot Telegram ###########
 	bot = telepot.Bot(TOKEN)
