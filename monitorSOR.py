@@ -13,6 +13,8 @@ import time
 import serial
 import requests
 
+import telepot
+
 # global variables
 DHT_PIN = 4
 
