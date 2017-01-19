@@ -106,7 +106,7 @@ def main():
     		print("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     		exit()
 
-	logging.info("caricata token.")
+	print("caricata token.")
 	try:
     		chatidFile = open(chatidpath,'r')
     		CHAT_ID = chatidFile.read().strip()
