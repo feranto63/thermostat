@@ -97,14 +97,34 @@ def get_temp_radio():
 
 
 def main():
-    	while True:
+	tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
+	try:
+    		tokenFile = open(tokenpath,'r')
+    		TOKEN = tokenFile.read().strip()
+    		tokenFile.close()
+	except IOError: 
+    		logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    		exit()
+
+	logging.info("caricata token.")
+	try:
+    		chatidFile = open(chatidpath,'r')
+    		CHAT_ID = chatidFile.read().strip()
+    		chatidFile.close()
+	except IOError:
+    		logging.error("Non ho trovato il file di chatId. E' necessario creare un file 'chatid' con la chatid telegram per il bot")	
+	
+	######## inizializza il bot Telegram ###########
+	bot = telepot.Bot(TOKEN)
+
+	while True:
     		now = time.time()
     		localtime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
         	deviceID, msgType, value = get_temp_radio()
         	if deviceID != '??':
-            		log_temp_radio(localtime,deviceID,msgType,value)
             		print "ID="+deviceID+",msgType="+msgType+",value="+str(value)
             		if msgType=="TEMP":
+	            		log_temp_radio(localtime,deviceID,msgType,value)
 				######## scrive il file del sensore 1        
     				f = open("sensor1.log","w")  #apre il file dei dati in read mode
     				f.write(localtime+" "+str(value)+"\n")  #legge la info del sensore sul file e divide per data, ora e valore
@@ -115,12 +135,15 @@ def main():
 					message+="bassa"
 				else:
 					message+=str(value)
+				print(message)
+				bot.sendMessage(CHAT_ID, message,disable_notification=True)
 			elif msgType=="SLEE":
 				message="La batteria del sensore con ID:"+str(deviceID)+" e' "
 				if value==0:
 					message+="bassa"
 				else:
 					message+=str(value)
+				print(message)
 
         	time.sleep(5*60)
 
