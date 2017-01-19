@@ -57,14 +57,18 @@ TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
 # 4 = bagno
 # 5 = sala hobby
 
-main_sensor = settings.get('SectionOne','main_sensor')
+main_sensor = int(settings.get('SectionOne','main_sensor'))
 sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
 sensori = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+ExtTempID = -99 #indice del sensore della temperatura esterna, se -99 non c'e' sensore esterno altrimenti è l'indice del sensore esterno
 for i in range (NUM_SENSORI):
-    sensori[i] = TIPO_SENSORE[int(sensor_type[i])]
+    s_type = int(sensor_type[i])
+    if s_type == 1 # giardino
+        ExtTempID = i
+    sensori[i] = TIPO_SENSORE[s_type]
     
 if not owner_found:
     sys.exit("owner not found")
@@ -1127,6 +1131,11 @@ while True:
             
     read_sensors()
     
+    CurTemp = sensor_value[main_sensor]
+    ExtTemp = 0
+    if ExtTempID != -99:
+        ExtTemp = sensor_value[ExtTempID]
+    
     current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
     change_heat = (current_heat != previous_heat)
     if change_heat:
@@ -1177,12 +1186,11 @@ while True:
             CurHumidity = 0
         #apre il file dei dati in append mode, se il file non esiste lo crea
         filedati = open("filedati","a")
-        #scrive la temperatura coreente ed il timestam sul file
+        #scrive la temperatura corrente ed il timestam sul file
         filedati.write("T="+str(CurTemp)+",HR="+str(CurHumidity)+"@"+localtime+"\n")
         #chiude il file dei dati e lo salva
         filedati.close()
-        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, 0, (heating_status and not heating_standby), CurTargetTemp)
-#        log_temperature(orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
+        log_temperature(localtime,CurTemp,CurTempDHT,CurHumidity, ExtTemp, (heating_status and not heating_standby), CurTargetTemp)
         last_report = now
     # verifica se ci sono nuovi aggiornamenti sulla presence (via email)
     if is_connected():
