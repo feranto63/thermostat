@@ -66,7 +66,7 @@ sensori = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
 ExtTempID = -99 #indice del sensore della temperatura esterna, se -99 non c'e' sensore esterno altrimenti è l'indice del sensore esterno
 for i in range (NUM_SENSORI):
     s_type = int(sensor_type[i])
-    if s_type == 1 # giardino
+    if s_type == 1: # giardino
         ExtTempID = i
     sensori[i] = TIPO_SENSORE[s_type]
     
