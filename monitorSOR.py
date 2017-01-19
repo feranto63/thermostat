@@ -98,6 +98,7 @@ def get_temp_radio():
 
 def main():
 	tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
+	chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 	try:
     		tokenFile = open(tokenpath,'r')
     		TOKEN = tokenFile.read().strip()
