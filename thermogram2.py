@@ -42,7 +42,8 @@ ARP_PRESENCE = settings.getboolean('SectionOne','ARP_PRESENCE')
 PRESENCE_MAC = settings.getboolean('SectionOne','PRESENCE_MAC')  #indica se se la presenza e' su base WiFi MAC Address
 DHT_PRESENCE = settings.getboolean('SectionOne','DHT_PRESENCE') #indica se e' presente il sensore DHT
 DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
-DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' presente il sensore di temperatura 18DS20
+DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' presente il sensore di temperatura DS18B20 (family 24h)
+DS1820_PRESENCE = settings.getboolean('SectionOne','DS1820_PRESENCE') # indica se e' presente il sensore di temperatura DS1820 (familiy 10h)
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
@@ -575,6 +576,11 @@ base_dir = '/sys/bus/w1/devices/'
 if DS_PRESENCE:
     device_folder = glob.glob(base_dir + '28*')[0]
     device_file = device_folder + '/w1_slave'
+    
+if DS1820_PRESENCE:
+    device_folder = glob.glob(base_dir + '10*')[0]
+    device_file = device_folder + '/w1_slave'
+
 
 def read_temp_raw():
     f = open(device_file, 'r')
