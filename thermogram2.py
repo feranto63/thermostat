@@ -1012,7 +1012,7 @@ def is_connected():
 
 # -------------------- inizio programma
 ######## Inizializza le temperature
-if DS_PRESENCE:
+if DS_PRESENCE or DS1820_PRESENCE:
     CurTemp = read_temp()
 else:
     CurTemp = 99
@@ -1121,11 +1121,11 @@ while True:
     curr_hour=int(time.strftime("%H",orario))
     
     CurTargetTemp=current_target_temp()
-    if DS_PRESENCE:
+    if DS_PRESENCE or DS1820_PRESENCE:
         CurTemp = read_temp()
     if DHT_PRESENCE:
         CurTempDHT, CurHumidity = read_TandH()
-        if DS_PRESENCE == False:
+        if (DS_PRESENCE and DS1820_PRESENCE) == False:
             CurTemp = CurTempDHT
     if CurHumidity == None:
         CurHumidity = 0
