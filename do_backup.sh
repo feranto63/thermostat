@@ -18,6 +18,8 @@ BACKUPFILEGZ="$BACKUPFILE".gz
 BACKUPFILEDIR="domoticz_all_$TIMESTAMP.tar.gz"
 
 ### Create backup and ZIP it
+## ----->>>> NON SERVE IL COMANDO CURL PERCHE' I FILE SONO IN LOCALE
+
 /usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /tmp/$BACKUPFILE
 gzip -9 /tmp/$BACKUPFILE
 ##Back domoticz folder incl database
