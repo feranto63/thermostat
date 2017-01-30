@@ -1,4 +1,5 @@
 #!/bin/bash
+#  https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=75065
 
 ## LOCAL/FTP/SCP/MAIL PARAMETERS
 SERVER="192.168.5.10"         # IP of Network disk, used for: ftp mail scp
@@ -23,8 +24,8 @@ gzip -9 /tmp/$BACKUPFILE
 tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/domoticz/
 
 ### Send to Network disk through SCP
-scp /tmp/$BACKUPFILEGZ pi@192.168.5.10:/$SERVER/media/hdd/Domoticz_backup/
-scp /tmp/$BACKUPFILEDIR  pi@192.168.5.10:/$SERVER/media/hdd/Domoticz_backup/
+scp /tmp/$BACKUPFILEGZ pi@192.168.5.10:/media/hdd/Domoticz_backup/
+scp /tmp/$BACKUPFILEDIR  pi@192.168.5.10:/media/hdd/Domoticz_backup/
 
 ### Remove temp backup files
 /bin/rm /tmp/$BACKUPFILEGZ
