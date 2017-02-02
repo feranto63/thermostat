@@ -1,6 +1,7 @@
 #!/bin/bash
 #  https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=75065
 
+NOMEMAGGIORDOMO="Ambrogio"
 ## LOCAL/FTP/SCP/MAIL PARAMETERS
 SERVER="http://ftp.feranto63.altervista.org/"         # IP of Network disk, used for: ftp mail scp
 #DOMO_IP="192.168.5.75"    # Domoticz IP used for all
@@ -15,19 +16,19 @@ BACKUPFILEGZ="$BACKUPFILE".gz
 
 ## BACKUP SCRIPTS
 
-BACKUPFILEDIR="domoticz_all_$TIMESTAMP.tar.gz"
+BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 
 ### Create backup and ZIP it
 ## ----->>>> NON SERVE IL COMANDO CURL PERCHE' I FILE SONO IN LOCALE
 
-/usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /tmp/$BACKUPFILE
+## /usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /tmp/$BACKUPFILE
 gzip -9 /tmp/$BACKUPFILE
 ##Back domoticz folder incl database
-tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/domoticz/
+tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/maggiordomo/
 
 ### Send to Network disk through SCP
-scp /tmp/$BACKUPFILEGZ pi@192.168.5.10:/media/hdd/Domoticz_backup/
-scp /tmp/$BACKUPFILEDIR  pi@192.168.5.10:/media/hdd/Domoticz_backup/
+scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
+scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 
 ### Remove temp backup files
 /bin/rm /tmp/$BACKUPFILEGZ
