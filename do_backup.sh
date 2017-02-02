@@ -2,15 +2,15 @@
 #  https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=75065
 
 ## LOCAL/FTP/SCP/MAIL PARAMETERS
-SERVER="192.168.5.10"         # IP of Network disk, used for: ftp mail scp
-DOMO_IP="192.168.5.75"    # Domoticz IP used for all
-DOMO_PORT="8080"            # Domoticz port used for all
+SERVER="http://ftp.feranto63.altervista.org/"         # IP of Network disk, used for: ftp mail scp
+#DOMO_IP="192.168.5.75"    # Domoticz IP used for all
+#DOMO_PORT="8080"            # Domoticz port used for all
 ## END OF USER CONFIGURABLE PARAMETERS
 
 TIMESTAMP=`/bin/date +%Y%m%d%H%M%S`
 
 ## BACKUP DATABASE
-BACKUPFILE="domoticz_$TIMESTAMP.db" # backups will be named "domoticz_YYYYMMDDHHMMSS.db.gz"
+BACKUPFILE="maggiordomo_$TIMESTAMP.db" # backups will be named "domoticz_YYYYMMDDHHMMSS.db.gz"
 BACKUPFILEGZ="$BACKUPFILE".gz
 
 ## BACKUP SCRIPTS
