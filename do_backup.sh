@@ -1,6 +1,12 @@
 #!/bin/bash
 #  https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=75065
 
+## The only pre-req for doing that is 
+## sshkey-gen
+## ssh-copy-id pi@192.168.0.90
+## that generates /home/pi/.ssh/id_rsa and /home/pi/.ssh/id_rsa.pub then sends the public key from the source RPi to /home/pi/.ssh/authorized_keys on the target machine. That allows you to use scp without a password. You can do the same stuff for the root id (except you'll have to send the key by copying it a USB stick, or by using the pi userid to send it over the network).
+
+
 NOMEMAGGIORDOMO="Ambrogio"
 ## LOCAL/FTP/SCP/MAIL PARAMETERS
 SERVER="http://ftp.feranto63.altervista.org/"         # IP of Network disk, used for: ftp mail scp
