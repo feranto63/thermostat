@@ -22,16 +22,17 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 ## ----->>>> NON SERVE IL COMANDO CURL PERCHE' I FILE SONO IN LOCALE
 
 ## /usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /tmp/$BACKUPFILE
-gzip -9 /tmp/$BACKUPFILE
+# gzip -9 /tmp/$BACKUPFILE
 ##Back domoticz folder incl database
-tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/maggiordomo/
+tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 
 ### Send to Network disk through SCP
-scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
+# curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
+# scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 
 ### Remove temp backup files
-/bin/rm /tmp/$BACKUPFILEGZ
+# /bin/rm /tmp/$BACKUPFILEGZ
 /bin/rm /tmp/$BACKUPFILEDIR
 
 ### Done!
