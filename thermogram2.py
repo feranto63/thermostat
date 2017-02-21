@@ -648,7 +648,7 @@ def read_sensors():
             try:
                 sensor_value[i][2]= "%.1f" % float(value[3])
             except:
-                sensor_vale[i][2]= 0.0
+                sensor_value[i][2]= 0.0
         except IOError:
             sensor_value[i][1] = -99  #se il file non e' presente imposto il sensore a -99
 
