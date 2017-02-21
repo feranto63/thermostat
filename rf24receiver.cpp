@@ -347,7 +347,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 						printf("identificativo del sensore non riconosciuto %i\n", header.from_node);
 				}
 				file1 = fopen(filename, "w");
-				sprintf(file_data, "%s %f\n",t_stamp, message.temperature);
+				sprintf(file_data, "%s %f %f\n",t_stamp, message.temperature,message.humidity);
 				fwrite(file_data, 1, sizeof(file_data), file1) ;
 				fclose(file1);
 				file1 = NULL;
