@@ -132,7 +132,7 @@ def main():
 	            		log_temp_radio(localtime,deviceID,msgType,value)
 				######## scrive il file del sensore 1        
     				f = open("sensor1.log","w")  #apre il file dei dati in read mode
-    				f.write(localtime+" "+str(value)+"0.0 \n")  #legge la info del sensore sul file e divide per data, ora e valore
+    				f.write(localtime+" "+str(value)+" 0.0 \n")  #legge la info del sensore sul file e divide per data, ora e valore
     				f.close()  #chiude il file dei dati e lo salva
 			elif msgType=="BATT":
 				message="La batteria del sensore con ID:"+str(deviceID)+" e' "
