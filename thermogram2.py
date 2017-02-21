@@ -59,7 +59,7 @@ TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
 # 5 = sala hobby
 
 main_sensor = int(settings.get('SectionOne','main_sensor'))
-sensor_value = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+sensor_value = [[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ', 0.0, 0.0]] #time,temp,humid
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
@@ -333,7 +333,7 @@ def handle(msg):
             strCurTempDHT= str(CurTempDHT)
         messaggio=""
         for i in range (NUM_SENSORI):
-            messaggio+="La temperatura ("+sensori[i]+") e' di "+str("%0.1f" % float(sensor_value[i]))+" C\n"
+            messaggio+="La temperatura ("+sensori[i]+") e' di "+str("%0.1f" % float(sensor_value[i][1]))+" C\n"
         messaggio+="L'umidita' misurata e' di "+strCurHumidity+"%\n"
         messaggio+="La temperatura di comfort e' di "+str(CurTargetTemp)+" C\n"
         messaggio+="Il riscaldamento e' "
@@ -643,9 +643,14 @@ def read_sensors():
             f = open("sensor"+str(i)+".log","r")  #apre il file dei dati in read mode
             value = f.read().split()  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
-            sensor_value[i]= "%.1f" % float(value[2])
+            sensor_value[i][0]= "%s %s" % str(value[0]),str(value[1])
+            sensor_value[i][1]= "%.1f" % float(value[2])
+            try:
+                sensor_value[i][2]= "%.1f" % float(value[3])
+            except:
+                sensor_vale[i][2]= 0.0
         except IOError:
-            sensor_value[i] = -99  #se il file non e' presente imposto il sensore a -99
+            sensor_value[i][1] = -99  #se il file non e' presente imposto il sensore a -99
 
 
 ######### FINE lettura sensori di temperatura ###########
@@ -1132,15 +1137,15 @@ while True:
 
     ######## scrive il file del sensore 0 ---- da spostare nella routine che gestisce la lettura delle temperature        
     f = open("sensor0.log","w")  #apre il file dei dati in read mode
-    f.write(localtime+" "+str(CurTemp))  #legge la info del sensore sul file e divide per data, ora e valore
+    f.write(localtime+" "+str(CurTemp)+" "+str(CurHumidity))  #legge la info del sensore sul file e divide per data, ora e valore
     f.close()  #chiude il file dei dati e lo salva
             
     read_sensors()
     
-    CurTemp = float(sensor_value[main_sensor])
+    CurTemp = float(sensor_value[main_sensor][1])
     ExtTemp = 0
     if ExtTempID != -99:
-        ExtTemp = float(sensor_value[ExtTempID])
+        ExtTemp = float(sensor_value[ExtTempID][1])
     
     current_heat = MAIN_HEAT[curr_hour] #current_heat e' la caldaia dell'ora attuale
     change_heat = (current_heat != previous_heat)
