@@ -36,6 +36,8 @@ tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 # curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
 # scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
+ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /home/pi/git/thermostat/thermostat/*.*
+
 
 ### Remove temp backup files
 # /bin/rm /tmp/$BACKUPFILEGZ
