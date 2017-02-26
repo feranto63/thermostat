@@ -9,7 +9,7 @@
 
 NOMEMAGGIORDOMO="Ambrogio"
 ## LOCAL/FTP/SCP/MAIL PARAMETERS
-SERVER="http://ftp.feranto63.altervista.org/"         # IP of Network disk, used for: ftp mail scp
+SERVER="ftp.feranto63.altervista.org"         # IP of Network disk, used for: ftp mail scp
 #DOMO_IP="192.168.5.75"    # Domoticz IP used for all
 #DOMO_PORT="8080"            # Domoticz port used for all
 ## END OF USER CONFIGURABLE PARAMETERS
@@ -36,10 +36,12 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 # curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
 # scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 # scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
-ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /home/pi/git/thermostat/thermostat/*.*
-ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /var/www/templog.db
-ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /usr/lib/cgi-bin/webgui.py
-ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /etc/supervisor/conf.d/*.*
+USERNAME = "feranto63"
+PASSSWORD = "cldbzz00"
+ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/*.*
+ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
+ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
+ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/supervisor/conf.d/*.*
 
 
 
