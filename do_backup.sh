@@ -30,17 +30,21 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 ## /usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /tmp/$BACKUPFILE
 # gzip -9 /tmp/$BACKUPFILE
 ##Back domoticz folder incl database
-tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
+#tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 
 ### Send to Network disk through SCP
 # curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
 # scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
-scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
+# scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
 ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /home/pi/git/thermostat/thermostat/*.*
+ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /var/www/templog.db
+ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /usr/lib/cgi-bin/webgui.py
+ncftpput -u feranto63 -p cldbzz00 ftp.feranto63.altervista.org /maggiordomo/Ambrogio/ /etc/supervisor/conf.d/*.*
+
 
 
 ### Remove temp backup files
 # /bin/rm /tmp/$BACKUPFILEGZ
-/bin/rm /tmp/$BACKUPFILEDIR
+# /bin/rm /tmp/$BACKUPFILEDIR
 
 ### Done!
