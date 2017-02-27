@@ -23,8 +23,8 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 #tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 
 ### Send to Network disk through SCP
-FTPNAME = "feranto63"
-FTPPASS = "cldbzz00"
+FTPNAME="feranto63"
+FTPPASS="cldbzz00"
 ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/*.*
 ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
 ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
