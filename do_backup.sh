@@ -42,6 +42,7 @@ ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/
 ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
 ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
 ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/supervisor/conf.d/*.*
+ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/lirc/lircd.conf
 
 
 
