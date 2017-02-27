@@ -1,18 +1,8 @@
 #!/bin/bash
 #  https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=75065
 
-## The only pre-req for doing that is 
-## sshkey-gen
-## ssh-copy-id pi@192.168.0.90
-## that generates /home/pi/.ssh/id_rsa and /home/pi/.ssh/id_rsa.pub then sends the public key from the source RPi to /home/pi/.ssh/authorized_keys on the target machine. That allows you to use scp without a password. You can do the same stuff for the root id (except you'll have to send the key by copying it a USB stick, or by using the pi userid to send it over the network).
-
-
 NOMEMAGGIORDOMO="Ambrogio"
-## LOCAL/FTP/SCP/MAIL PARAMETERS
 SERVER="ftp.feranto63.altervista.org"         # IP of Network disk, used for: ftp mail scp
-#DOMO_IP="192.168.5.75"    # Domoticz IP used for all
-#DOMO_PORT="8080"            # Domoticz port used for all
-## END OF USER CONFIGURABLE PARAMETERS
 
 TIMESTAMP=`/bin/date +%Y%m%d%H%M%S`
 
@@ -33,21 +23,10 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 #tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 
 ### Send to Network disk through SCP
-# curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
-# scp /tmp/$BACKUPFILEGZ pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
-# scp /tmp/$BACKUPFILEDIR  pi@$SERVER:/maggiordomo/$NOMEMAGGIORDOMO/
-USERNAME = "feranto63"
-PASSSWORD = "cldbzz00"
-ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/*.*
-ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
-ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
-ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/supervisor/conf.d/*.*
-ncftpput -u $USERNAME -p $PASSWORD $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/lirc/lircd.conf
-
-
-
-### Remove temp backup files
-# /bin/rm /tmp/$BACKUPFILEGZ
-# /bin/rm /tmp/$BACKUPFILEDIR
-
-### Done!
+FTPNAME = "feranto63"
+FTPPASS = "cldbzz00"
+ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/*.*
+ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
+ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
+ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/supervisor/conf.d/*.*
+ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/lirc/lircd.conf
