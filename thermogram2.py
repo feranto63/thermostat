@@ -481,6 +481,9 @@ def handle(msg):
     elif command == '/restart':
         bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
         result = subprocess.call(['sudo','supervisorctl','restart','thermogram2'])
+    elif command == '/noip':
+        bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
+        result = subprocess.call(['sudo','noip2'])
     elif command == '/cold_on':
         result = subprocess.call(['irsend','SEND_ONCE','BION','TURN_ON'])
         bot.sendMessage(CHAT_ID, "Accendo il condizionatore",disable_notification=True)
