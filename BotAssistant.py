@@ -60,10 +60,19 @@ print 'Listening ...'
 
 # generate a name for this maggiordomo if does not exist
 try:
-os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.token"except IOError: 
-os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.token"except IOError: 
+    MaggiordomoIDFile = open(IDpath,'r')
+    MaggiordomoID = MaggiordomoIDFile.read().strip()
+    MaggiordomoIDFile.close()
+    bot.sendmessage("sono "+MaggiordomoID+". Mi sono appena svegliato")
+
+except IOError: 
     logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
-    exit()
+    MaggiordomoID = "maggiordomo.1234" #da generare in modo random
+    MaggiordomoIDFile = open(IDpath,'w')
+    MaggiordomoIDFile.write(MaggiordomoID)
+    MaggiordomoIDFile.close()
+
+    bot.sendmessage("sono "+MaggiordomoID+". Sono stato appena generato")
 
 
 # Keep the program running.
