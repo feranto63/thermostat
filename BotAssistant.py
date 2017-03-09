@@ -51,7 +51,7 @@ def handle(msg):
     flavor = telepot.flavor(msg)
 
     summary = telepot.glance(msg, flavor=flavor)
-    print flavor, summary
+    print (flavor, summary)
 
 
 bot = telepot.Bot(TOKEN)
@@ -63,7 +63,7 @@ try:
     MaggiordomoIDFile = open(IDpath,'r')
     MaggiordomoID = MaggiordomoIDFile.read().strip()
     MaggiordomoIDFile.close()
-    bot.sendmessage("sono "+MaggiordomoID+". Mi sono appena svegliato")
+    bot.sendMessage("sono "+MaggiordomoID+". Mi sono appena svegliato")
 
 except IOError: 
     logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
@@ -72,7 +72,7 @@ except IOError:
     MaggiordomoIDFile.write(MaggiordomoID)
     MaggiordomoIDFile.close()
 
-    bot.sendmessage("sono "+MaggiordomoID+". Sono stato appena generato")
+    bot.sendMessage("sono "+MaggiordomoID+". Sono stato appena generato")
 
 
 # Keep the program running.
