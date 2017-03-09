@@ -47,6 +47,8 @@ except IOError:
 
 logging.info("caricata token.")
 
+CHATID = 26228522
+
 def handle(msg):
     flavor = telepot.flavor(msg)
 
@@ -63,7 +65,7 @@ try:
     MaggiordomoIDFile = open(IDpath,'r')
     MaggiordomoID = MaggiordomoIDFile.read().strip()
     MaggiordomoIDFile.close()
-    bot.sendMessage("sono "+MaggiordomoID+". Mi sono appena svegliato")
+    bot.sendMessage(CHATID, "sono "+MaggiordomoID+". Mi sono appena svegliato")
 
 except IOError: 
     logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
@@ -72,7 +74,7 @@ except IOError:
     MaggiordomoIDFile.write(MaggiordomoID)
     MaggiordomoIDFile.close()
 
-    bot.sendMessage("sono "+MaggiordomoID+". Sono stato appena generato")
+    bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
 
 
 # Keep the program running.
