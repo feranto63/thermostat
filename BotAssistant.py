@@ -1,6 +1,8 @@
 import sys
 import time
 import telepot
+import string
+import random
 
 import urllib3
 
