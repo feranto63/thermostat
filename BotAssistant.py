@@ -3,6 +3,8 @@ import time
 import telepot
 import string
 import random
+import os
+import sys
 
 import urllib3
 
@@ -62,7 +64,7 @@ bot = telepot.Bot(TOKEN)
 bot.message_loop(handle)
 print 'Listening ...'
 
-myIPaddress = dig +short myip.opendns.com @resolver1.opendns.com
+myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
 
 # generate a name for this maggiordomo if does not exist
 try:
@@ -80,7 +82,7 @@ except IOError:
 
     bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
 
-bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPAddress)
+bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress)
 
 # Keep the program running.
 while 1:
