@@ -71,7 +71,7 @@ try:
 
 except IOError: 
     logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
-    MaggiordomoID = "Maaggiordomo-"+''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10)) #da generare in modo random
+    MaggiordomoID = "Maggiordomo-"+''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10)) #da generare in modo random
     MaggiordomoIDFile = open(IDpath,'w')
     MaggiordomoIDFile.write(MaggiordomoID)
     MaggiordomoIDFile.close()
