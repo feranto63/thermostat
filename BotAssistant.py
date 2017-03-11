@@ -62,6 +62,8 @@ bot = telepot.Bot(TOKEN)
 bot.message_loop(handle)
 print 'Listening ...'
 
+myIPaddress = dig +short myip.opendns.com @resolver1.opendns.com
+
 # generate a name for this maggiordomo if does not exist
 try:
     MaggiordomoIDFile = open(IDpath,'r')
@@ -78,6 +80,7 @@ except IOError:
 
     bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
 
+bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPAddress)
 
 # Keep the program running.
 while 1:
