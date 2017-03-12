@@ -38,7 +38,7 @@ A skeleton for your telepot programs.
 
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.token"
 IDpath= os.path.dirname(os.path.realpath(__file__)) + "/Maggiordomo.ID"
-#chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
+chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.chatid"
 #chatidgatepath = os.path.dirname(os.path.realpath(__file__)) + "/chatid_cancello"
 
 
@@ -47,23 +47,33 @@ try:
     TOKEN = tokenFile.read().strip()
     tokenFile.close()
 except IOError: 
-    logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    logging.error("Non ho trovato il file di token. E' necessario creare un file 'BotAssistant.token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     exit()
 
 logging.info("caricata token.")
 
-CHATID = 26228522
+try:
+    chatidFile = open(chatidpath,'r')
+    CHATID = chatidFile.read().strip()
+    chatidFile.close()
+except IOError: 
+    logging.error("Non ho trovato il file di chatid. E' necessario creare un file 'BotAssistant.chatid' con la chatidi telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    exit()
 
-def handle(msg):
-    flavor = telepot.flavor(msg)
+logging.info("caricata chatid.")
 
-    summary = telepot.glance(msg, flavor=flavor)
-    print (flavor, summary)
+# CHATID = 26228522
+
+#def handle(msg):
+#    flavor = telepot.flavor(msg)
+#
+#    summary = telepot.glance(msg, flavor=flavor)
+#    print (flavor, summary)
 
 
 bot = telepot.Bot(TOKEN)
-bot.message_loop(handle)
-print 'Listening ...'
+#bot.message_loop(handle)
+print 'running Bot Assistant ...'
 
 myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
 
@@ -86,5 +96,5 @@ except IOError:
 bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress)
 
 # Keep the program running.
-while 1:
-    time.sleep(10)
+#while 1:
+#    time.sleep(10)
