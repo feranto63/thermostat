@@ -26,21 +26,21 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 ### Send to Network disk through SCP
 FTPNAME="feranto63"
 FTPPASS="cldbzz00"
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/chatid
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/filedati
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/fileheating
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/filepresence
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/heating_standby
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/heating_status
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/heating_update
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/MAGGIORDOMO.jpg
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/termostato.log
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/thermogram2.ini
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/termoschedule
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/token
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/chatid /home/pi/git/thermostat/thermostat/chatid
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/filedati /home/pi/git/thermostat/thermostat/filedati
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/fileheating /home/pi/git/thermostat/thermostat/fileheating
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/filepresence /home/pi/git/thermostat/thermostat/filepresence
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/heating_standby /home/pi/git/thermostat/thermostat/heating_standby
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/heating_status /home/pi/git/thermostat/thermostat/heating_status
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/heating_update /home/pi/git/thermostat/thermostat/heating_update
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/MAGGIORDOMO.jpg /home/pi/git/thermostat/thermostat/MAGGIORDOMO.jpg
+#ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/termostato.log /home/pi/git/thermostat/thermostat/termostato.log
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/thermogram2.ini /home/pi/git/thermostat/thermostat/thermogram2.ini
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/thermoschedule /home/pi/git/thermostat/thermostat/termoschedule
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/token /home/pi/git/thermostat/thermostat/token
 # ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/Maggiordomo.ID
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/chatid_cancello
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /var/www/templog.db
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /usr/lib/cgi-bin/webgui.py
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/supervisor/conf.d/*.*
-ncftpget -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/lirc/lircd.conf
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/chatid_cancello /home/pi/git/thermostat/thermostat/chatid_cancello
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/templog.db /var/www/templog.db
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/webgui.py /usr/lib/cgi-bin/webgui.py
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/*.conf /etc/supervisor/conf.d/*.conf
+ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/lircd.conf /etc/lirc/lircd.conf
