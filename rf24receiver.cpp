@@ -252,7 +252,6 @@ int main(int argc, char** argv)
 
 //OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
 	FILE *file1;
-	char file_data[100] = "";
 	const char *filename1 = "sensor1.log";
 	const char *filename2 = "sensor2.log";
 	const char *filename3 = "sensor3.log";
@@ -284,6 +283,9 @@ int main(int argc, char** argv)
 		
 	while(1)
 	{
+		//clear temporary variable
+		char file_data[100] = "";
+
 		// Get the latest network info
 		network.update();
 		printf(".");
