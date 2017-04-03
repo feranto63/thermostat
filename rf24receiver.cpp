@@ -258,6 +258,10 @@ int main(int argc, char** argv)
 	const char *filename4 = "sensor4.log";
 	const char *filename5 = "sensor5.log";
 	const char *filename6 = "sensor6.log";
+	const char *filename7 = "sensor7.log";
+	const char *filename8 = "sensor8.log";
+	const char *filename9 = "sensor9.log";
+	const char *filename10 = "sensor10.log";
 	char filename[20];
 
 	
@@ -344,6 +348,18 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 						break;
 					case 6:
 						strcpy(filename, filename6);
+						break;
+					case 7:
+						strcpy(filename, filename7);
+						break;
+					case 8:
+						strcpy(filename, filename8);
+						break;
+					case 9:
+						strcpy(filename, filename9);
+						break;
+					case 10:
+						strcpy(filename, filename10);
 						break;
 					default:
 						printf("identificativo del sensore non riconosciuto %i\n", header.from_node);
