@@ -171,7 +171,7 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 					timeout[header.from_node] = rawtime + SAMPLE;
 				}
 
-				//filename = "sensor_strange.log";
+				strcpy(filename, "sensor_strange.log");
 				
 				switch (header.from_node) {
 					case 1:
