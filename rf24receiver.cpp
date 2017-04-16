@@ -35,7 +35,9 @@ void log_w_sensor (sqlite3 *db, char *t_stamp, int node_id, float temp, float hu
 	sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, node_id, temp, humid);
 	printf(sql);
    	/* Execute SQL statement */
+	printf("a\n");
    	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+	printf("b\n");
    	if( rc != SQLITE_OK ){
       		fprintf(stderr, "SQL error: %s\n", zErrMsg);
       		sqlite3_free(zErrMsg);
@@ -115,7 +117,7 @@ int main(int argc, char** argv)
 	printf("Ready to receive...\n");
 	
 	// Now do this forever (until cancelled by user)
-	int i=0;
+	// int i=0;
 	rawtime = time(NULL);
 	info = localtime( &rawtime );
 	time_t timeout[NUM_SENSORI+1];
