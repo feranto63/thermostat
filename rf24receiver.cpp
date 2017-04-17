@@ -66,7 +66,7 @@ const uint16_t pi_node = 0;
 // Time between checking for packets (in ms)
 const unsigned long interval = 2000;
 const int SAMPLE = 600; // intervallo in secondi per la memorizzazione delle temp nel db 10 minuti 10*60
-const int NUM_SENSORI = 10; // definisce il numero massimo di sensori gestiti dal modulo
+const int NUM_SENSORI = 100; // definisce il numero massimo di sensori gestiti dal modulo
 
 
 int main(int argc, char** argv)
@@ -104,6 +104,24 @@ int main(int argc, char** argv)
 	const char *filename8 = "sensor8.log";
 	const char *filename9 = "sensor9.log";
 	const char *filename10 = "sensor10.log";
+	const char *filename11 = "sensor11.log";
+	const char *filename12 = "sensor12.log";
+	const char *filename13 = "sensor13.log";
+	const char *filename14 = "sensor14.log";
+	const char *filename15 = "sensor15.log";
+	const char *filename16 = "sensor16.log";
+	const char *filename17 = "sensor17.log";
+	const char *filename18 = "sensor18.log";
+	const char *filename19 = "sensor19.log";
+	const char *filename20 = "sensor20.log";
+	const char *filename21 = "sensor21.log";
+	const char *filename22 = "sensor22.log";
+	const char *filename23 = "sensor23.log";
+	const char *filename24 = "sensor24.log";
+	const char *filename25 = "sensor25.log";
+	const char *filename26 = "sensor26.log";
+	const char *filename27 = "sensor27.log";
+	const char *filename28 = "sensor28.log";
 	char filename[20];
 
 	
@@ -147,10 +165,11 @@ int main(int argc, char** argv)
 			if (header.type == 't') {
 				// Read the message
 				network.read(header, &message, sizeof(message));
+				
 				// Print it out
 				printf("\nTemperature received from node %i: %f \n", header.from_node, message.temperature);
 				printf("Humidity received from node %i: %f \n", header.from_node, message.humidity);
-				   /* Create SQL statement */
+				/* Create SQL statement */
 /*
 CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humidity NUMERIC);
 */
@@ -203,6 +222,60 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 						break;
 					case 10:
 						strcpy(filename, filename10);
+						break;
+					case 11:
+						strcpy(filename, filename11);
+						break;
+					case 12:
+						strcpy(filename, filename12);
+						break;
+					case 13:
+						strcpy(filename, filename13);
+						break;
+					case 14:
+						strcpy(filename, filename14);
+						break;
+					case 15:
+						strcpy(filename, filename15);
+						break;
+					case 16:
+						strcpy(filename, filename16);
+						break;
+					case 17:
+						strcpy(filename, filename17);
+						break;
+					case 18:
+						strcpy(filename, filename18);
+						break;
+					case 19:
+						strcpy(filename, filename19);
+						break;
+					case 20:
+						strcpy(filename, filename20);
+						break;
+					case 21:
+						strcpy(filename, filename21);
+						break;
+					case 22:
+						strcpy(filename, filename22);
+						break;
+					case 23:
+						strcpy(filename, filename23);
+						break;
+					case 24:
+						strcpy(filename, filename24);
+						break;
+					case 25:
+						strcpy(filename, filename25);
+						break;
+					case 26:
+						strcpy(filename, filename26);
+						break;
+					case 27:
+						strcpy(filename, filename27);
+						break;
+					case 28:
+						strcpy(filename, filename28);
 						break;
 					default:
 						printf("identificativo del sensore non riconosciuto %i\n", header.from_node);
