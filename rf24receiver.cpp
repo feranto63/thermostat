@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 	const char *filename6 = "sensor6.log";
 	const char *filename7 = "sensor7.log";
 	const char *filename8 = "sensor8.log";
-	const char *filename9 = "sensor9.log";
+	const char *filename9 = "sensor2.log"; // solo per piero per gestire il figloio child come primario
 	const char *filename10 = "sensor10.log";
 	const char *filename11 = "sensor11.log";
 	const char *filename12 = "sensor12.log";
