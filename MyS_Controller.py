@@ -1,31 +1,15 @@
+import sqlite3
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-   int i;
-   for(i=0; i<argc; i++){
-      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-   }
-   printf("\n");
-   return 0;
-}
+# store the temperature in the database
+def log_w_sensor (t_stamp, node_id, temp, humid)   #orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp):
 
-void log_w_sensor (sqlite3 *db, char *t_stamp, int node_id, float temp, float humid) {
-	char sql[200];
-   	char *zErrMsg = 0;
-   	int rc;
-
-	sprintf(sql,"INSERT INTO 'w_temps' VALUES ('%s', %i, %f, %f);", t_stamp, node_id, temp, humid);
-	printf(sql);
-   	/* Execute SQL statement */
-	printf("a\n");
-   	rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-	printf("b\n");
-   	if( rc != SQLITE_OK ){
-      		fprintf(stderr, "SQL error: %s\n", zErrMsg);
-      		sqlite3_free(zErrMsg);
-   	}else{
-      		fprintf(stdout, "Records created successfully\n");
-   	}
-}
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    dati_da_inserire = [t_stamp, node_id, temp, humid]  #orario,temp,tempDHT,humidity, ExtTemp, HeatOn, TargetTemp]
+    curs.execute("INSERT INTO w_temps values (?,?,?,?)", dati_da_inserire)
+    # commit the changes
+    conn.commit()
+    conn.close()
 
 
 // Structure of our message
