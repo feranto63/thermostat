@@ -209,25 +209,6 @@ def save_sensorlog(filename, t_stamp, temp, humidity):
     filesensor.close()  #chiude il file dei dati e lo salva
 
 			
-			} else {
-				// This is not a type we recognize
-				network.read(header, &message, sizeof(message));
-				printf("Unknown message received from node %i\n", header.from_node);
-			}
-		}
-	
-		// Wait a bit before we start over again
-		delay(2000);
-		// i=i+1;
-	}
-
-	sqlite3_close(db);
-
-	// last thing we do before we end things
-	return 0;
-}
-
-
 ##############################################
 
 import sys
@@ -325,6 +306,8 @@ def event(message):
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
 
+	
+				
     if message.node_id == 3:
        print("message.node_id == 3")
        if message.sub_type == 16:
@@ -342,7 +325,12 @@ def event(message):
                else:
                    print("PAYLOAD == 1")
                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
-                    
+    else:
+		if message.sub_type == 1: #it is a temperature
+			sensor[message.node_id].temp = float(PAYLOAD)
+			sensor[message.node_id].time = localtime
+				############### WORKING HERE ##################
+			save_sensorlog(filename, t_stamp, temp, humidity)
 
 GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', event, True)
 GATEWAY.start()
