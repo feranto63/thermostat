@@ -1,3 +1,6 @@
+dbname='/var/www/templog.db'
+
+
 import sqlite3
 
 # store the temperature in the database
@@ -12,50 +15,7 @@ def log_w_sensor (t_stamp, node_id, temp, humid)   #orario,temp, tempDHT, humidi
     conn.close()
 
 
-// Structure of our message
-struct message_t {
-  float temperature;
-  float humidity;
-};
-
-
-
-// CE Pin, CSN Pin, SPI Speed
-RF24 radio(RPI_BPLUS_GPIO_J8_15,RPI_BPLUS_GPIO_J8_24, BCM2835_SPI_SPEED_8MHZ);
-
-RF24Network network(radio);
-
-// Constants that identifies this node
-const uint16_t pi_node = 0;
-
-// Time between checking for packets (in ms)
-const unsigned long interval = 2000;
-const int SAMPLE = 600; // intervallo in secondi per la memorizzazione delle temp nel db 10 minuti 10*60
-const int NUM_SENSORI = 100; // definisce il numero massimo di sensori gestiti dal modulo
-
-
-int main(int argc, char** argv)
-{
-	sqlite3 *db;
-   	int rc;
-
-	char t_stamp[80];
-	
-	time_t rawtime;
-   	struct tm *info;
-	
-	int elapsed =0;
-
-   	/* open database */
-	rc = sqlite3_open("/var/www/templog.db", &db);
-
-   	if( rc ){
-      		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-      		return(0);
-   	}else{
-      		fprintf(stderr, "Opened database successfully\n");
-   	}
-
+'''
 
 //OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
 	FILE *file1;
@@ -88,19 +48,9 @@ int main(int argc, char** argv)
 	const char *filename27 = "sensor27.log";
 	const char *filename28 = "sensor28.log";
 	char filename[20];
+'''
 
 	
-	// Initialize all radio related modules
-	radio.begin();
-	delay(5);
-	network.begin(90, pi_node);
-	
-	// Print some radio details (for debug purposes)
-	radio.printDetails();
-	printf("Ready to receive...\n");
-	
-	// Now do this forever (until cancelled by user)
-	// int i=0;
 	rawtime = time(NULL);
 	info = localtime( &rawtime );
 	time_t timeout[NUM_SENSORI+1];
@@ -251,11 +201,14 @@ CREATE TABLE w_temps (timestamp DATETIME, sensor_id NUMERIC, temp NUMERIC, humid
 				fclose(file1);
 				file1 = NULL;
 
-
-//				// write temperature in shared memory
-//				memcpy(shared_memory, ntoa(message.temperature), sizeof(ntoa(message.temperature)));
-
 				
+def save_sensorlog(filename, t_stamp, temp, humidity):
+    filesensor = open(filename,"w")  #apre il file di log del sensore in write mode, se il file non esiste lo crea
+    #####   print (( 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)))
+    filesensor.write(t_stamp +" "+str(temp)+" "+str(humidity))
+    filesensor.close()  #chiude il file dei dati e lo salva
+
+			
 			} else {
 				// This is not a type we recognize
 				network.read(header, &message, sizeof(message));
@@ -363,6 +316,11 @@ ALARM_STATUS = 1
 def event(message):
     global ALARM_STATUS
     """Callback for mysensors updates."""
+
+    orario = time.localtime(time.time())
+    localtime = time.asctime( orario )
+    ora_minuti = time.strftime("%H:%M", orario)
+	
     print("sensor_update " + str(message.node_id))
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
