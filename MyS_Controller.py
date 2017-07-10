@@ -13,42 +13,9 @@ def log_w_sensor (t_stamp, node_id, temp, humid)   #orario,temp, tempDHT, humidi
     # commit the changes
     conn.commit()
     conn.close()
+    return()
 
 
-'''
-
-//OPEN CONFIG FILE IN OUR APPLICAITONS DIRECTORY OR CREATE IT IF IT DOESN'T EXIST
-	FILE *file1;
-	const char *filename1 = "sensor1.log";
-	const char *filename2 = "sensor2.log";
-	const char *filename3 = "sensor3.log";
-	const char *filename4 = "sensor4.log";
-	const char *filename5 = "sensor5.log";
-	const char *filename6 = "sensor6.log";
-	const char *filename7 = "sensor7.log";
-	const char *filename8 = "sensor8.log";
-	const char *filename9 = "sensor2.log"; // solo per piero per gestire il figloio child come primario
-	const char *filename10 = "sensor10.log";
-	const char *filename11 = "sensor11.log";
-	const char *filename12 = "sensor12.log";
-	const char *filename13 = "sensor13.log";
-	const char *filename14 = "sensor14.log";
-	const char *filename15 = "sensor15.log";
-	const char *filename16 = "sensor16.log";
-	const char *filename17 = "sensor17.log";
-	const char *filename18 = "sensor18.log";
-	const char *filename19 = "sensor19.log";
-	const char *filename20 = "sensor20.log";
-	const char *filename21 = "sensor21.log";
-	const char *filename22 = "sensor22.log";
-	const char *filename23 = "sensor23.log";
-	const char *filename24 = "sensor24.log";
-	const char *filename25 = "sensor25.log";
-	const char *filename26 = "sensor26.log";
-	const char *filename27 = "sensor27.log";
-	const char *filename28 = "sensor28.log";
-	char filename[20];
-'''
 
 	
 	rawtime = time(NULL);
@@ -243,10 +210,7 @@ logging.basicConfig(
 
 
 
-"""
-$ python2.7 skeleton.py <token>
-A skeleton for your telepot programs.
-"""
+
 ############ legge da file il token del Telegram Bot e della chat id
 
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.token"
@@ -285,8 +249,8 @@ logging.info("caricata chatid.")
 
 
 bot = telepot.Bot(TOKEN)
-#bot.message_loop(handle)
-print ('running Bot Assistant ...')
+# bot.message_loop(handle)
+print ('running Sensor Controller ...')
 
 myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
 
@@ -305,9 +269,7 @@ def event(message):
     print("sensor_update " + str(message.node_id))
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
-
 	
-				
     if message.node_id == 3:
        print("message.node_id == 3")
        if message.sub_type == 16:
@@ -326,11 +288,18 @@ def event(message):
                    print("PAYLOAD == 1")
                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
     else:
-		if message.sub_type == 1: #it is a temperature
+		if message.sub_type == 0: #it is a temperature
 			sensor[message.node_id].temp = float(PAYLOAD)
 			sensor[message.node_id].time = localtime
-				############### WORKING HERE ##################
-			save_sensorlog(filename, t_stamp, temp, humidity)
+		elif message.sub_type == 1: # it is a humidity
+			sensor[message.node_id].humidity = float(PAYLOAD)
+			sensor[message.node_id].time = localtime
+
+		sensorfilename = "sensor"+int(message.node_id)+".log"
+		save_sensorlog(sensorfilename, sensor[message.node_id].temp, sensor[message.node_id].humidity)
+	return()
+
+		############### WORKING HERE ##################
 
 GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', event, True)
 GATEWAY.start()
