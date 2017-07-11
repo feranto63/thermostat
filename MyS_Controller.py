@@ -56,7 +56,7 @@ logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.WARN)
 
-sensor = [][3]
+sensor = [20][3]
 
 def MySensorEvent(message):
     global ALARM_STATUS, sensor
