@@ -90,10 +90,12 @@ def MySensorEvent(message):
     else:
         print("node_id="+str(message.node_id))
         if int(message.sub_type) == 0: #it is a temperature
+            print("it's temperature")
             sensor[message.node_id][1] = float(PAYLOAD)
             sensor[message.node_id][0] = localtime
         else:
             if int(message.sub_type) == 1: # it is a humidity
+                print("it's humidity")
                 sensor[message.node_id][2] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
 
