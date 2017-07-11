@@ -92,11 +92,11 @@ def MySensorEvent(message):
             sensor[message.node_id][1] = float(PAYLOAD)
             sensor[message.node_id][0] = localtime
         elif message.sub_type == 1: # it is a humidity
-            sensor[message.node_id].[2] = float(PAYLOAD)
-            sensor[message.node_id].[0] = localtime
+            sensor[message.node_id][2] = float(PAYLOAD)
+            sensor[message.node_id][0] = localtime
 
         sensorfilename = "sensor"+str(message.node_id)+".log"
-        save_sensorlog(sensorfilename, sensor[message.node_id].[0], sensor[message.node_id][1], sensor[message.node_id][2])
+        save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2])
     return()
 
 
