@@ -88,6 +88,7 @@ def MySensorEvent(message):
                    print("PAYLOAD == 1")
                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
     else:
+	print("node_id="+str(message.node_id))
         if message.sub_type == 0: #it is a temperature
             sensor[message.node_id][1] = float(PAYLOAD)
             sensor[message.node_id][0] = localtime
