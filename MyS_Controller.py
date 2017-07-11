@@ -4,7 +4,7 @@ dbname='/var/www/templog.db'
 import sqlite3
 
 # store the temperature in the database
-def log_w_sensor (t_stamp, node_id, temp, humid)   #orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp):
+def log_w_sensor (t_stamp, node_id, temp, humid):   #orario,temp, tempDHT, humidity, ExtTemp, HeatOn, TargetTemp)
 
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
