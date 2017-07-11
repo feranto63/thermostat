@@ -93,7 +93,7 @@ def MySensorEvent(message):
             sensor[message.node_id][1] = float(PAYLOAD)
             sensor[message.node_id][0] = localtime
         else:
-		    if int(message.sub_type) == 1: # it is a humidity
+            if int(message.sub_type) == 1: # it is a humidity
                 sensor[message.node_id][2] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
 
