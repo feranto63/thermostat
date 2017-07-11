@@ -88,16 +88,16 @@ def MySensorEvent(message):
                    print("PAYLOAD == 1")
                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
     else:
-		if message.sub_type == 0: #it is a temperature
-			sensor[message.node_id][1] = float(PAYLOAD)
-			sensor[message.node_id][0] = localtime
-		elif message.sub_type == 1: # it is a humidity
-			sensor[message.node_id].[2] = float(PAYLOAD)
-			sensor[message.node_id].[0] = localtime
+        if message.sub_type == 0: #it is a temperature
+            sensor[message.node_id][1] = float(PAYLOAD)
+            sensor[message.node_id][0] = localtime
+        elif message.sub_type == 1: # it is a humidity
+            sensor[message.node_id].[2] = float(PAYLOAD)
+            sensor[message.node_id].[0] = localtime
 
-		sensorfilename = "sensor"+str(message.node_id)+".log"
-		save_sensorlog(sensorfilename, sensor[message.node_id].[0], sensor[message.node_id][1], sensor[message.node_id][2])
-	return()
+        sensorfilename = "sensor"+str(message.node_id)+".log"
+        save_sensorlog(sensorfilename, sensor[message.node_id].[0], sensor[message.node_id][1], sensor[message.node_id][2])
+    return()
 
 
 ############ legge da file il token del Telegram Bot e della chat id
