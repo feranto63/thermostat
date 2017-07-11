@@ -98,8 +98,8 @@ def MySensorEvent(message):
         sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
-        print("temp="+str(sensor[message.node_id][1])
-        print("Humidity="+str(sensor[message.node_id][2])
+        print("temp="+str(sensor[message.node_id][1]))
+        print("Humidity="+str(sensor[message.node_id][2]))
         save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2])
     return()
 
