@@ -65,7 +65,7 @@ def MySensorEvent(message):
 
     orario = time.localtime(time.time())
     #localtime = time.asctime( orario )
-    localtime = time.strftime("%d-%m-%Y %H:%M:%S", orario)
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
     ora_minuti = time.strftime("%H:%M", orario)
 	
     print("sensor_update " + str(message.node_id))
