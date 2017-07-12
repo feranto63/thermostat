@@ -100,7 +100,7 @@ def MySensorEvent(message):
                 sensor[message.node_id][0] = localtime
                 print("it's humidity")
 
-        pritn("test")
+        print("test")
         sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
