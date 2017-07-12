@@ -71,11 +71,11 @@ def MySensorEvent(message):
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
 	
+    PAYLOAD = int(message.payload)
     if message.node_id == 3:
        print("message.node_id == 3")
        if message.sub_type == 16:
            print("message.sub_type == 16")
-           PAYLOAD = int(message.payload)
            print("PAYLOAD = "+str(PAYLOAD))
            if PAYLOAD == ALARM_STATUS:
                print("message.payload == "+str(ALARM_STATUS))
