@@ -57,7 +57,7 @@ logging.basicConfig(
         level=logging.WARN)
 """
 
-sensor = [['2017-06-15 22:02:27',25.3, 70.9] for x in range (20)]
+sensor = [['2000-01-01 00:00:00',0.0, 0.0] for x in range (20)]
 
 def MySensorEvent(message):
     global ALARM_STATUS, sensor
