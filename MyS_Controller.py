@@ -64,7 +64,8 @@ def MySensorEvent(message):
     """Callback for mysensors updates."""
 
     orario = time.localtime(time.time())
-    localtime = time.asctime( orario )
+    #localtime = time.asctime( orario )
+    localtime = time.strftime("%d-%m-%Y %H:%M:%S", orario)
     ora_minuti = time.strftime("%H:%M", orario)
 	
     print("sensor_update " + str(message.node_id))
