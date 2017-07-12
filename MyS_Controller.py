@@ -71,18 +71,18 @@ def MySensorEvent(message):
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
 	
-    PAYLOAD = int(message.payload)
+    PAYLOAD = message.payload
     if message.node_id == 3:
        print("message.node_id == 3")
        if message.sub_type == 16:
            print("message.sub_type == 16")
            print("PAYLOAD = "+str(PAYLOAD))
-           if PAYLOAD == ALARM_STATUS:
+           if int(PAYLOAD) == ALARM_STATUS:
                print("message.payload == "+str(ALARM_STATUS))
                return()
            else:
-               ALARM_STATUS = PAYLOAD
-               if PAYLOAD == 0:
+               ALARM_STATUS = int(PAYLOAD)
+               if int(PAYLOAD) == 0:
                    print("PAYLOAD == 0")
                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto")
                else:
