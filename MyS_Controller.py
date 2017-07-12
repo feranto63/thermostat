@@ -123,20 +123,20 @@ try:
     TOKEN = tokenFile.read().strip()
     tokenFile.close()
 except IOError: 
-    logging.error("Non ho trovato il file di token. E' necessario creare un file 'BotAssistant.token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    #logging.error("Non ho trovato il file di token. E' necessario creare un file 'BotAssistant.token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     exit()
 
-logging.info("caricata token.")
+#logging.info("caricata token.")
 
 try:
     chatidFile = open(chatidpath,'r')
     CHATID = chatidFile.read().strip()
     chatidFile.close()
 except IOError: 
-    logging.error("Non ho trovato il file di chatid. E' necessario creare un file 'BotAssistant.chatid' con la chatidi telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    #logging.error("Non ho trovato il file di chatid. E' necessario creare un file 'BotAssistant.chatid' con la chatidi telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     exit()
 
-logging.info("caricata chatid.")
+#logging.info("caricata chatid.")
 
 # CHATID = 26228522
 
@@ -172,7 +172,7 @@ try:
 #    bot.sendMessage(CHATID, "sono "+MaggiordomoID+". Mi sono appena svegliato")
 
 except IOError: 
-    logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
+    #logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
     MaggiordomoID = "Maggiordomo-"+''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10)) #da generare in modo random
     MaggiordomoIDFile = open(IDpath,'w')
     MaggiordomoIDFile.write(MaggiordomoID)
