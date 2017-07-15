@@ -60,7 +60,7 @@ logging.basicConfig(
 sensor = [['2000-01-01 00:00:00',0.0, 0.0] for x in range (20)]
 
 def MySensorEvent(message):
-    global ALARM_STATUS, sensor
+    global ALARM_STATUS, sensor, MaggiordomoID
     """Callback for mysensors updates."""
 
     orario = time.localtime(time.time())
@@ -102,7 +102,16 @@ def MySensorEvent(message):
                 print("it's humidity")
 
         print("test")
-        sensorfilename = "sensor"+str(message.node_id)+".log"
+        if MaggiordomoID == "Battista":
+            if message.node_id == 8:
+                sensorfilename = "sensor1.log"
+            else:
+                if message.node_id == 9:
+                    sensorfilename = "sensor2.log"
+                else:
+                    sensorfilename = "sensor"+str(message.node_id)+".log"
+        else:
+            sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
