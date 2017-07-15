@@ -73,8 +73,8 @@ def MySensorEvent(message):
     print("message.payload: "+message.payload)
 	
     PAYLOAD = message.payload
-    if message.node_id == 3:
-       print("message.node_id == 3")
+    if message.node_id == 30:
+       print("message.node_id == 30")
        if message.sub_type == 16:
            print("message.sub_type == 16")
            print("PAYLOAD = "+str(PAYLOAD))
