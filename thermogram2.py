@@ -683,7 +683,7 @@ def set_presence(n, presence_msg):
                 orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
             except:
                 print("sto gestendo la location")
-                temp_str=rsplit(IFTTTtime, 1)
+                temp_str=IFTTTtime.rsplit(" ", 1)
                 IFTTTtime = temp_str[0]
                 location = temp_str[1]
                 print("IFTTTtime:"+IFTTTtime)
