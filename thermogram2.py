@@ -679,7 +679,16 @@ def set_presence(n, presence_msg):
         try:
             IFTTTtime = words[2]
             logging.info("IFTTTtime "+IFTTTtime)
-            orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
+            try:
+                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
+            except:
+                print("sto gestendo la location")
+                temp_str=rsplit(IFTTTtime, 1)
+                IFTTTtime = temp_str[0]
+                location = temp_str[1]
+                print("IFTTTtime:"+IFTTTtime)
+                print("location:"+location)
+                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
             logging.info("orario letto da mail "+time.asctime(orario))
         except:
             e = sys.exc_info()[0]
