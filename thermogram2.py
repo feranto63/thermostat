@@ -679,19 +679,29 @@ def set_presence(n, presence_msg):
         try:
             IFTTTtime = words[2]
             print("IFTTTtime "+IFTTTtime)
-            try:
-                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
-                print("orario letto da mail senza location:"+IFTTTtime)
-            except:
-                e = sys.exc_info()[0]
-                print( "<p>Error: %s</p>" % e )
+            temp_str=IFTTTtime.rsplit(" ",1)
+            if (temp_str[1].lower()="casa") OR (temp_str[1].lower()="verrecchie"):
                 print("sto gestendo la location")
-                temp_str=IFTTTtime.rsplit(" ", 1)
-                IFTTTtime = temp_str[0]
-                location = temp_str[1]
+                IFTTTtime=temp_str[0]
+                location = temp_str[1].lower()
                 print("IFTTTtime:"+IFTTTtime)
                 print("location:"+location)
-                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
+            else:
+                print("orario letto da mail senza location:"+IFTTTtime)
+            orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
+#            try:
+#                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
+#                print("orario letto da mail senza location:"+IFTTTtime)
+#            except:
+#                e = sys.exc_info()[0]
+#                print( "<p>Error: %s</p>" % e )
+#                print("sto gestendo la location")
+#                temp_str=IFTTTtime.rsplit(" ", 1)
+#                IFTTTtime = temp_str[0]
+#                location = temp_str[1]
+#                print("IFTTTtime:"+IFTTTtime)
+#                print("location:"+location)
+#                orario = time.strptime(IFTTTtime, "%B %d, %Y at %I:%M%p")
             print("orario letto da mail "+time.asctime(orario))
         except:
             e = sys.exc_info()[0]
