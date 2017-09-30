@@ -680,7 +680,7 @@ def set_presence(n, presence_msg):
             IFTTTtime = words[2]
             print("IFTTTtime "+IFTTTtime)
             temp_str=IFTTTtime.rsplit(" ",1)
-            if (temp_str[1].lower()=="casa") OR (temp_str[1].lower()=="verrecchie"):
+            if (temp_str[1].lower()=="casa") or (temp_str[1].lower()=="verrecchie"):
                 print("sto gestendo la location")
                 IFTTTtime=temp_str[0]
                 location = temp_str[1].lower()
