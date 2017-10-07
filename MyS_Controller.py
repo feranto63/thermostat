@@ -106,7 +106,7 @@ def MySensorEvent(message):
             if message.node_id == 8:
                 sensorfilename = "sensor1.log"
             else:
-                if message.node_id == 9:
+                if message.node_id == 31:
                     sensorfilename = "sensor2.log"
                 else:
                     sensorfilename = "sensor"+str(message.node_id)+".log"
