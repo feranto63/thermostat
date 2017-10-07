@@ -190,7 +190,7 @@ except IOError:
 
 #    bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
 
-bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dell'antifurto")
+bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dell'antifurto", disable_notification=True)
 
 # Keep the program running.
 while 1:
