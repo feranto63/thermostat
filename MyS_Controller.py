@@ -117,7 +117,7 @@ def MySensorEvent(message):
             else:
                 sensorfilename = "sensor"+str(message.node_id)+".log"
           else:
-		sensorfilename = "sensor"+str(message.node_id)+".log"
+            sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
