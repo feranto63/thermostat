@@ -121,9 +121,9 @@ def MySensorEvent(message):
               if message.node_id == 5: #giardino
                   sensorfilename = "sensor1.log"
               else:
-		if message.node_id == 4: #zona notte
+                if message.node_id == 4: #zona notte
                   sensorfilename = "sensor2.log"
-		else:
+                else:
                   if message.node_id == 10: # cucina
                     sensorfilename = "sensor3.log"
             else:
