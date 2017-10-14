@@ -103,21 +103,31 @@ def MySensorEvent(message):
 
         print("test")
         if MaggiordomoID == "Battista":
-            if message.node_id == 8:
+            if message.node_id == 8: #soggiorno
                 sensorfilename = "sensor1.log"
             else:
-                if message.node_id == 31:
+                if message.node_id == 31: #giardino
                     sensorfilename = "sensor2.log"
                 else:
                     sensorfilename = "sensor"+str(message.node_id)+".log"
         else:
           if MaggiordomoID == "Ursula":
-            if message.node_id == 15:
+            if message.node_id == 15: #zona notte
                 sensorfilename = "sensor1.log"
             else:
                 sensorfilename = "sensor"+str(message.node_id)+".log"
           else:
-            sensorfilename = "sensor"+str(message.node_id)+".log"
+            if MaggiordomoID == "Ambrogio":
+              if message.node_id == 5: #giardino
+                  sensorfilename = "sensor1.log"
+              else:
+		if message.node_id == 4: #zona notte
+                  sensorfilename = "sensor2.log"
+		else:
+                  if message.node_id == 10: # cucina
+                    sensorfilename = "sensor3.log"
+            else:
+              sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
