@@ -186,7 +186,8 @@ ALARM_STATUS = 1
 
 		############### WORKING HERE ##################
 
-GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, True)
+GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=True,
+  persistence_file='/home/pi/git/thermostat/thermostat/mysensors.pickle')
 GATEWAY.start()
 
 
