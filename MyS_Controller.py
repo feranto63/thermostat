@@ -74,21 +74,21 @@ def MySensorEvent(message):
 	
     PAYLOAD = message.payload
     if message.node_id == 30:
-       print("message.node_id == 30")
-       if message.sub_type == 16:
-           print("message.sub_type == 16")
-           print("PAYLOAD = "+str(PAYLOAD))
-           if int(PAYLOAD) == ALARM_STATUS:
-               print("message.payload == "+str(ALARM_STATUS))
-               return()
-           else:
-               ALARM_STATUS = int(PAYLOAD)
-               if int(PAYLOAD) == 0:
-                   print("PAYLOAD == 0")
-                   bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto")
-               else:
-                   print("PAYLOAD == 1")
-                   bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
+        print("message.node_id == 30")
+        if message.sub_type == 16:
+            print("message.sub_type == 16")
+            print("PAYLOAD = "+str(PAYLOAD))
+            if int(PAYLOAD) == ALARM_STATUS:
+                print("message.payload == "+str(ALARM_STATUS))
+                return()
+            else:
+                ALARM_STATUS = int(PAYLOAD)
+                if int(PAYLOAD) == 0:
+                    print("PAYLOAD == 0")
+                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto")
+                else:
+                    print("PAYLOAD == 1")
+                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
     else:
         print("node_id="+str(message.node_id))
         if int(message.sub_type) == 0: #it is a temperature
@@ -102,7 +102,9 @@ def MySensorEvent(message):
                 print("it's humidity")
 
         print("test")
-        if MaggiordomoID == "Battista":
+        sensorfilename = "sensor"+str(message.node_id)+".log"
+        
+	if MaggiordomoID == "Battista":
             if message.node_id == 8: #soggiorno
                 sensorfilename = "sensor1.log"
             else:
@@ -111,23 +113,23 @@ def MySensorEvent(message):
                 else:
                     sensorfilename = "sensor"+str(message.node_id)+".log"
         else:
-          if MaggiordomoID == "Ursula":
-            if message.node_id == 15: #zona notte
-                sensorfilename = "sensor1.log"
-            else:
-                sensorfilename = "sensor"+str(message.node_id)+".log"
-          else:
-            if MaggiordomoID == "Ambrogio":
-              if message.node_id == 5: #giardino
-                  sensorfilename = "sensor1.log"
-              else:
-                if message.node_id == 4: #zona notte
-                  sensorfilename = "sensor2.log"
+            if MaggiordomoID == "Ursula":
+                if message.node_id == 15: #zona notte
+                    sensorfilename = "sensor1.log"
                 else:
-                  if message.node_id == 10: # cucina
-                    sensorfilename = "sensor3.log"
+                    sensorfilename = "sensor"+str(message.node_id)+".log"
             else:
-              sensorfilename = "sensor"+str(message.node_id)+".log"
+                if MaggiordomoID == "Ambrogio":
+                    if message.node_id == 5: #giardino
+                        sensorfilename = "sensor1.log"
+                    else:
+                        if message.node_id == 4: #zona notte
+                            sensorfilename = "sensor2.log"
+                        else:
+                            if message.node_id == 10: # cucina
+                                sensorfilename = "sensor3.log"
+                else:
+                    sensorfilename = "sensor"+str(message.node_id)+".log"
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
