@@ -85,10 +85,10 @@ def MySensorEvent(message):
                 ALARM_STATUS = int(PAYLOAD)
                 if int(PAYLOAD) == 0:
                     print("PAYLOAD == 0")
-                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto")
+                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
                 else:
                     print("PAYLOAD == 1")
-                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento")
+                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
     else:
         print("node_id="+str(message.node_id))
         if int(message.sub_type) == 0: #it is a temperature
