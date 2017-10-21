@@ -82,7 +82,7 @@ try:
     MaggiordomoIDFile = open(IDpath,'r')
     MaggiordomoID = MaggiordomoIDFile.read().strip()
     MaggiordomoIDFile.close()
-    bot.sendMessage(CHATID, "sono "+MaggiordomoID+". Mi sono appena svegliato")
+    bot.sendMessage(CHATID, "sono "+MaggiordomoID+". Mi sono appena svegliato", disable_notification=True)
 
 except IOError: 
     logging.error("Non ho trovato il file con ID del maggiordomo. Genero ID e lo salvo")
@@ -91,9 +91,9 @@ except IOError:
     MaggiordomoIDFile.write(MaggiordomoID)
     MaggiordomoIDFile.close()
 
-    bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
+    bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato", disable_notification=True)
 
-bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress)
+bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress, disable_notification=True)
 
 # Keep the program running.
 #while 1:
