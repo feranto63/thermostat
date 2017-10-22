@@ -106,8 +106,10 @@ while 1:
 	
     # To set sensor 1, child 1, sub-type V_LIGHT (= 2), with value 1.
     GATEWAY.set_child_value(31, 1, 2, 1)
+    print("settato ON")
     # Keep the program running.
     time.sleep(10)
     # To set sensor 1, child 1, sub-type V_LIGHT (= 2), with value 1.
     GATEWAY.set_child_value(31, 1, 2, 0)
+    print("settato off")
     time.sleep(10)
