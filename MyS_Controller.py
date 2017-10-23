@@ -171,11 +171,11 @@ def read_heating_standby():
 
 #################### accende o spegne i termosifoni #############
 def TurnON_termosifoni(heatID):
-	GATEWAY.set_child_value(heatID, 1, 2, 1)
+	GATEWAY.set_child_value(heatID, 1, 2, 0)
 	return()
 
 def TurnOFF_termosifoni(heatID):
-	GATEWAY.set_child_value(heatID, 1, 2, 0)
+	GATEWAY.set_child_value(heatID, 1, 2, 1)
 	return()
 
 ############ legge da file il token del Telegram Bot e della chat id
