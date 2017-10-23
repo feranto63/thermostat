@@ -145,28 +145,28 @@ def MySensorEvent(message):
 ######## legge da file lo stato del riscaldamento e dello standby ###########
 def read_heating_status():
 	try:
-    	f = open("heating_status","r")  #apre il file dei dati in read mode
-    	h_status=f.read().strip()   #legge la info di presence sul file
-    	f.close()  #chiude il file dei dati e lo salva
-    	if h_status == "ON":
-        	heating_status = True
-    	else:
-        	heating_status = False
+		f = open("heating_status","r")  #apre il file dei dati in read mode
+		h_status=f.read().strip()   #legge la info di presence sul file
+		f.close()  #chiude il file dei dati e lo salva
+		if h_status == "ON":
+			heating_status = True
+		else:
+			heating_status = False
 	except IOError:
-    	heating_status = False  #se il file non e' presente imposto la presence a False
+		heating_status = False  #se il file non e' presente imposto la presence a False
 	return(heating_status)
 
 def read_heating_standby():
 	try:
-    	f = open("heating_standby","r")  #apre il file dei dati in read mode
-    	hby_status=f.read().strip()   #legge la info di presence sul file
-    	f.close()  #chiude il file dei dati e lo salva
-    	if hby_status == "ON":
-        	heating_standby = True
-    	else:
-        	heating_standby = False
+		f = open("heating_standby","r")  #apre il file dei dati in read mode
+		hby_status=f.read().strip()   #legge la info di presence sul file
+		f.close()  #chiude il file dei dati e lo salva
+		if hby_status == "ON":
+			heating_standby = True
+		else:
+			heating_standby = False
 	except IOError:
-    	heating_standby = False  #se il file non e' presente imposto la presence a False
+		heating_standby = False  #se il file non e' presente imposto la presence a False
 	return(heating_standby)
 
 #################### accende o spegne i termosifoni #############
