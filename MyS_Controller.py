@@ -1,6 +1,6 @@
 
 
-HEAD_ID =31 #da leggere da file di configurazione
+HEAT_ID =31 #da leggere da file di configurazione
 
 dbname='/var/www/templog.db'
 
