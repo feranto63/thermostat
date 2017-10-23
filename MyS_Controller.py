@@ -14,7 +14,7 @@ import configparser as ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
-HEAT_ID = settings.get('SectionOne','HEAT_ID')
+HEAT_ID = settings.getint('SectionOne','HEAT_ID')
 
 dbname='/var/www/templog.db'
 
