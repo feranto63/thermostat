@@ -253,7 +253,11 @@ except IOError:
 bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dell'antifurto", disable_notification=True)
 
 HEAT_STATUS = read_heating_status()
-print("initial heat status"+HEAT_STATUS)
+print("initial heat status ")
+if HEAT_STATUS:
+	print("ON")
+else:
+	print("OFF")
 
 
 #restore acensione riscaldamento
