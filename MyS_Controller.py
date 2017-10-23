@@ -256,17 +256,17 @@ HEAT_STATUS = read_heating_status()
 
 #restore acensione riscaldamento
 if HEAT_STATUS:
-	turnON_termosifoni(HEAT_ID)
+	TurnON_termosifoni(HEAT_ID)
 else:
-	turnOFF_termosifoni(HEAT_ID)
+	TurnOFF_termosifoni(HEAT_ID)
 
 # Keep the program running.
 while 1:
 	CURRENT_HEAT=read_heating_status()
 	if CURRENT_HEAT != HEAT_STATUS:
 		if CURRENT_HEAT:
-			turnON_termosifoni(HEAT_ID)
+			TurnON_termosifoni(HEAT_ID)
 		else:
-			turnOFF_temosifoni(HEAT_ID)
+			TurnOFF_termosifoni(HEAT_ID)
 		HEAT_STATUS = CURRENT_HEAT
 	time.sleep(1)
