@@ -1,6 +1,22 @@
+#!/usr/bin/python
+#coding: utf-8
+
+import telepot.api
+
+# DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
+import sys
+
+#PROPRIETARIO = sys.argv[1]  # get user from command-line
+owner_found = False
 
 
-HEAT_ID =31 #da leggere da file di configurazione
+import configparser as ConfigParser
+
+settings = ConfigParser.ConfigParser()
+settings.read('thermogram2.ini')
+HEAT_ID = settings.get('SectionOne','HEAT_ID')
+
+# HEAT_ID =31 #da leggere da file di configurazione
 
 dbname='/var/www/templog.db'
 
