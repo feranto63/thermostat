@@ -263,12 +263,10 @@ else:
 # Keep the program running.
 while 1:
 	CURRENT_HEAT=read_heating_status()
-	if CURRENT_HEAT == HEAT_STATUS:
-		#do nothing
-	else:
+	if CURRENT_HEAT != HEAT_STATUS:
 		if CURRENT_HEAT:
 			turnON_termosifoni(HEAT_ID)
 		else:
 			turnOFF_temosifoni(HEAT_ID)
 		HEAT_STATUS = CURRENT_HEAT
-    time.sleep(1)
+	time.sleep(1)
