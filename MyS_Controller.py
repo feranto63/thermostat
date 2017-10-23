@@ -16,8 +16,6 @@ settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
 HEAT_ID = settings.get('SectionOne','HEAT_ID')
 
-# HEAT_ID =31 #da leggere da file di configurazione
-
 dbname='/var/www/templog.db'
 
 
