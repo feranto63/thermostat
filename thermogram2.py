@@ -908,7 +908,7 @@ def connect(retries=5, delay=3):
 
 ############## gestione del riscaldamento ##################
 def setRadioHeat(xID, heat_toggle):
-    if xID = 0:
+    if xID == 0:
         GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
         GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
     else:
@@ -932,7 +932,7 @@ def TurnOnHeating():
     
     if not heating_overwrite and heating_standby:
         bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
-        if HEAT_ID = 0:
+        if HEAT_ID == 0:
             GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
             GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
         else:
@@ -950,7 +950,7 @@ def TurnOnHeating():
                 GPIO.output(HEAT2_PIN, HEAT_ON) # accendo la stufa secondaria
                 print('accendo la stufa secondaria')
         else: # c'e' solo la caldaia primaria e l'accendo
-            if HEAT_ID=0:
+            if HEAT_ID == 0:
                 GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
             else:
                 setRadoHeat(HEAT_ID,"ON")
@@ -974,7 +974,7 @@ def TurnOffHeating():
     f.write('OFF')
     f.close()  #chiude il file dei dati e lo salva
     
-    if HEAT_ID=0:
+    if HEAT_ID == 0:
         GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
     else:
         setRadioHeat(HEAT_ID,"OFF")
