@@ -159,7 +159,7 @@ def MySensorEvent(message):
 ######## legge da file lo stato del riscaldamento e dello standby ###########
 def read_heating_status():
 	try:
-		f = open("heating_status","r")  #apre il file dei dati in read mode
+		f = open("heat_toggle","r")  #apre il file dei dati in read mode
 		h_status=f.read().strip()   #legge la info di presence sul file
 		f.close()  #chiude il file dei dati e lo salva
 		if h_status == "ON":
