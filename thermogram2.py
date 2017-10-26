@@ -953,7 +953,7 @@ def TurnOnHeating():
             if HEAT_ID == 0:
                 GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 1 (3.3V, on) per accendere i termosifoni
             else:
-                setRadoHeat(HEAT_ID,"ON")
+                setRadioHeat(HEAT_ID,"ON")
             print('accendo la caldaia unica')
         bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
         orario = time.localtime(time.time())
