@@ -103,10 +103,16 @@ def MySensorEvent(message):
                 ALARM_STATUS = int(PAYLOAD)
                 if int(PAYLOAD) == 0:
                     print("PAYLOAD == 0")
-                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
+                    try:
+                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
+                    except:
+                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
                 else:
                     print("PAYLOAD == 1")
-                    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
+                    try:
+                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
+                    except:
+			bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
     else:
         print("node_id="+str(message.node_id))
         if int(message.sub_type) == 0: #it is a temperature
@@ -264,7 +270,7 @@ except IOError:
 
 #    bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato")
 
-bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dell'antifurto", disable_notification=True)
+bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dei sensori wireless e dell'antifurto", disable_notification=True)
 
 HEAT_STATUS = read_heating_status()
 print("initial heat status ")
@@ -281,7 +287,7 @@ else:
 	TurnOFF_termosifoni(HEAT_ID)
 
 # Keep the program running.
-while 1:
+while True:
 	CURRENT_HEAT=read_heating_status()
 	if CURRENT_HEAT != HEAT_STATUS:
 		if CURRENT_HEAT:
