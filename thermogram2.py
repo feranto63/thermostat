@@ -62,11 +62,11 @@ TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
 # 5 = sala hobby
 
 main_sensor = int(settings.get('SectionOne','main_sensor'))
-sensor_value = [[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ', 0.0, 0.0]] #time,temp,humid
+sensor_value = [[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0]] #time,temp,humid
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
-sensori = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+sensori = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
 ExtTempID = -99 #indice del sensore della temperatura esterna, se -99 non c'e' sensore esterno altrimenti è l'indice del sensore esterno
 for i in range (NUM_SENSORI):
     s_type = int(sensor_type[i])
@@ -101,8 +101,8 @@ overwrite_duration = 1000 #ore di attivazione dell'overwrite; se = 1000 è perma
 overwrite_temp = 25 #temperatura in gradi di funzionamento in overwrite da settare sia per /turnon che per /turnoff
 
 
-#MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # indica se usare la caldaia principale nell'ora x
-MAIN_HEAT  = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]  # indica se usare la caldaia principale nell'ora x
+MAIN_HEAT =  [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # indica se usare la caldaia principale nell'ora x
+#MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]  # indica se usare la caldaia principale nell'ora x
 #            [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
