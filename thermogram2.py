@@ -1141,7 +1141,10 @@ if male_maggiordomo:
 else:
     sex_indicator="a"
 welcome_message = nome_maggiordomo+" si e' appena svegliat"+sex_indicator+", Padrone"
-bot.sendMessage(CHAT_ID, welcome_message, disable_notification=debug_notify)
+try:
+    bot.sendMessage(CHAT_ID, welcome_message, disable_notification=debug_notify)
+except:
+    bot.sendMessage(CHAT_ID, "."+welcome_message, disable_notification=debug_notify)
 
 if heating_status and not heating_standby:
     TurnOnHeating()
@@ -1156,7 +1159,10 @@ bot.sendMessage(CHAT_ID, 'Come ti posso aiutare?', reply_markup=main_show_keyboa
 #predispone la tastiera per i visitatori della casa
 if GATE_PRESENT:
     show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
-    bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard, disable_notification=debug_notify)
+    try:
+        bot.sendMessage(CHAT_ID_GATE, "Premere /apri per aprire il cancello", reply_markup=show_keyboard, disable_notification=debug_notify)
+    except:
+        bot.sendMessage(CHAT_ID_GATE, ".Premere /apri per aprire il cancello", reply_markup=show_keyboard, disable_notification=debug_notify)
 
 mail = connect() #apre la casella di posta
 
@@ -1204,7 +1210,10 @@ while True:
     if heating_overwrite:
         if now >= overwrite_timer:
             heating_overwrite = False
-            bot.sendMessage(CHAT_ID, "E'terminato il periodo di overwrite",disable_notification=True)
+            try:
+                bot.sendMessage(CHAT_ID, "E'terminato il periodo di overwrite",disable_notification=True)
+            except:
+                bot.sendMessage(CHAT_ID, ".E'terminato il periodo di overwrite",disable_notification=True)
         else: #ancora non e' terminato il periodo di overwrite
             if overwrite_temp > 0:  #overwrite settato a turnON
                 if not heating_status:
