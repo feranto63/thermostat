@@ -1136,7 +1136,7 @@ help_or_gate = '/help'
 if GATE_PRESENT:
     help_or_gate = '/apri'
 
-main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/pulizie',help_or_gate]]} #tastiera personalizzata
+main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/turnon 1','/annulla'],['/pulizie',help_or_gate]]} #tastiera personalizzata
 if male_maggiordomo:
     sex_indicator="o"
 else:
