@@ -932,7 +932,10 @@ def TurnOnHeating():
     f.close()  #chiude il file dei dati e lo salva
     
     if not heating_overwrite and heating_standby:
-        bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+        try:
+            bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+        except:
+            bot.sendMessage(CHAT_ID, ".Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
         if HEAT_ID == 0:
             GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
             GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
@@ -956,7 +959,10 @@ def TurnOnHeating():
             else:
                 setRadioHeat(HEAT_ID,"ON")
             print('accendo la caldaia unica')
-        bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
+        try:
+            bot.sendMessage(CHAT_ID, "Accendo il riscaldamento, Padrone")
+        except:
+            bot.sendMessage(CHAT_ID, ".Accendo il riscaldamento, Padrone")
         orario = time.localtime(time.time())
         localtime = time.asctime( orario )
         ora_minuti = time.strftime("%H:%M", orario)
@@ -984,7 +990,10 @@ def TurnOffHeating():
         GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
         print('spengo la stufa secondaria')
     
-    bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
+    try:
+        bot.sendMessage(CHAT_ID, "Spengo il riscaldamento, Padrone")
+    except:
+        bot.sendMessage(CHAT_ID, ".Spengo il riscaldamento, Padrone")
     orario = time.localtime(time.time())
     localtime = time.asctime( orario )
     ora_minuti = time.strftime("%H:%M", orario)
