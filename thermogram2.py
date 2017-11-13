@@ -105,6 +105,7 @@ MAIN_HEAT =  [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # 
 #MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # indica se usare la caldaia principale nell'ora x
 #MAIN_HEAT = [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]  # indica se usare la caldaia principale nell'ora x
 #            [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+FORCE_HOUR = [1,1,1,1,1,1,1,1,1,1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]  # indica se forzare la presenza
 
 lucchetto_chiuso = '\U0001f512' # '\xF0\x9F\x94\x92'  #	lock U+1F512
 lucchetto_aperto = '\U0001f513' # '\xF0\x9F\x94\x93'  #    open lock U+1F513	
@@ -715,6 +716,8 @@ def set_presence(n, presence_msg):
 
         localtime = time.asctime( orario )
         ora_minuti = time.strftime("%H:%M", orario)
+        current_ora = time.strftime("%H", orario)
+        
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
         filepresence.close()  #chiude il file dei dati e lo salva
@@ -776,12 +779,13 @@ def set_presence(n, presence_msg):
                 f.write('ON')
                 f.close()  #chiude il file dei dati e lo salva
                 if not heating_overwrite and heating_status: #se termosifoni attivi
-                    TurnOffHeating()
-                    #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
-                    try:
-                        bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
-                    except:
-                        bot.sendMessage(CHAT_ID, ".Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+                    if FORCE_HOUR[current_ora] == 0:
+                        TurnOffHeating()
+                        #GPIO.output(HEAT_PIN, HEAT_OFF) # spenge i termosifoni
+                        try:
+                            bot.sendMessage(CHAT_ID, "Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
+                        except:
+                            bot.sendMessage(CHAT_ID, ".Ho messo in stand by il riscaldamento in attesa che rientri qualcuno a casa",disable_notification=True)
         else: #almeno una persona in casa
             if heating_standby: #se standby attivo
                 heating_standby = False
