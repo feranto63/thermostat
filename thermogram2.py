@@ -1184,6 +1184,9 @@ now = time.time()
 orario = time.localtime(now)
 curr_hour=int(time.strftime("%H",orario))
 previous_heat = MAIN_HEAT[curr_hour] #previous_heat e' la caldaia dell'ora precedente
+overwrite_timer = now #inizializza overwrite_timer
+pulizie_status = False #inizializza pulizie status
+pulizie_timer = now #inizializza pulizie_timer
 
 while True:
     now = time.time()
