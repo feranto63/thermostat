@@ -716,7 +716,7 @@ def set_presence(n, presence_msg):
 
         localtime = time.asctime( orario )
         ora_minuti = time.strftime("%H:%M", orario)
-        current_ora = time.strftime("%H", orario)
+        current_ora = int(time.strftime("%H", orario))
         
         filepresence = open("filepresence","a")  #apre il file dei dati in append mode, se il file non esiste lo crea
         filepresence.write(presence_msg+" "+localtime+"\n")  #scrive la info di presence ed il timestam sul file
