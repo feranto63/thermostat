@@ -924,7 +924,7 @@ def setRadioHeat(xID, heat_toggle):
 
 def TurnOnHeating():
     global heating_status, heating_standby, heating_overwrite, FILEHEATING, CHAT_ID
-    global HEAT_PIN, HEAT2_PIN, HEAT_ON, HEAT_OFF, SECONDARY_HEAT, MAIN_HEAT
+    global HEAT_PIN, HEAT2_PIN, HEAT_ON, HEAT_OFF, SECONDARY_HEAT, MAIN_HEAT, FORCE_HOUR
 
     orario = time.localtime(time.time())
     ora_attuale = int(time.strftime("%H", orario))
@@ -935,7 +935,7 @@ def TurnOnHeating():
     f.write('ON')
     f.close()  #chiude il file dei dati e lo salva
     
-    if not heating_overwrite and heating_standby:
+    if not heating_overwrite and heating_standby and FORCE_HOUR[ora_attuale] == 0:
         try:
             bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
         except:
