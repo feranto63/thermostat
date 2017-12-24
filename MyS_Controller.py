@@ -268,6 +268,28 @@ Message
     ack - True is message was an ACK, false otherwise
     sub_type - the message sub_type (int)
     payload - the payload of the message (string)
+    
+SerialGateway/TCPGateway/MQTTGateway
+    sensors - a dict containing all nodes for the gateway; node is of type Sensor
+
+Sensor - a sensor node
+    children - a dict containing all child sensors for the node
+    sensor_id - node id on the MySensors network
+    type - 17 for node or 18 for repeater
+    sketch_name
+    sketch_version
+    battery_level
+    protocol_version - the mysensors protocol version used by the node
+
+ChildSensor - a child sensor
+    id - Child id on the parent node
+    type - Data type, S_HUM, S_TEMP etc.
+    values - a dictionary of values (V_HUM, V_TEMP, etc.)
+    
+Getting the type and values of node 23, child sensor 4 would be performed as follows:
+
+s_type = GATEWAY.sensors[23].children[4].type
+values = GATEWAY.sensors[23].children[4].values
 '''
 
 ALARM_STATUS = 1
@@ -322,4 +344,6 @@ while True:
 		else:
 			TurnOFF_termosifoni(HEAT_ID)
 		HEAT_STATUS = CURRENT_HEAT
+    print("battery level="+ int(GATEWAY.sensors[34].battery_level)
+          
 	time.sleep(1)
