@@ -62,7 +62,7 @@ TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
 # 5 = sala hobby
 
 main_sensor = int(settings.get('SectionOne','main_sensor'))
-sensor_value = [[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ',0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0],[' ', 0.0, 0.0]] #time,temp,humid
+sensor_value = [[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0]] #time,temp,humid
 
 owner_found= settings.getboolean('SectionOne','owner_found')
 
@@ -500,7 +500,7 @@ def handle(msg):
     elif command == '/all':
         messaggio=""
         for i in range (NUM_SENSORI):
-            messaggio+="("+sensori[i]+") T="+str("%0.1f" % float(sensor_value[i][1]))+" C, H="+str("%0.1f" % float(sensor_value[i][2]))+"%, t="+sensor_value[i][0]+"\n"
+            messaggio+="("+sensori[i]+") T="+str("%0.1f" % float(sensor_value[i][1]))+" C, H="+str("%0.1f" % float(sensor_value[i][2]))+"%, Batt="+str("%0.1f" % float(sensor_vale[i][3]))+"% t="+sensor_value[i][0]+"\n"
         bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     else:
         bot.sendMessage(CHAT_ID, "'"+command+"'?? Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
@@ -658,6 +658,10 @@ def read_sensors():
                 sensor_value[i][2]= "%.1f" % float(value[3])
             except:
                 sensor_value[i][2]= 0.0
+            try:
+                sensor_value[i][3]= "%.1f" % float(value[4])
+            except:
+                sensor_value[i][4]= 0.0
         except IOError:
             sensor_value[i][1] = -99  #se il file non e' presente imposto il sensore a -99
 
