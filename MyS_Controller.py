@@ -268,7 +268,7 @@ Message
     ack - True is message was an ACK, false otherwise
     sub_type - the message sub_type (int)
     payload - the payload of the message (string)
-    
+
 SerialGateway/TCPGateway/MQTTGateway
     sensors - a dict containing all nodes for the gateway; node is of type Sensor
 
