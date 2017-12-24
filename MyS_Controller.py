@@ -86,11 +86,14 @@ def MySensorEvent(message):
     localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
     ora_minuti = time.strftime("%H:%M", orario)
 	
+    print("sto per maneggiare un messaggio")
     print("sensor_update " + str(message.node_id))
+    print("message.type " + str(message.type))
     print("message.sub_type: "+str(message.sub_type))
     print("message.payload: "+message.payload)
 	
     PAYLOAD = message.payload
+    
     if message.node_id == 30:
         print("message.node_id == 30")
         if message.sub_type == 16:
