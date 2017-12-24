@@ -344,6 +344,5 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
-    print("battery level="+ int(GATEWAY.sensors[34].battery_level)
-          
+    print("battery level="+ int(GATEWAY.sensors[34].battery_level))
     time.sleep(1)
