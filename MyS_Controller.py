@@ -75,7 +75,7 @@ logging.basicConfig(
         level=logging.WARN)
 """
 
-sensor = [['2000-01-01 00:00:00',0.0, 0.0] for x in range (100)]
+sensor = [['2000-01-01 00:00:00',0.0, 0.0, 0.0] for x in range (100)]
 
 def MySensorEvent(message):
     global ALARM_STATUS, sensor, MaggiordomoID
@@ -115,45 +115,52 @@ def MySensorEvent(message):
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
     else:
         print("node_id="+str(message.node_id))
-        if int(message.sub_type) == 0: #it is a temperature
-            sensor[message.node_id][1] = float(PAYLOAD)
-            sensor[message.node_id][0] = localtime
-            print("it's temperature")
-        else:
-            if int(message.sub_type) == 1: # it is a humidity
-                sensor[message.node_id][2] = float(PAYLOAD)
+        if  int(message.type) == 1:  # is a SET message
+            if int(message.sub_type) == 0: #it is a temperature
+                sensor[message.node_id][1] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
-                print("it's humidity")
-
+                print("it's temperature")
+            else:
+                if int(message.sub_type) == 1: # it is a humidity
+                    sensor[message.node_id][2] = float(PAYLOAD)
+                    sensor[message.node_id][0] = localtime
+                    print("it's humidity")
+        elif int(message.type) == 3: # is an INTERNAL message
+            if int(message.subtype) == 0: # it's a battery level
+                sensor[message.node_id][3] = float(PAYLOAD)
+                sensor[message.node_id][0] = localtime
+                print("it's battery level")
+            else:
+                print("internal message sconosciuto:"+str(message.type))
+                
         print("test")
         sensorfilename = "sensor"+str(message.node_id)+".log"
         
         if MaggiordomoID == "Battista":
             if message.node_id == 8: #soggiorno
                 sensorfilename = "sensor1.log"
+            elif message.node_id == 31: #giardino
+                sensorfilename = "sensor2.log"
             else:
-                if message.node_id == 31: #giardino
-                    sensorfilename = "sensor2.log"
-                else:
-                    sensorfilename = "sensor"+str(message.node_id)+".log"
+                sensorfilename = "sensor"+str(message.node_id)+".log"
+        elif MaggiordomoID == "Ursula":
+            if message.node_id == 15: #zona notte
+                sensorfilename = "sensor1.log"
+            else:
+                sensorfilename = "sensor"+str(message.node_id)+".log"
+        elif MaggiordomoID == "Ambrogio":
+            if message.node_id == 5: #giardino
+                sensorfilename = "sensor1.log"
+            elif message.node_id == 4: #zona notte
+                sensorfilename = "sensor2.log"
+            elif message.node_id == 10: # cucina
+                sensorfilename = "sensor3.log"
+            elif message.node_id == 34: # sala hobby
+                sensorfilename = "sensor4.log"
+
         else:
-            if MaggiordomoID == "Ursula":
-                if message.node_id == 15: #zona notte
-                    sensorfilename = "sensor1.log"
-                else:
-                    sensorfilename = "sensor"+str(message.node_id)+".log"
-            else:
-                if MaggiordomoID == "Ambrogio":
-                    if message.node_id == 5: #giardino
-                        sensorfilename = "sensor1.log"
-                    else:
-                        if message.node_id == 4: #zona notte
-                            sensorfilename = "sensor2.log"
-                        else:
-                            if message.node_id == 10: # cucina
-                                sensorfilename = "sensor3.log"
-                else:
-                    sensorfilename = "sensor"+str(message.node_id)+".log"
+            sensorfilename = "sensor"+str(message.node_id)+".log"
+
         print("sensorfilename ="+sensorfilename)
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
@@ -245,6 +252,17 @@ print ('running Sensor Controller ...')
 myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
 
 import mysensors.mysensors as mysensors
+
+'''
+Message
+    gateway - the gateway instance
+    node_id - the sensor node identifier
+    child_id - the child sensor id
+    type - the message type (int)
+    ack - True is message was an ACK, false otherwise
+    sub_type - the message sub_type (int)
+    payload - the payload of the message (string)
+'''
 
 ALARM_STATUS = 1
 
