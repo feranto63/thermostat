@@ -500,7 +500,7 @@ def handle(msg):
     elif command == '/all':
         messaggio=""
         for i in range (NUM_SENSORI):
-            messaggio+="("+sensori[i]+") T="+str("%0.1f" % float(sensor_value[i][1]))+" C, H="+str("%0.1f" % float(sensor_value[i][2]))+"%, Batt="+str("%0.1f" % float(sensor_vale[i][3]))+"% t="+sensor_value[i][0]+"\n"
+            messaggio+="("+sensori[i]+") T="+str("%0.1f" % float(sensor_value[i][1]))+" C, H="+str("%0.1f" % float(sensor_value[i][2]))+"%, Batt="+str("%0.1f" % float(sensor_value[i][3]))+"% t="+sensor_value[i][0]+"\n"
         bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     else:
         bot.sendMessage(CHAT_ID, "'"+command+"'?? Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
