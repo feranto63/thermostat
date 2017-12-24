@@ -132,7 +132,7 @@ def MySensorEvent(message):
             print("ho trovato un internal message")
             if int(message.sub_type) == 0: # it's a battery level
                 print("trovato battery level")
-                sensor[message.node_id][3] = float(PAYLOAD)
+                sensor[message.node_id][3] = int(PAYLOAD)
                 print("memorizzato valore battery level")
                 sensor[message.node_id][0] = localtime
                 print("it's battery level")
