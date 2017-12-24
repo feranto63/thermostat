@@ -126,12 +126,12 @@ def MySensorEvent(message):
                     sensor[message.node_id][0] = localtime
                     print("it's humidity")
         elif int(message.type) == 3: # is an INTERNAL message
-            if int(message.subtype) == 0: # it's a battery level
+            if int(message.sub_type) == 0: # it's a battery level
                 sensor[message.node_id][3] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
                 print("it's battery level")
             else:
-                print("internal message sconosciuto:"+str(message.type))
+                print("internal message sconosciuto:"+str(message.sub_type))
                 
         print("test")
         sensorfilename = "sensor"+str(message.node_id)+".log"
