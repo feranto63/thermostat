@@ -127,7 +127,9 @@ def MySensorEvent(message):
                     print("it's humidity")
         elif int(message.type) == 3: # is an INTERNAL message
             if int(message.sub_type) == 0: # it's a battery level
+		print("trovato battery level")
                 sensor[message.node_id][3] = float(PAYLOAD)
+		print("memorizzato valore battery level")
                 sensor[message.node_id][0] = localtime
                 print("it's battery level")
             else:
