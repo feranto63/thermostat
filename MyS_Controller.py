@@ -337,13 +337,13 @@ else:
 
 # Keep the program running.
 while True:
-	CURRENT_HEAT=read_heating_status()
-	if CURRENT_HEAT != HEAT_STATUS:
-		if CURRENT_HEAT:
-			TurnON_termosifoni(HEAT_ID)
-		else:
-			TurnOFF_termosifoni(HEAT_ID)
-		HEAT_STATUS = CURRENT_HEAT
+    CURRENT_HEAT=read_heating_status()
+    if CURRENT_HEAT != HEAT_STATUS:
+        if CURRENT_HEAT:
+            TurnON_termosifoni(HEAT_ID)
+        else:
+            TurnOFF_termosifoni(HEAT_ID)
+        HEAT_STATUS = CURRENT_HEAT
     print("battery level="+ int(GATEWAY.sensors[34].battery_level)
           
-	time.sleep(1)
+    time.sleep(1)
