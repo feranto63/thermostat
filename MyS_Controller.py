@@ -219,7 +219,7 @@ def TurnON_termosifoni(heatID):
     
     retries = 4
     while retries > 0:
-        GATEWAY.set_child_value(heatID, 1, 2, 0, ack=1)
+        GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
 #        time.sleep(15)
         values = GATEWAY.sensors[heatID].children[1].values[2]
@@ -244,7 +244,7 @@ def TurnOFF_termosifoni(heatID):
     retries = 4
     while retries > 0:
 
-        GATEWAY.set_child_value(heatID, 1, 2, 1, ack=1)
+        GATEWAY.set_child_value(heatID, 1, 2, 1) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
 #        time.sleep(15)
         values = GATEWAY.sensors[heatID].children[1].values[2]
@@ -392,8 +392,8 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
-    # values = GATEWAY.sensors[HEAT_ID].children[1].values
-    # print(values)
+    values = GATEWAY.sensors[HEAT_ID].children[1].values
+    print(values)
 
     # print("battery level="+ str(GATEWAY.sensors[34].battery_level))
     time.sleep(1)
