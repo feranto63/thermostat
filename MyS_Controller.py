@@ -35,10 +35,10 @@ def log_w_sensor (t_stamp, node_id, temp, humid):   #orario,temp, tempDHT, humid
 
 
 				
-def save_sensorlog(filename, t_stamp, temp, humidity):
+def save_sensorlog(filename, t_stamp, temp, humidity, battery):
     filesensor = open(filename,"w")  #apre il file di log del sensore in write mode, se il file non esiste lo crea
     #####   print (( 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)))
-    filesensor.write(t_stamp +" "+str(temp)+" "+str(humidity))
+    filesensor.write(t_stamp +" "+str(temp)+" "+str(humidity)+" "+str(battery))
     filesensor.close()  #chiude il file dei dati e lo salva
 
 			
@@ -171,7 +171,9 @@ def MySensorEvent(message):
         print("timestamp="+sensor[message.node_id][0])
         print("temp="+str(sensor[message.node_id][1]))
         print("Humidity="+str(sensor[message.node_id][2]))
-        save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2])
+        print("Battery="+str(sensor[message.node_id][3]))
+
+        save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2], sensor[message.node_id][3])
     return()
 
 
