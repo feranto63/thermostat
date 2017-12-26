@@ -87,64 +87,64 @@ def MySensorEvent(message):
     localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
     ora_minuti = time.strftime("%H:%M", orario)
 	
-    print("sto per maneggiare un messaggio")
-    print("sensor_update " + str(message.node_id))
-    print("message.type " + str(message.type))
-    print("message.sub_type: "+str(message.sub_type))
-    print("message.payload: "+message.payload)
+#    print("sto per maneggiare un messaggio")
+#    print("sensor_update " + str(message.node_id))
+#    print("message.type " + str(message.type))
+#    print("message.sub_type: "+str(message.sub_type))
+#    print("message.payload: "+message.payload)
 	
     PAYLOAD = message.payload
     
     if message.node_id == 30:
-        print("message.node_id == 30")
+#        print("message.node_id == 30")
         if message.sub_type == 16:
-            print("message.sub_type == 16")
-            print("PAYLOAD = "+str(PAYLOAD))
+#            print("message.sub_type == 16")
+#            print("PAYLOAD = "+str(PAYLOAD))
             if int(PAYLOAD) == ALARM_STATUS:
-                print("message.payload == "+str(ALARM_STATUS))
+#                print("message.payload == "+str(ALARM_STATUS))
                 return()
             else:
                 ALARM_STATUS = int(PAYLOAD)
                 if int(PAYLOAD) == 0:
-                    print("PAYLOAD == 0")
+ #                   print("PAYLOAD == 0")
                     try:
                         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
                     except:
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
                 else:
-                    print("PAYLOAD == 1")
+  #                  print("PAYLOAD == 1")
                     try:
                         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
                     except:
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
     else:
-        print("node_id="+str(message.node_id))
+ #       print("node_id="+str(message.node_id))
         if  int(message.type) == 1:  # is a SET message
             if int(message.sub_type) == 0: #it is a temperature
                 sensor[message.node_id][1] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
-                print("it's temperature")
+ #               print("it's temperature")
             elif int(message.sub_type) == 1: # it is a humidity
                     sensor[message.node_id][2] = float(PAYLOAD)
                     sensor[message.node_id][0] = localtime
-                    print("it's humidity")
+ #                   print("it's humidity")
             elif int(message.sub_type) == 2: # it is a V_STATUS
                     sensor[message.node_id][2] = float(PAYLOAD)
                     sensor[message.node_id][0] = localtime
-                    print("it's V_STATUS")
+ #                   print("it's V_STATUS")
 
         elif int(message.type) == 3: # is an INTERNAL message
-            print("ho trovato un internal message")
+#            print("ho trovato un internal message")
             if int(message.sub_type) == 0: # it's a battery level
-                print("trovato battery level")
+#                print("trovato battery level")
                 sensor[message.node_id][3] = int(PAYLOAD)
-                print("memorizzato valore battery level")
+#                print("memorizzato valore battery level")
                 sensor[message.node_id][0] = localtime
-                print("it's battery level")
+#                print("it's battery level")
             else:
                 print("internal message sconosciuto:"+str(message.sub_type))
                 
-        print("test")
+#        print("test")
         sensorfilename = "sensor"+str(message.node_id)+".log"
         
         if MaggiordomoID == "Battista":
@@ -173,11 +173,11 @@ def MySensorEvent(message):
             sensorfilename = "sensor"+str(message.node_id)+".log"
 
         sensor[message.node_id][3] = GATEWAY.sensors[message.node_id].battery_level
-        print("sensorfilename ="+sensorfilename)
-        print("timestamp="+sensor[message.node_id][0])
-        print("temp="+str(sensor[message.node_id][1]))
-        print("Humidity="+str(sensor[message.node_id][2]))
-        print("Battery="+str(sensor[message.node_id][3]))
+#        print("sensorfilename ="+sensorfilename)
+#        print("timestamp="+sensor[message.node_id][0])
+#        print("temp="+str(sensor[message.node_id][1]))
+#        print("Humidity="+str(sensor[message.node_id][2]))
+#        print("Battery="+str(sensor[message.node_id][3]))
 
         save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2], sensor[message.node_id][3])
     return()
@@ -223,7 +223,7 @@ def TurnON_termosifoni(heatID):
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         values = GATEWAY.sensors[heatID].children[1].values[2]
-        print(values)
+#        print(values)
         if int(values) == 0:
             retries = 0
             return()
@@ -248,7 +248,7 @@ def TurnOFF_termosifoni(heatID):
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         values = GATEWAY.sensors[heatID].children[1].values[2]
-        print(values)
+#        print(values)
         if int(values) == 1:
             retries = 0
             return()
@@ -392,8 +392,8 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
-    values = GATEWAY.sensors[HEAT_ID].children[1].values
-    print(values)
+#    values = GATEWAY.sensors[HEAT_ID].children[1].values
+#    print(values)
 
     # print("battery level="+ str(GATEWAY.sensors[34].battery_level))
     time.sleep(1)
