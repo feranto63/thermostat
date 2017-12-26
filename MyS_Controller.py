@@ -123,11 +123,15 @@ def MySensorEvent(message):
                 sensor[message.node_id][1] = float(PAYLOAD)
                 sensor[message.node_id][0] = localtime
                 print("it's temperature")
-            else:
-                if int(message.sub_type) == 1: # it is a humidity
+            elif int(message.sub_type) == 1: # it is a humidity
                     sensor[message.node_id][2] = float(PAYLOAD)
                     sensor[message.node_id][0] = localtime
                     print("it's humidity")
+            elif int(message.sub_type) == 2: # it is a V_STATUS
+                    sensor[message.node_id][2] = float(PAYLOAD)
+                    sensor[message.node_id][0] = localtime
+                    print("it's V_STATUS")
+
         elif int(message.type) == 3: # is an INTERNAL message
             print("ho trovato un internal message")
             if int(message.sub_type) == 0: # it's a battery level
@@ -383,5 +387,8 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
+    values = GATEWAY.sensors[heatID].children[1].values
+    print(values)
+
     # print("battery level="+ str(GATEWAY.sensors[34].battery_level))
     time.sleep(1)
