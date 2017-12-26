@@ -207,14 +207,50 @@ def read_heating_standby():
 
 #################### accende o spegne i termosifoni #############
 def TurnON_termosifoni(heatID):
-	resp = GATEWAY.set_child_value(heatID, 1, 2, 0)
-	print(resp)
-	return()
+    
+    orario = time.localtime(time.time())
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
+    ora_minuti = time.strftime("%H:%M", orario)
+    
+    retries = 4
+    while retries > 0:
+        GATEWAY.set_child_value(heatID, 1, 2, 0)
+	    values = GATEWAY.sensors[heatID].children[1].values
+        print(values)
+        if values == 0:
+            retries = 0
+            return()
+        else:
+            retries = retries-1
+    try:
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime)
+    except:
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime)
+    
+    return()
 
 def TurnOFF_termosifoni(heatID):
-	resp=GATEWAY.set_child_value(heatID, 1, 2, 1)
-	print (resp)
-	return()
+    orario = time.localtime(time.time())
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
+    ora_minuti = time.strftime("%H:%M", orario)
+    
+    retries = 4
+    while retries > 0:
+
+        GATEWAY.set_child_value(heatID, 1, 2, 1)
+	    values = GATEWAY.sensors[heatID].children[1].values
+        print(values)
+        if values == 1:
+            retries = 0
+            return()
+        else:
+            retries = retries-1
+    try:
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime)
+    except:
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime)
+
+    return()
 
 ############ legge da file il token del Telegram Bot e della chat id
 
