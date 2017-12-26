@@ -223,9 +223,9 @@ def TurnON_termosifoni(heatID):
         else:
             retries = retries-1
     try:
-        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime)
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime, disable_notification=True)
     except:
-        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime)
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito ad accendere i termosifoni alle "+localtime, disable_notification=True)
     
     return()
 
@@ -246,9 +246,9 @@ def TurnOFF_termosifoni(heatID):
         else:
             retries = retries-1
     try:
-        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime)
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime, disable_notification=True)
     except:
-        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime)
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime, disable_notification=True)
 
     return()
 
