@@ -401,7 +401,7 @@ while True:
     now = time.time()
     if now > check_timer:
         # verifica lo stato del relay e nel caso lo resetta
-        values = GATEWAY.sensors[HEAT_ID].children[1].values
+        values = GATEWAY.sensors[HEAT_ID].children[1].values[2]
         if int(values) == 1:
             relay_status = 'OFF'
         elif int(values) == 0:
