@@ -223,7 +223,7 @@ def TurnON_termosifoni(heatID):
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         values = GATEWAY.sensors[heatID].children[1].values[2]
-#        print(values)
+        print("rilettura stato relay:"+values)
         if int(values) == 0:
             retries = 0
             return()
@@ -248,7 +248,7 @@ def TurnOFF_termosifoni(heatID):
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         values = GATEWAY.sensors[heatID].children[1].values[2]
-#        print(values)
+        print("rilettura stato relay:"+values)
         if int(values) == 1:
             retries = 0
             return()
