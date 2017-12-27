@@ -370,11 +370,11 @@ except IOError:
 bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Inizio il monitoraggio dei sensori wireless e dell'antifurto", disable_notification=True)
 
 HEAT_STATUS = read_heating_status()
-print("initial heat status ")
+
 if HEAT_STATUS:
-	print("ON")
+	print("initial heat status ON")
 else:
-	print("OFF")
+	print("initial heat status OFF")
 
 
 #restore acensione riscaldamento
@@ -382,6 +382,11 @@ if HEAT_STATUS:
 	TurnON_termosifoni(HEAT_ID)
 else:
 	TurnOFF_termosifoni(HEAT_ID)
+    
+CHECK_INTERVAL = 15*60 # every 15 minutes (in seconds)
+
+now = time.time()
+check_timer = now + CHECK_INTERVAL  #inizializza check_timer
 
 # Keep the program running.
 while True:
@@ -392,8 +397,23 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
-#    values = GATEWAY.sensors[HEAT_ID].children[1].values
-#    print(values)
 
-    # print("battery level="+ str(GATEWAY.sensors[34].battery_level))
-    time.sleep(1)
+    now = time.time()
+    if now > check_timer:
+        # verifica lo stato del relay e nel caso lo resetta
+        values = GATEWAY.sensors[HEAT_ID].children[1].values
+        if int(values) == 1:
+            relay_status = 'OFF'
+        elif int(values) == 0:
+            relay_status = 'ON'
+        else:
+            print ("errore di lettura dello statoi del relay:"+values)
+        if relay_status != HEAT_STATUS:
+            if HEAT_STATUS:
+                TurnON_termosifoni(HEAT_ID)
+            else:
+                TurnOFF_termosifoni(HEAT_ID)
+
+        check_timer = now + CHECK_INTERVAL  #inizializza check_timer
+
+    time.sleep(10)
