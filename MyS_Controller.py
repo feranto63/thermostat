@@ -14,8 +14,8 @@ import configparser as ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
-#HEAT_ID = settings.getint('SectionOne','HEAT_ID')
-HEAT_ID = 31
+HEAT_ID = settings.getint('SectionOne','HEAT_ID')
+# HEAT_ID = 31
 
 dbname='/var/www/templog.db'
 
@@ -168,6 +168,9 @@ def MySensorEvent(message):
                 sensorfilename = "sensor3.log"
             elif message.node_id == 34: # sala hobby
                 sensorfilename = "sensor4.log"
+        elif MaggiordomoID == "Sas":
+            if message.node_id == 1: #zona notte
+                sensorfilename = "sensor1.log"
 
         else:
             sensorfilename = "sensor"+str(message.node_id)+".log"
