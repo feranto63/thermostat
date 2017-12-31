@@ -407,7 +407,14 @@ def handle(msg):
         if not pulizie_status:
             # set 2 hours off for cleaning
             pulizie_status=True
-            pulizie_timer = time.time() + 2*60*60 #2 hours
+            #t=time.time()
+            #lst=list(t)
+            #if t + 2*60*60 <= t:
+            #    lst[3]=23;
+            #    lst[4]=59;
+            #    pulizie_timer= time.mktime(tuple(lst))
+            #else:
+            pulizie_timer = t + 2*60*60 #2 hours
             if heating_status:
                 TurnOffHeating()
                 #GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
@@ -485,6 +492,7 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
     elif command == '/restart':
         bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
+        result = subprocess.call(['sudo','supervisorctl','restart','MyS_Controller'])
         result = subprocess.call(['sudo','supervisorctl','restart','thermogram2'])
     elif command == '/noip':
         bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
