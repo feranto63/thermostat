@@ -407,7 +407,7 @@ def handle(msg):
         if not pulizie_status:
             # set 2 hours off for cleaning
             pulizie_status=True
-            #t=time.time()
+            t=time.time()
             #lst=list(t)
             #if t + 2*60*60 <= t:
             #    lst[3]=23;
