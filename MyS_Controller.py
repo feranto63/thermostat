@@ -1,6 +1,11 @@
 #!/usr/bin/python
 #coding: utf-8
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+_LOGGER = logging.getLogger(__name__)
+
+
 import telepot.api
 
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
@@ -345,12 +350,11 @@ values = GATEWAY.sensors[23].children[4].values
 
 ALARM_STATUS = 1
 
-
-		############### WORKING HERE ##################
-
 #GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=False)
 GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=True,
-  persistence_file='/home/pi/git/thermostat/thermostat/mysensors.pickle')
+  persistence_file='/home/pi/git/thermostat/thermostat/mysensors.pickle', protocol_version='2.0')
+
+_LOGGER.debug("Starting Gateway")
 GATEWAY.start()
 
 
