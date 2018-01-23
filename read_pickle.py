@@ -1,3 +1,4 @@
+import pickle
 objects = []
 with (open("mysensors.pickle", "rb")) as openfile:
     while True:
