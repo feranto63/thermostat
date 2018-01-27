@@ -34,6 +34,12 @@ persona_IP=settings.get('SectionOne','persona_IP').split("\n")
 persona_BT=settings.get('SectionOne','persona_BT').split("\n")
 persona_WIFI=settings.get('SectionOne','persona_WIFI').split("\n")
 persona_ARP=settings.get('SectionOne','persona_ARP').split("\n")
+
+try:
+    NOTIFY_PRESENCE=settings.getboolean('SectionOne','NOTIFY_PRESENCE')
+except:
+    NOTIFY_PRESENCE=True
+    
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 
 HEAT_ID = settings.getint('SectionOne','HEAT_ID') # 0=relay on board; <int> = relay sensor ID
@@ -750,11 +756,12 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = True
                 messaggio_IN_OUT="Benvenuto a casa "+nome+"\nSono le "+ora_minuti
                 changed = True
-                try:
-                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
-                    print(res)
-                except:
-                    res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
+                if NOTIFY_PRESENCE:
+                    try:
+                        res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                        print(res)
+                    except:
+                        res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("IN")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
@@ -764,11 +771,12 @@ def set_presence(n, presence_msg):
                 persona_at_home[n] = False
                 messaggio_IN_OUT="Arrivederci a presto "+nome+"\nSono le "+ora_minuti
                 changed = True
-                try:
-                    res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
-                    print(res)
-                except:
-                    res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
+                if NOTIFY_PRESENCE:
+                    try:
+                        res=bot.sendMessage(CHAT_ID, messaggio_IN_OUT ,disable_notification=hide_notify)
+                        print(res)
+                    except:
+                        res=bot.sendMessage(CHAT_ID, '.'+messaggio_IN_OUT ,disable_notification=hide_notify)
                 f = open(persona[n]+"_at_home","w")  #apre il file dei dati in write mode, se il file non esiste lo crea
                 f.write("OUT")  #scrive la info di presence sul file
                 f.close()  #chiude il file dei dati e lo salva
