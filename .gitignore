@@ -10,3 +10,12 @@ logging.log
 fileheating
 fileschedule
 *.log
+*.jpg
+heating*
+Maggiordomo.ID
+*at_home
+heat_toggle
+mysensors.pickle
+BotAssistant.chatid
+BotAssistant.token
+thermoschedule
