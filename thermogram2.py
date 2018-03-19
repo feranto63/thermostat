@@ -360,6 +360,7 @@ def handle(msg):
         heating_overwrite = False
         bot.sendMessage(CHAT_ID, "Annullo overwrite",disable_notification=True)
     elif command == '/ho_freddo':
+
         bot.sendMessage(CHAT_ID, "Ho capito che hai freddo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
@@ -375,6 +376,33 @@ def handle(msg):
         # modifica la temperatura di comfort
         put_tempschedule(int(giorno_attuale),int(ora_attuale),float(CurTargetTemp-DELTA_TEMP))
         bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
+
+
+    elif command == '/set':
+	if len(command_list) == 3:
+	    time_to_set = int(command_list[1])
+	    temp_to_set = float(command_list[2])
+            bot.sendMessage(CHAT_ID,"Imposto temperatura %0.1f C per ora %d."%(temp_to_set,time_to_set))
+            for giorno in range(7):
+                put_tempschedule(giorno, int(time_to_set), float(temp_to_set))
+
+        else:
+            bot.sendMessage(CHAT_ID,"Errore: numero argomenti non valido.")
+
+    elif command == "/table":
+        get_tempschedule()
+        outstring = ".\tMON\tTUE\tWED\tTHU\tFRY\tSAT\tSUN\n"
+        for hour in range(24):
+            outstring+= str(hour)+":00|\t"
+            for day in range(7):
+                outstring += "%0.1f\t"%(mySchedule[day][hour])
+            outstring+="\n"
+            
+        bot.sendMessage(CHAT_ID, outstring)
+
+
+		
+
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
