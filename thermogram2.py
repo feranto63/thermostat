@@ -101,6 +101,7 @@ hide_notify = False
 debug_notify = True
 
 week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
+
 DELTA_TEMP = 0.2
 
 overwrite_duration = 1000 #ore di attivazione dell'overwrite; se = 1000 è permanente
@@ -275,6 +276,23 @@ def isnumeric(s):
         return False
 
 
+
+def parse_weekday(s):
+    s = s.upper()
+    if s in week_name:
+        return week_name.index(s)
+
+    try:
+        i = int(s)
+        if((i >= 0) and (i < 7)):
+            return i
+        else:
+            return None
+    except (ValueError,TypeError):
+        return None
+
+
+
 # definisce la variabile per la conferma dell'apertura del cancello
 opengate_confirming = False
 
@@ -379,11 +397,26 @@ def handle(msg):
 
 
     elif command == '/set':
-	if len(command_list) == 3:
-	    time_to_set = int(command_list[1])
-	    temp_to_set = float(command_list[2])
-            bot.sendMessage(CHAT_ID,"Imposto temperatura %0.1f C per ora %d."%(temp_to_set,time_to_set))
-            for giorno in range(7):
+	if len(command_list) in [3,4]:
+            if (len(command_list) == 3):
+                time_to_set = int(command_list[1])
+	        temp_to_set = float(command_list[2])
+                days_to_set = range(7)
+            else:
+                days_to_set = [ parse_weekday(command_list[1]) , ]
+                time_to_set = int(command_list[2])
+                temp_to_set = float(command_list[3])
+
+            if days_to_set[0] is None:
+                bot.sendMessage(CHAT_ID, "Errore: giorno settimana non valido.")
+                days_to_set = []
+                days_to_set_names = "NONE"
+            else:
+                days_to_set_names = ", ".join([week_name[d] for d in days_to_set ] )
+
+            bot.sendMessage(CHAT_ID,"Imposto temperatura %0.1f C per ora %d nei giorni: %s."%(temp_to_set,time_to_set, days_to_set_names))
+
+            for giorno in days_to_set:
                 put_tempschedule(giorno, int(time_to_set), float(temp_to_set))
 
         else:
@@ -391,7 +424,7 @@ def handle(msg):
 
     elif command == "/table":
         get_tempschedule()
-        outstring = ".\tMON\tTUE\tWED\tTHU\tFRY\tSAT\tSUN\n"
+        outstring = ".\t"+ "\t".join(week_name) + "\n"
         for hour in range(24):
             outstring+= str(hour)+":00|\t"
             for day in range(7):
