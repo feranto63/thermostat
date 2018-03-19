@@ -101,6 +101,7 @@ hide_notify = False
 debug_notify = True
 
 week_name=['DOM','LUN','MAR','MER','GIO','VEN','SAB'] #domenica = 0
+
 DELTA_TEMP = 0.2
 
 overwrite_duration = 1000 #ore di attivazione dell'overwrite; se = 1000 è permanente
@@ -275,6 +276,23 @@ def isnumeric(s):
         return False
 
 
+
+def parse_weekday(s):
+    s = s.upper()
+    if s in week_name:
+        return week_name.index(s)
+
+    try:
+        i = int(s)
+        if((i >= 0) and (i < 7)):
+            return i
+        else:
+            return None
+    except (ValueError,TypeError):
+        return None
+
+
+
 # definisce la variabile per la conferma dell'apertura del cancello
 opengate_confirming = False
 
@@ -360,6 +378,7 @@ def handle(msg):
         heating_overwrite = False
         bot.sendMessage(CHAT_ID, "Annullo overwrite",disable_notification=True)
     elif command == '/ho_freddo':
+
         bot.sendMessage(CHAT_ID, "Ho capito che hai freddo", disable_notification=debug_notify)
         f = open("heating_update","a")
         f.write("F,"+heatstat+","+giorno_ora_minuti+","+str("%0.1f" % CurTemp)+","+str(CurTargetTemp)+"\n")
@@ -375,6 +394,48 @@ def handle(msg):
         # modifica la temperatura di comfort
         put_tempschedule(int(giorno_attuale),int(ora_attuale),float(CurTargetTemp-DELTA_TEMP))
         bot.sendMessage(CHAT_ID, "Nuova temperatura di comfort per il giorno "+week_name[giorno_attuale]+" ora "+str(ora_attuale)+"="+str("%0.1f" % (CurTargetTemp-DELTA_TEMP)), disable_notification=debug_notify)
+
+
+    elif command == '/set':
+	if len(command_list) in [3,4]:
+            if (len(command_list) == 3):
+                time_to_set = int(command_list[1])
+	        temp_to_set = float(command_list[2])
+                days_to_set = range(7)
+            else:
+                days_to_set = [ parse_weekday(command_list[1]) , ]
+                time_to_set = int(command_list[2])
+                temp_to_set = float(command_list[3])
+
+            if days_to_set[0] is None:
+                bot.sendMessage(CHAT_ID, "Errore: giorno settimana non valido.")
+                days_to_set = []
+                days_to_set_names = "NONE"
+            else:
+                days_to_set_names = ", ".join([week_name[d] for d in days_to_set ] )
+
+            bot.sendMessage(CHAT_ID,"Imposto temperatura %0.1f C per ora %d nei giorni: %s."%(temp_to_set,time_to_set, days_to_set_names))
+
+            for giorno in days_to_set:
+                put_tempschedule(giorno, int(time_to_set), float(temp_to_set))
+
+        else:
+            bot.sendMessage(CHAT_ID,"Errore: numero argomenti non valido.")
+
+    elif command == "/table":
+        get_tempschedule()
+        outstring = ".\t"+ "\t".join(week_name) + "\n"
+        for hour in range(24):
+            outstring+= str(hour)+":00|\t"
+            for day in range(7):
+                outstring += "%0.1f\t"%(mySchedule[day][hour])
+            outstring+="\n"
+            
+        bot.sendMessage(CHAT_ID, outstring)
+
+
+		
+
     elif command == '/casa':
         who_is_at_home=""
         how_many_at_home=0
@@ -957,9 +1018,9 @@ def TurnOnHeating():
     
     if not heating_overwrite and heating_standby and FORCE_HOUR[ora_attuale] == 0:
         try:
-            bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+            bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma sono solo a casa e faccio un po' di economia")
         except:
-            bot.sendMessage(CHAT_ID, ".Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+            bot.sendMessage(CHAT_ID, ".Fa un po' freddo, Padrone, ma sono solo a casa e faccio un po' di economia")
         if HEAT_ID == 0:
             GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
             GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
