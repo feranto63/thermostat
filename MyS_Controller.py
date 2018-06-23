@@ -418,13 +418,17 @@ while True:
     now = time.time()
     if now > check_timer:
         # verifica lo stato del relay e nel caso lo resetta
-        values = GATEWAY.sensors[HEAT_ID].children[1].values[2]
+        try:
+            values = GATEWAY.sensors[HEAT_ID].children[1].values[2]
+        except:
+            values = 99
         if int(values) == 1:
             relay_status = 'OFF'
         elif int(values) == 0:
             relay_status = 'ON'
         else:
-            print ("errore di lettura dello statoi del relay:"+values)
+            print ("errore di lettura dello stato del relay:"+values)
+            relay_status = HEAT_STATUS
         if relay_status != HEAT_STATUS:
             if HEAT_STATUS:
                 TurnON_termosifoni(HEAT_ID)
