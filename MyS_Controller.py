@@ -426,7 +426,7 @@ while True:
         elif int(values) == 0:
             relay_status = 'ON'
         else:
-            print ("errore di lettura dello stato del relay:"+values)
+            print ("errore di lettura dello stato del relay:"+str(values))
             relay_status = HEAT_STATUS
         if relay_status != HEAT_STATUS:
             if HEAT_STATUS:
