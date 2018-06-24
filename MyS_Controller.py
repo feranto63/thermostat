@@ -229,7 +229,7 @@ def TurnON_termosifoni(heatID):
         GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
-	    try:
+        try:
             values = GATEWAY.sensors[heatID].children[1].values[2]
         except:
             print("errore di lettura dello stato del relay")
