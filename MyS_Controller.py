@@ -230,7 +230,12 @@ def TurnON_termosifoni(heatID):
         GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
-        values = GATEWAY.sensors[heatID].children[1].values[2]
+        try:
+            values = GATEWAY.sensors[heatID].children[1].values[2]
+        except:
+            print("errore di lettura dello stato del relay")
+            retries = 0
+            return()
         print("rilettura stato relay:"+values)
         if int(values) == 0:
             retries = 0
@@ -255,7 +260,12 @@ def TurnOFF_termosifoni(heatID):
         GATEWAY.set_child_value(heatID, 1, 2, 1) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
-        values = GATEWAY.sensors[heatID].children[1].values[2]
+        try:
+            values = GATEWAY.sensors[heatID].children[1].values[2]
+        except:
+            print("errore di lettura dello stato del relay")
+            retries = 0
+            return()
         print("rilettura stato relay:"+values)
         if int(values) == 1:
             retries = 0
@@ -351,9 +361,10 @@ values = GATEWAY.sensors[23].children[4].values
 ALARM_STATUS = 1
 
 #GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=False)
-GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=True,
+GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', baud=115200, event_callback=MySensorEvent, persistence=True,
   persistence_file='/home/pi/git/thermostat/thermostat/mysensors.pickle', protocol_version='2.0')
 
+GATEWAY.start_persistence()
 _LOGGER.debug("Starting Gateway")
 GATEWAY.start()
 
@@ -408,13 +419,17 @@ while True:
     now = time.time()
     if now > check_timer:
         # verifica lo stato del relay e nel caso lo resetta
-        values = GATEWAY.sensors[HEAT_ID].children[1].values[2]
+        try:
+            values = GATEWAY.sensors[HEAT_ID].children[1].values[2]
+        except:
+            values = 99
         if int(values) == 1:
             relay_status = 'OFF'
         elif int(values) == 0:
             relay_status = 'ON'
         else:
-            print ("errore di lettura dello statoi del relay:"+values)
+            print ("errore di lettura dello stato del relay:"+str(values))
+            relay_status = HEAT_STATUS
         if relay_status != HEAT_STATUS:
             if HEAT_STATUS:
                 TurnON_termosifoni(HEAT_ID)
