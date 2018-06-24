@@ -1018,9 +1018,9 @@ def TurnOnHeating():
     
     if not heating_overwrite and heating_standby and FORCE_HOUR[ora_attuale] == 0:
         try:
-            bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+            bot.sendMessage(CHAT_ID, "Fa un po' freddo, Padrone, ma sono solo a casa e faccio un po' di economia")
         except:
-            bot.sendMessage(CHAT_ID, ".Fa un po' freddo, Padrone, ma solo solo a casa e faccio un po' di economia")
+            bot.sendMessage(CHAT_ID, ".Fa un po' freddo, Padrone, ma sono solo a casa e faccio un po' di economia")
         if HEAT_ID == 0:
             GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
             GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
