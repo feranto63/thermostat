@@ -360,9 +360,10 @@ values = GATEWAY.sensors[23].children[4].values
 ALARM_STATUS = 1
 
 #GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=False)
-GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=True,
+GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', baud=115200, MySensorEvent, persistence=True,
   persistence_file='/home/pi/git/thermostat/thermostat/mysensors.pickle', protocol_version='2.0')
 
+GATEWAY.start_persistence()
 _LOGGER.debug("Starting Gateway")
 GATEWAY.start()
 
