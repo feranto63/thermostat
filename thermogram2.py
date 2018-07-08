@@ -561,6 +561,9 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
         result = subprocess.call(['sudo','supervisorctl','restart','MyS_Controller'])
         result = subprocess.call(['sudo','supervisorctl','restart','thermogram2'])
+    elif command == '/reset':
+        bot.sendMessage(CHAT_ID, "Resetto "+nome_maggiordomo,disable_notification=True)
+        result = subprocess.call(['sudo','reboot','now'])
     elif command == '/noip':
         bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
         result = subprocess.call(['sudo','noip2'])
