@@ -400,7 +400,7 @@ def handle(msg):
         if len(command_list) in [3,4]:
             if (len(command_list) == 3):
                 time_to_set = int(command_list[1])
-            temp_to_set = float(command_list[2])
+                temp_to_set = float(command_list[2])
                 days_to_set = range(7)
             else:
                 days_to_set = [ parse_weekday(command_list[1]) , ]
