@@ -321,6 +321,8 @@ bot = telepot.Bot(TOKEN)
 print ('running Sensor Controller ...')
 
 myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
+print('myIPaddress:'+myIPaddress)
+
 
 import mysensors.mysensors as mysensors
 
