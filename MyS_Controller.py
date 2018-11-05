@@ -20,6 +20,8 @@ settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
 HEAT_ID = settings.getint('SectionOne','HEAT_ID')
 # HEAT_ID = 31
+NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
+
 
 dbname='/var/www/templog.db'
 
@@ -46,7 +48,8 @@ def save_sensorlog(filename, t_stamp, temp, humidity, battery):
     filesensor.write(t_stamp +" "+str(temp)+" "+str(humidity)+" "+str(battery))
     filesensor.close()  #chiude il file dei dati e lo salva
 
-			
+
+
 ##############################################
 
 import sys
@@ -81,6 +84,34 @@ logging.basicConfig(
 """
 
 sensor = [['2000-01-01 00:00:00',0.0, 0.0, 0.0] for x in range (300)]
+
+	######### lettura sensori di temperatura #################
+
+def read_sensors():
+    global sensor, NUM_SENSORI
+    for i in range (NUM_SENSORI):
+        try:
+            f = open("sensor"+str(i)+".log","r")  #apre il file dei dati in read mode
+            value = f.read().split()  #legge la info del sensore sul file e divide per data, ora e valore
+            f.close()  #chiude il file dei dati e lo salva
+            sensor[i][0]= "%s" % str(value[0]) + " %s" % str(value[1])
+            sensor[i][1]= "%.1f" % float(value[2])
+            try:
+                sensor[i][2]= "%.1f" % float(value[3])
+            except:
+                sensor[i][2]= 0.0
+            try:
+                sensor[i][3]= "%.1f" % float(value[4])
+            except:
+                sensor[i][3]= 0.0
+        except IOError:
+            sensor[i][1] = -99  #se il file non e' presente imposto il sensore a -99
+
+
+######### FINE lettura sensori di temperatura ###########
+
+
+
 
 def MySensorEvent(message):
     global ALARM_STATUS, sensor, MaggiordomoID
@@ -402,6 +433,10 @@ if HEAT_STATUS:
 else:
 	TurnOFF_termosifoni(HEAT_ID)
     
+# read stored values of sensors
+read_sensors()
+
+
 CHECK_INTERVAL = 15*60 # every 15 minutes (in seconds)
 
 now = time.time()
