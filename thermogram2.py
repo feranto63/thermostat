@@ -315,6 +315,7 @@ def handle(msg):
     logging.debug('inizio la gestione di handle')
     msg_type, chat_type, chat_id = telepot.glance(msg)
     msg_sender = msg['from']['first_name']
+    msg_username = msg['from']['username']
     
     # ignore non-text message
     if msg_type != 'text':
@@ -581,7 +582,7 @@ def handle(msg):
             messaggio+="("+sensori[i]+") T="+str("%0.1f" % float(sensor_value[i][1]))+" C, H="+str("%0.1f" % float(sensor_value[i][2]))+"%, Batt="+str("%0.1f" % float(sensor_value[i][3]))+"% t="+sensor_value[i][0]+"\n"
         bot.sendMessage(CHAT_ID, messaggio, disable_notification=debug_notify)
     else:
-        bot.sendMessage(CHAT_ID, "'"+command+"'?? Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
+        bot.sendMessage(CHAT_ID, "'"+msg_username+" dice "+command+"'?? Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti",disable_notification=True)
         bot.sendMessage(CHAT_ID, "Come ti posso aiutare?",disable_notification=True, reply_markup=main_show_keyboard)
 
 
