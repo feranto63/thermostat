@@ -460,9 +460,16 @@ def handle(msg):
         # send message for help
         messaggio="il mio nome e' "+nome_maggiordomo+" e custodisco la casa. Attendo i suoi comandi Padrone per eseguirli prontamente e rendere la sua vita piacevole e felice.\n"
         messaggio+="/now - mostra la temperatura\n"
-        messaggio+="/ho_freddo - accende il riscaldamento\n"
-        messaggio+="/ho_caldo - spegne il riscaldamento\n"
+        messaggio+="/ho_freddo - regola la temperatura\n"
+        messaggio+="/ho_caldo - regola la temperatura\n"
         messaggio+="/casa - chi e' a casa?\n"
+        messaggio+="/pulizie - attiva/disattiva modalita' pulizie\n"
+        messaggio+="/turnon <ore> <temp> - attiva il riscaldamento per <ore> alla temperatura <temp>\n"
+        messaggio+="/turnoff <ore> - disattiva il riscaldamento per <ore>\n"
+        messaggio+="/annulla - disattiva il comando /turnon o /turnoff\n"
+        messaggio+="/set [giorno sett] <ora> <temp>\n"
+        messaggio+="/table\n"
+        messaggio+="/all - mostra i dettagli dei sensori\n"
         messaggio+="Riscaldamento "
         if heating_status:
             messaggio+="attivato"
@@ -472,28 +479,31 @@ def handle(msg):
         result = bot.sendPhoto(CHAT_ID, open('MAGGIORDOMO.jpg', 'rb'), reply_markup=show_keyboard, disable_notification=debug_notify)
         bot.sendMessage(CHAT_ID, messaggio, reply_markup=show_keyboard, disable_notification=debug_notify)
     elif command == '/pulizie':
-        if not pulizie_status:
-            # set 2 hours off for cleaning
-            pulizie_status=True
-            t=time.time()
-            #lst=list(t)
-            #if t + 2*60*60 <= t:
-            #    lst[3]=23;
-            #    lst[4]=59;
-            #    pulizie_timer= time.mktime(tuple(lst))
-            #else:
-            pulizie_timer = t + 2*60*60 #2 hours
-            if heating_status:
-                TurnOffHeating()
-                #GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-            bot.sendMessage(CHAT_ID, "Disattivo il riscaldamento Padrone cosi' puoi fare le pulizie", disable_notification=debug_notify)
+        if heating_overwrite:
+            bot.sendMessage(CHAT_ID, "Modalita' overwrite attiva. fare /annulla prima di /pulizie",disable_notification=True)
         else:
-            # set 2 hours off for cleaning
-            pulizie_status=False
-            if heating_status:
-                TurnOnHeating()
-                #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
-            bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
+            if not pulizie_status:
+                # set 2 hours off for cleaning
+                pulizie_status=True
+                t=time.time()
+                #lst=list(t)
+                #if t + 2*60*60 <= t:
+                #    lst[3]=23;
+                #    lst[4]=59;
+                #    pulizie_timer= time.mktime(tuple(lst))
+                #else:
+                pulizie_timer = t + 2*60*60 #2 hours
+                if heating_status:
+                    TurnOffHeating()
+                    #GPIO.output(HEAT_PIN, HEAT_OFF) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+                bot.sendMessage(CHAT_ID, "Disattivo il riscaldamento Padrone cosi' puoi fare le pulizie", disable_notification=debug_notify)
+            else:
+                # set 2 hours off for cleaning
+                pulizie_status=False
+                if heating_status:
+                    TurnOnHeating()
+                    #GPIO.output(HEAT_PIN, HEAT_ON) # sets port 0 to 0 (3.3V, off) per spengere i termosifoni
+                bot.sendMessage(CHAT_ID, "Modalita' pulizie disattivata")
     elif command == '/apri':
         bot.sendMessage(chat_id, "Confermi?", reply_markup= {'keyboard': [['SI'],['NO']], 'resize_keyboard':True})
         opengate_confirming=True
@@ -521,43 +531,49 @@ def handle(msg):
 #            bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
                 bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
     elif command == '/turnon':
-        overwrite_duration = 1000 #default forever = 1000 ore
-        overwrite_temp = 25     #default 25 gradi centigradi
-        if num_args > 1:
-            overwrite_duration = int(command_list[1])
-            if num_args > 2:
-                overwrite_temp = int(command_list[2])
-        overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
-        if overwrite_duration == 1000:
-            overwrite_message = "sempre"
+        if pulizie_status:
+            bot.sendMessage(CHAT_ID, "Modalita' pulizie attiva. Non puoi dare il comando /turnon",disable_notification=True)
         else:
-            if overwrite_duration == 1:
-                overwrite_message = str(overwrite_duration)+" ora"
+            overwrite_duration = 1000 #default forever = 1000 ore
+            overwrite_temp = 25     #default 25 gradi centigradi
+            if num_args > 1:
+                overwrite_duration = int(command_list[1])
+                if num_args > 2:
+                    overwrite_temp = int(command_list[2])
+            overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
+            if overwrite_duration == 1000:
+                overwrite_message = "sempre"
             else:
-                overwrite_message = str(overwrite_duration)+" ore"            
-        heating_overwrite = True
-        heating_status = True
-        TurnOnHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
+                if overwrite_duration == 1:
+                    overwrite_message = str(overwrite_duration)+" ora"
+                else:
+                    overwrite_message = str(overwrite_duration)+" ore"            
+            heating_overwrite = True
+            heating_status = True
+            TurnOnHeating()
+            bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
     elif command == '/turnoff':
-        overwrite_duration = 1000 #default forever = 1000 ore
-        overwrite_temp = -5     #default 5 gradi centigradi (il segno meno e' per indicare turnOFF)
-        if num_args > 1:
-            overwrite_duration = int(command_list[1])
-            if num_args > 2:
-                overwrite_temp = -int(command_list[2]) #il segno meno e' per indicare turnOFF
-        overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
-        if overwrite_duration == 1000:
-            overwrite_message = "sempre"
+        if pulizie_status:
+            bot.sendMessage(CHAT_ID, "Modalita' pulizie attiva. Non puoi dare il comando /turnoff",disable_notification=True)
         else:
-            if overwrite_duration == 1:
-                overwrite_message = str(overwrite_duration)+" ora"
+            overwrite_duration = 1000 #default forever = 1000 ore
+            overwrite_temp = -5     #default 5 gradi centigradi (il segno meno e' per indicare turnOFF)
+            if num_args > 1:
+                overwrite_duration = int(command_list[1])
+                if num_args > 2:
+                    overwrite_temp = -int(command_list[2]) #il segno meno e' per indicare turnOFF
+            overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
+            if overwrite_duration == 1000:
+                overwrite_message = "sempre"
             else:
-                overwrite_message = str(overwrite_duration)+" ore"            
-        heating_overwrite = True
-        heating_status = False
-        TurnOffHeating()
-        bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
+                if overwrite_duration == 1:
+                    overwrite_message = str(overwrite_duration)+" ora"
+                else:
+                    overwrite_message = str(overwrite_duration)+" ore"            
+            heating_overwrite = True
+            heating_status = False
+            TurnOffHeating()
+            bot.sendMessage(CHAT_ID, "Attivo overwrite per "+overwrite_message,disable_notification=True)
     elif command == '/restart':
         bot.sendMessage(CHAT_ID, "Riavvio "+nome_maggiordomo,disable_notification=True)
         result = subprocess.call(['sudo','supervisorctl','restart','MyS_Controller'])
