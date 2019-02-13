@@ -334,7 +334,7 @@ def TurnON_heatpump(heatID):
     
     retries = 4
     while retries > 0:
-        GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
+        GATEWAY.set_child_value(heatID, 1, 2, 1) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         try:
@@ -364,7 +364,7 @@ def TurnOFF_heatpump(heatID):
     retries = 4
     while retries > 0:
 
-        GATEWAY.set_child_value(heatID, 1, 2, 1) #, ack=1)
+        GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
 #        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
         time.sleep(5)
         try:
