@@ -19,6 +19,8 @@ import configparser as ConfigParser
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
 HEAT_ID = settings.getint('SectionOne','HEAT_ID')
+HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
+
 # HEAT_ID = 31
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
 
@@ -248,6 +250,20 @@ def read_heating_standby():
 		heating_standby = False  #se il file non e' presente imposto la presence a False
 	return(heating_standby)
 
+######## legge da file lo stato della pompa di calore ###########
+def read_heatpump_status():
+	try:
+		f = open("heatpump_toggle","r")  #apre il file dei dati in read mode
+		h_status=f.read().strip()   #legge la info di presence sul file
+		f.close()  #chiude il file dei dati e lo salva
+		if h_status == "ON":
+			heatpump_status = True
+		else:
+			heatpump_status = False
+	except IOError:
+		heatpump_status = False  #se il file non e' presente imposto la presence a False
+	return(heatpump_status)
+
 #################### accende o spegne i termosifoni #############
 def TurnON_termosifoni(heatID):
     
@@ -306,6 +322,67 @@ def TurnOFF_termosifoni(heatID):
         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime, disable_notification=True)
     except:
         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito a spegnere i termosifoni alle "+localtime, disable_notification=True)
+
+    return()
+
+#################### accende o spegne la pompa di calore #############
+def TurnON_heatpump(heatID):
+    
+    orario = time.localtime(time.time())
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
+    ora_minuti = time.strftime("%H:%M", orario)
+    
+    retries = 4
+    while retries > 0:
+        GATEWAY.set_child_value(heatID, 1, 2, 0) #, ack=1)
+#        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
+        time.sleep(5)
+        try:
+            values = GATEWAY.sensors[heatID].children[1].values[2]
+        except:
+            print("errore di lettura dello stato della pompa di calore")
+            retries = 0
+            return()
+        print("rilettura stato pompa di calore:"+values)
+        if int(values) == 0:
+            retries = 0
+            return()
+        else:
+            retries = retries-1
+    try:
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito ad accendere la pompa di calore alle "+localtime, disable_notification=True)
+    except:
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito ad accendere la pompa di calore alle "+localtime, disable_notification=True)
+    
+    return()
+
+def TurnOFF_heatpump(heatID):
+    orario = time.localtime(time.time())
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
+    ora_minuti = time.strftime("%H:%M", orario)
+    
+    retries = 4
+    while retries > 0:
+
+        GATEWAY.set_child_value(heatID, 1, 2, 1) #, ack=1)
+#        GATEWAY.set_child_value(heatID, 1, 2, msg_type=2, ack=1)
+        time.sleep(5)
+        try:
+            values = GATEWAY.sensors[heatID].children[1].values[2]
+        except:
+            print("errore di lettura dello stato della pompa di calore")
+            retries = 0
+            return()
+        print("rilettura stato pompa di calore:"+values)
+        if int(values) == 1:
+            retries = 0
+            return()
+        else:
+            retries = retries-1
+    try:
+        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non sono riuscito a spegnere la pompa di calore alle "+localtime, disable_notification=True)
+    except:
+        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non sono riuscito a spegnere la pompa di calore alle "+localtime, disable_notification=True)
 
     return()
 
@@ -427,11 +504,26 @@ else:
 	print("initial heat status OFF")
 
 
-#restore acensione riscaldamento
+#restore accensione riscaldamento
 if HEAT_STATUS:
 	TurnON_termosifoni(HEAT_ID)
 else:
 	TurnOFF_termosifoni(HEAT_ID)
+
+HEATPUMP_STATUS = read_heatpump_status()
+
+if HEATPUMP_STATUS:
+	print("initial heatpump status ON")
+else:
+	print("initial heatpump status OFF")
+
+
+#restore accensione pompa di calore
+if HEATPUMP_STATUS:
+	TurnON_heatpump(HEATPUMP_ID)
+else:
+	TurnOFF_heatpump(HEATPUMP_ID)
+
     
 # read stored values of sensors
 read_sensors()
@@ -451,6 +543,14 @@ while True:
         else:
             TurnOFF_termosifoni(HEAT_ID)
         HEAT_STATUS = CURRENT_HEAT
+
+    CURRENT_HEATPUMP=read_heatpump_status()
+    if CURRENT_HEATPUMP != HEATPUMP_STATUS:
+        if CURRENT_HEATPUMP:
+            TurnON_heatpump(HEATPUMP_ID)
+        else:
+            TurnOFF_heatpump(HEATPUMP_ID)
+        HEATPUMP_STATUS = CURRENT_HEATPUMP
 
     now = time.time()
     if now > check_timer:
