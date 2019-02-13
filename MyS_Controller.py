@@ -344,7 +344,7 @@ def TurnON_heatpump(heatID):
             retries = 0
             return()
         print("rilettura stato pompa di calore:"+values)
-        if int(values) == 0:
+        if int(values) == 1:
             retries = 0
             return()
         else:
@@ -374,7 +374,7 @@ def TurnOFF_heatpump(heatID):
             retries = 0
             return()
         print("rilettura stato pompa di calore:"+values)
-        if int(values) == 1:
+        if int(values) == 0:
             retries = 0
             return()
         else:
