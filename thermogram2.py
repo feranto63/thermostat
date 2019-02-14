@@ -43,7 +43,7 @@ except:
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 
 HEAT_ID = settings.getint('SectionOne','HEAT_ID') # 0=relay on board; <int> = relay sensor ID
-
+HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
 SECONDARY_HEAT = settings.getboolean('SectionOne','SECONDARY_HEAT') #indica se e' presente la fonte di riscaldamento secondaria
 IP_PRESENCE = settings.getboolean('SectionOne','IP_PRESENCE')
 BT_PRESENCE = settings.getboolean('SectionOne','BT_PRESENCE')
@@ -96,6 +96,8 @@ GATE_PIN = 23 #GPIO del cancello
 GATE_ON = 0
 GATE_OFF = 1
 DHT_PIN = 18
+FILEHEATPUMP="fileheatpump"
+
 dbname='/var/www/templog.db'
 hide_notify = False
 debug_notify = True
@@ -590,6 +592,14 @@ def handle(msg):
     elif command == '/cold_off':
         result = subprocess.call(['irsend','SEND_ONCE','BION','TURN_OFF'])
         bot.sendMessage(CHAT_ID, "Spengo il condizionatore",disable_notification=True)
+    elif command == '/heat_on':
+        heatpump_status = True
+        TurnOnHeatpump()
+        bot.sendMessage(CHAT_ID, "Accendo la pompa di calore",disable_notification=True)
+    elif command == '/heat_off':
+        heatpump_status = False
+        TurnOffHeatpump()
+        bot.sendMessage(CHAT_ID, "Spengo la pompa di calore",disable_notification=True)
     elif command == '/image':
         result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
     elif command == '/all':
@@ -652,6 +662,8 @@ report_interval = 300  # report every 300 seconds (5 min) as a default
 heating_status = False
 heating_standby = False
 heating_overwrite = False
+
+heatpump_status = False 
 
 CurTempDHT = 0
 CurHumidity = 0
@@ -1106,6 +1118,64 @@ def TurnOffHeating():
     fileheating.write("OFF,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
     fileheating.close()  #chiude il file dei dati e lo salva
 
+############## gestione della pompa di calore ##################
+def setRadioHeatpump(xID, heatpump_toggle):
+    if xID == 0:
+        #GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
+        #GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
+    else:
+        f = open("heatpump_toggle","w")
+        f.write(heatpump_toggle)
+        f.close()  #chiude il file dei dati e lo salva
+    return()
+
+def TurnOnHeatpump():
+    global heatpump_status, FILEHEATPUMP, CHAT_ID, HEATPUMP_ID
+
+    orario = time.localtime(time.time())
+    ora_attuale = int(time.strftime("%H", orario))
+    giorno_attuale = int(time.strftime("%w", orario))
+
+    heatpump_status = True #print "HEATPUMP ON "+localtime+"\n"
+    f = open("heatpump_status","w")
+    f.write('ON')
+    f.close()  #chiude il file dei dati e lo salva
+    
+    setRadioHeatpump(HEATPUMP_ID,"ON")
+    print('accendo la pompa di calore')
+    try:
+        bot.sendMessage(CHAT_ID, "Accendo la pompa di calore, Padrone")
+    except:
+        bot.sendMessage(CHAT_ID, ".Accendo la pompa di calore, Padrone")
+    orario = time.localtime(time.time())
+    localtime = time.asctime( orario )
+    ora_minuti = time.strftime("%H:%M", orario)
+    fileheatpump = open(FILEHEATPUMP,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+    fileheatpump.write("ON,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
+    fileheatpump.close()  #chiude il file dei dati e lo salva
+
+    
+    
+def TurnOffHeatpump():
+    global heatpump_status, FILEHEATPUMP, CHAT_ID, HEATPUMP_ID
+
+    heatpump_status = False
+    f = open("heatpump_status","w")
+    f.write('OFF')
+    f.close()  #chiude il file dei dati e lo salva
+    
+    setRadioHeatpump(HEATPUMP_ID,"OFF")
+    print('spengo la pompa di calore')
+    try:
+        bot.sendMessage(CHAT_ID, "Spengo la pompa di calore, Padrone")
+    except:
+        bot.sendMessage(CHAT_ID, ".Spengo la pompa di calore, Padrone")
+    orario = time.localtime(time.time())
+    localtime = time.asctime( orario )
+    ora_minuti = time.strftime("%H:%M", orario)
+    fileheating = open(FILEHEATPUMP,"a")  #apre il file dei dati in append mode, se il file non esiste lo crea
+    fileheating.write("OFF,"+localtime+"\n")  #scrive la info di accensione del riscaldamento il timestamp su file
+    fileheating.close()  #chiude il file dei dati e lo salva
 
 ##################### inizio gestione presence via email ################
 #connect to gmail
