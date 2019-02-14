@@ -1120,14 +1120,10 @@ def TurnOffHeating():
 
 ############## gestione della pompa di calore ##################
 def setRadioHeatpump(xID, heatpump_toggle):
-    if xID == 0:
-        #GPIO.output(HEAT_PIN, HEAT_OFF) # spengo la caldaia primaria
-        #GPIO.output(HEAT2_PIN, HEAT_OFF) # spengo la stufa secondaria
-    else:
-        f = open("heatpump_toggle","w")
-        f.write(heatpump_toggle)
-        f.close()  #chiude il file dei dati e lo salva
-    return()
+    f = open("heatpump_toggle","w")
+    f.write(heatpump_toggle)
+    f.close()  #chiude il file dei dati e lo salva
+return()
 
 def TurnOnHeatpump():
     global heatpump_status, FILEHEATPUMP, CHAT_ID, HEATPUMP_ID
