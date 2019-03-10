@@ -208,7 +208,7 @@ def MySensorEvent(message):
         elif MaggiordomoID == "Sas":
             if message.node_id == 37: #zona notte
                 sensorfilename = "sensor1.log"
-        elif MaggiordomoID == "Luana Verrecchiana":
+        elif MaggiordomoID == "Verrecchie":
             if message.node_id == 34: #giardino/balcone
                 sensorfilename = "sensor1.log"
 
