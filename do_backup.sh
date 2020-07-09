@@ -48,3 +48,5 @@ ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/sup
 ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /etc/lirc/lircd.conf
 sudo rm /home/pi/git/thermostat/thermostat/termostato.log
 
+
+
