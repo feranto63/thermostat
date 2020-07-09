@@ -44,3 +44,5 @@ ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/templo
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/webgui.py /usr/lib/cgi-bin/webgui.py
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/*.conf /etc/supervisor/conf.d/*.conf
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/lircd.conf /etc/lirc/lircd.conf
+
+
