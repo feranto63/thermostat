@@ -131,8 +131,13 @@ def MySensorEvent(message):
 #    print("message.payload: "+message.payload)
 	
     PAYLOAD = message.payload
-    
-    if message.node_id == 30:
+#
+# CODICI NODE_ID
+# 30 STATO ALLARME
+# 32 SENSORE DI PRESENZA
+#
+
+    if message.node_id == 30: # STATO ALLARME
 #        print("message.node_id == 30")
         if message.sub_type == 16:
 #            print("message.sub_type == 16")
@@ -154,7 +159,29 @@ def MySensorEvent(message):
                         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
                     except:
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
-    else:
+     elif message.node_id == 32: # SENSORE DI PRESENZA
+        print("message.node_id == 32")
+        if message.sub_type == 16:
+            print("message.sub_type == 16")
+            print("PAYLOAD = "+str(PAYLOAD))
+            if int(PAYLOAD) == MOVING_STATUS:
+                print("message.payload == "+str(MOVING_STATUS))
+                return()
+            else:
+                MOVING_STATUS = int(PAYLOAD)
+                if int(PAYLOAD) == 0:
+                    print("PAYLOAD == 0")
+                    try:
+                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                    except:
+                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                else:
+                    print("PAYLOAD == 1")
+                    try:
+                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
+                    except:
+                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
+   	  else:
  #       print("node_id="+str(message.node_id))
         if  int(message.type) == 1:  # is a SET message
             if int(message.sub_type) == 0: #it is a temperature
