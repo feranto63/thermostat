@@ -159,7 +159,7 @@ def MySensorEvent(message):
                         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
                     except:
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
-     elif message.node_id == 32: # SENSORE DI PRESENZA
+    elif message.node_id == 32: # SENSORE DI PRESENZA
         print("message.node_id == 32")
         if message.sub_type == 16:
             print("message.sub_type == 16")
