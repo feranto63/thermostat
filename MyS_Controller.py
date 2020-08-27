@@ -116,7 +116,7 @@ def read_sensors():
 
 
 def MySensorEvent(message):
-    global ALARM_STATUS, sensor, MaggiordomoID
+    global MOVING_STATUS, ALARM_STATUS, sensor, MaggiordomoID
     """Callback for mysensors updates."""
 
     orario = time.localtime(time.time())
@@ -498,6 +498,7 @@ values = GATEWAY.sensors[23].children[4].values
 '''
 
 ALARM_STATUS = 1
+MOVING_STATUS = 1
 
 #GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=False)
 GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', baud=115200, event_callback=MySensorEvent, persistence=True,
