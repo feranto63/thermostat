@@ -169,18 +169,18 @@ def MySensorEvent(message):
                 return()
             else:
                 MOVING_STATUS = int(PAYLOAD)
-                if int(PAYLOAD) == 0:
-                    print("PAYLOAD == 0")
-                    try:
-                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
-                    except:
-                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
-                else:
+                if int(PAYLOAD) == 1:
                     print("PAYLOAD == 1")
-                    try:
-                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
-                    except:
-                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
+                    #try:
+                    #    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                    #except:
+                    #    bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                else:
+                    print("PAYLOAD == 0")
+                    #try:
+                    #    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
+                    #except:
+                    #    bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
     else:
  #       print("node_id="+str(message.node_id))
         if  int(message.type) == 1:  # is a SET message
