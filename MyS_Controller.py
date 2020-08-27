@@ -181,7 +181,7 @@ def MySensorEvent(message):
                         bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
                     except:
                         bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Non c'e' piu' movimento alle "+localtime)
-   	  else:
+    else:
  #       print("node_id="+str(message.node_id))
         if  int(message.type) == 1:  # is a SET message
             if int(message.sub_type) == 0: #it is a temperature
