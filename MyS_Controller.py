@@ -587,11 +587,11 @@ while True:
     # calcola chi e' a casa
     # legge su file quante persone sono a casa per MySController
     try:
-	f = open("how_many_at_home","r")
+        f = open("how_many_at_home","r")
         how_many_at_home=int(f.read())
         f.close()  #chiude il file dei dati e lo salva
     except:
-	how_many_home=0
+        how_many_home=0
 	
     now = time.time()
     if now > check_timer:
