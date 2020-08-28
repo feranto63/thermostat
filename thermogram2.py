@@ -884,6 +884,11 @@ def set_presence(n, presence_msg):
                 how_many_at_home=how_many_at_home+1
     
         print ((str(how_many_at_home)+"  "+who_is_at_home))
+	
+        # scrive su file quante persone sono a casa per MySController
+	f = open("how_many_at_home","w")
+        f.write(str(how_many_at_home))
+        f.close()  #chiude il file dei dati e lo salva
     
         if how_many_at_home == 0: #nessuno in casa
             if heating_standby == False:  #standby termosifoni non attivo
