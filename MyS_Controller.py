@@ -116,7 +116,7 @@ def read_sensors():
 
 
 def MySensorEvent(message):
-    global MOVING_STATUS, ALARM_STATUS, sensor, MaggiordomoID
+    global MOVING_STATUS, ALARM_STATUS, sensor, MaggiordomoID, how_many_at_home
     """Callback for mysensors updates."""
 
     orario = time.localtime(time.time())
@@ -171,10 +171,11 @@ def MySensorEvent(message):
                 MOVING_STATUS = int(PAYLOAD)
                 if int(PAYLOAD) == 1:
                     print("PAYLOAD == 1")
-                    #try:
-                    #    bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
-                    #except:
-                    #    bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+		    if how_many_at_home == 0:
+                        try:
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                        except:
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
                 else:
                     print("PAYLOAD == 0")
                     #try:
@@ -583,6 +584,15 @@ while True:
             TurnOFF_heatpump(HEATPUMP_ID)
         HEATPUMP_STATUS = CURRENT_HEATPUMP
 
+    # calcola chi e' a casa
+    # legge su file quante persone sono a casa per MySController
+    try:
+	f = open("how_many_at_home","r")
+        how_many_at_home=int(f.read())
+        f.close()  #chiude il file dei dati e lo salva
+    except:
+	how_many_home=0
+	
     now = time.time()
     if now > check_timer:
         # verifica lo stato del relay e nel caso lo resetta
