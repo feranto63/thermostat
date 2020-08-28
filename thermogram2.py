@@ -1276,6 +1276,17 @@ for n in range(persone_della_casa):
     except IOError:
         persona_at_home[n] = False  #se il file non e' presente imposto la presence a False
 
+# calcola chi e' a casa
+how_many_at_home=0
+for n in range(persone_della_casa):
+    if persona_at_home[n]:
+         how_many_at_home=how_many_at_home+1
+    
+# scrive su file quante persone sono a casa per MySController
+f = open("how_many_at_home","w")
+f.write(str(how_many_at_home))
+f.close()  #chiude il file dei dati e lo salva
+
 ######## legge da file lo stato del riscaldamento e dello standby ###########
 try:
     f = open("heating_status","r")  #apre il file dei dati in read mode
