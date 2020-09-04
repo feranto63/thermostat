@@ -643,12 +643,12 @@ try:
     tokenFile = open(tokenpath,'r')
     TOKEN = tokenFile.read().strip()
     tokenFile.close()
-    print('Ho letto il token')
 except IOError: 
     logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     exit()
 
 logging.info("caricata token.")
+print('Ho letto il token')
         
 try:
     chatidFile = open(chatidpath,'r')
@@ -659,6 +659,7 @@ except IOError:
     # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
 
 logging.info("caricata chatId.")
+print('Ho letto il chatId')
 
 if GATE_PRESENT:
     try:
@@ -672,6 +673,7 @@ if GATE_PRESENT:
         # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
 
     logging.info("caricata chatIdGate.")
+    print('Ho letto il chatIdGate')
 
 
 # variables for periodic reporting
