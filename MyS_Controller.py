@@ -22,6 +22,13 @@ HEAT_ID = settings.getint('SectionOne','HEAT_ID')
 HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
 
 # HEAT_ID = 31
+
+GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
+try:
+    GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
+except:
+    GATE_ID = 0
+
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
 
 
@@ -50,6 +57,24 @@ def save_sensorlog(filename, t_stamp, temp, humidity, battery):
     filesensor.write(t_stamp +" "+str(temp)+" "+str(humidity)+" "+str(battery))
     filesensor.close()  #chiude il file dei dati e lo salva
 
+    
+############## gestione dell'apertura del cancello con relay radio ##################
+def OpenGate(gateID):
+    
+    orario = time.localtime(time.time())
+    localtime = time.strftime("%Y-%m-%d %H:%M:%S", orario)
+    ora_minuti = time.strftime("%H:%M", orario)
+    
+    GATEWAY.set_child_value(gateID, 1, 2, 0) #, ack=1)
+    time.sleep(2)
+    GATEWAY.set_child_value(gateID, 1, 2, 1) #, ack=1)
+
+    f = open("gate_toggle","w")
+    f.write(" ")
+    f.close()  #chiude il file dei dati e lo salva
+    print('eseguita apertura cancello')
+   
+    return()
 
 
 ##############################################
@@ -252,6 +277,20 @@ def MySensorEvent(message):
 
         save_sensorlog(sensorfilename, sensor[message.node_id][0], sensor[message.node_id][1], sensor[message.node_id][2], sensor[message.node_id][3])
     return()
+
+######## legge da file lo stato del cancello ###########
+def read_gate_status():
+	try:
+		f = open("gate_toggle","r")  #apre il file dei dati in read mode
+		g_status=f.read().strip()   #legge la info di presence sul file
+		f.close()  #chiude il file dei dati e lo salva
+		if g_status == "0":
+			gate_status = True
+		else:
+			gate_status = False
+	except IOError:
+		gate_status = False  #se il file non e' presente imposto la presence a False
+	return(gate_status)
 
 
 ######## legge da file lo stato del riscaldamento e dello standby ###########
@@ -614,5 +653,8 @@ while True:
                 TurnOFF_termosifoni(HEAT_ID)
 
         check_timer = now + CHECK_INTERVAL  #inizializza check_timer
-
-    time.sleep(10)
+    
+    if read_gate_status():
+        OpenGate(GATE_ID)
+    
+    time.sleep(5)
