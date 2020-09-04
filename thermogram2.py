@@ -905,7 +905,7 @@ def set_presence(n, presence_msg):
         print ((str(how_many_at_home)+"  "+who_is_at_home))
 	
         # scrive su file quante persone sono a casa per MySController
-	f = open("how_many_at_home","w")
+        f = open("how_many_at_home","w")
         f.write(str(how_many_at_home))
         f.close()  #chiude il file dei dati e lo salva
     
