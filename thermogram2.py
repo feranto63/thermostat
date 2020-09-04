@@ -308,7 +308,7 @@ def setRadioGate(xID, gate_toggle):
         GPIO.output(GATE_PIN, GATE_OFF) # reset apertura cancello
     else:
         f = open("gate_toggle","w")
-        f.write(gate_toggle)
+        f.write(str(gate_toggle))
         f.close()  #chiude il file dei dati e lo salva
     print('eseguita apertura cancello')
     return()
@@ -530,7 +530,7 @@ def handle(msg):
         opengate_confirming=True
     elif opengate_confirming:
         if command == 'si':
-            if GATE_ID==0:
+            if GATE_ID == 0:
                 GPIO.output(GATE_PIN, GATE_ON)
             else:
                 setRadioGate(GATE_ID, GATE_ON)
