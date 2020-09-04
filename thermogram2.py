@@ -301,6 +301,7 @@ def parse_weekday(s):
     
 ############## gestione dell'apertura del cancello con relay radio ##################
 def setRadioGate(xID, gate_toggle):
+    print('xID Gate ='+str(xID)+ 'gate_toggle: '+str(gate_toggle)')
     if xID == 0:
         GPIO.output(GATE_PIN, GATE_ON) # apro il cancello
         time.sleep(2)
@@ -309,6 +310,7 @@ def setRadioGate(xID, gate_toggle):
         f = open("gate_toggle","w")
         f.write(gate_toggle)
         f.close()  #chiude il file dei dati e lo salva
+    print('eseguita apertura cancello')
     return()
 ######################################################################################
 
