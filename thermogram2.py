@@ -41,6 +41,8 @@ except:
     NOTIFY_PRESENCE=True
     
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
+GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
+
 
 HEAT_ID = settings.getint('SectionOne','HEAT_ID') # 0=relay on board; <int> = relay sensor ID
 HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
@@ -54,8 +56,6 @@ DHT_TYPE = settings.getint('SectionOne','DHT_TYPE')
 DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' presente il sensore di temperatura DS18B20 (family 24h)
 DS1820_PRESENCE = settings.getboolean('SectionOne','DS1820_PRESENCE') # indica se e' presente il sensore di temperatura DS1820 (familiy 10h)
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
-
-GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
 
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
 sensor_type = settings.get('SectionOne','sensor_type').split("\n")
@@ -1336,7 +1336,11 @@ heating_overwrite = False
 get_tempschedule()
 
 ######## inizializza il bot Telegram ###########
+print('token: '+str(TOKEN))
+
 bot = telepot.Bot(TOKEN)
+print('avviato il bot')
+
 
 #clear queue
 updates = bot.getUpdates()
