@@ -643,6 +643,7 @@ try:
     tokenFile = open(tokenpath,'r')
     TOKEN = tokenFile.read().strip()
     tokenFile.close()
+    print('Ho letto il token')
 except IOError: 
     logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
     exit()
