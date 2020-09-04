@@ -55,6 +55,8 @@ DS_PRESENCE = settings.getboolean('SectionOne','DS_PRESENCE') # indica se e' pre
 DS1820_PRESENCE = settings.getboolean('SectionOne','DS1820_PRESENCE') # indica se e' presente il sensore di temperatura DS1820 (familiy 10h)
 PRESENCE_RETRY = settings.getint('SectionOne','TIMEOUT')
 
+GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
+
 NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
 sensor_type = settings.get('SectionOne','sensor_type').split("\n")
 # sensori = settings.get('SectionOne','sensori').split("\n")
@@ -294,6 +296,19 @@ def parse_weekday(s):
         return None
 
 
+    
+############## gestione dell'apertura del cancello con relay radio ##################
+def setRadioGate(xID, gate_toggle):
+    if xID == 0:
+        GPIO.output(GATE_PIN, GATE_ON) # apro il cancello
+        time.sleep(2)
+        GPIO.output(GATE_PIN, GATE_OFF) # reset apertura cancello
+    else:
+        f = open("gate_toggle","w")
+        f.write(gate_toggle)
+        f.close()  #chiude il file dei dati e lo salva
+    return()
+######################################################################################
 
 # definisce la variabile per la conferma dell'apertura del cancello
 opengate_confirming = False
@@ -511,7 +526,10 @@ def handle(msg):
         opengate_confirming=True
     elif opengate_confirming:
         if command == 'si':
-            GPIO.output(GATE_PIN, GATE_ON)
+            if GATE_ID==0:
+                GPIO.output(GATE_PIN, GATE_ON)
+            else:
+                setRadioGate(GATE_ID, GATE_ON)
             if str(chat_id) == str(CHAT_ID):
                 bot.sendMessage(CHAT_ID, "Apro il cancello Padrone")
                 bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard, disable_notification=debug_notify)
@@ -521,7 +539,8 @@ def handle(msg):
                 bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
                 bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
             time.sleep(2)
-            GPIO.output(GATE_PIN, GATE_OFF)
+            if GATE_ID==0:
+                GPIO.output(GATE_PIN, GATE_OFF)
             opengate_confirming=False
         else:
             opengate_confirming=False
