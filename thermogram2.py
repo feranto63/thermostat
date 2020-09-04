@@ -41,8 +41,10 @@ except:
     NOTIFY_PRESENCE=True
     
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
-GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
-
+try:
+    GATE_ID = settings.getint('SectionOne','GATE_ID') # 0=relay on board; <int> = relay sensor ID
+except:
+    GATE_ID = 0
 
 HEAT_ID = settings.getint('SectionOne','HEAT_ID') # 0=relay on board; <int> = relay sensor ID
 HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
