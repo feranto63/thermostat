@@ -1269,6 +1269,9 @@ def is_connected():
 ######### fine test internet connection
 
 # -------------------- inizio programma
+
+print('INIZIO IL PROGRAMMA THERMOGRAM')
+
 ######## Inizializza le temperature
 if DS_PRESENCE or DS1820_PRESENCE:
     CurTemp = read_temp()
