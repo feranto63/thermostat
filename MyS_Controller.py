@@ -66,7 +66,7 @@ def OpenGate(gateID):
     ora_minuti = time.strftime("%H:%M", orario)
     
     GATEWAY.set_child_value(gateID, 1, 2, 0) #, ack=1)
-    time.sleep(2)
+    time.sleep(1)
     GATEWAY.set_child_value(gateID, 1, 2, 1) #, ack=1)
 
     f = open("gate_toggle","w")
