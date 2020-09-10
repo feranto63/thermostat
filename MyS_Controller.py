@@ -195,15 +195,15 @@ def MySensorEvent(message):
                     if int(PAYLOAD) == 0:
  #                       print("PAYLOAD == 0")
                         try:
-                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime)
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime, disable_notification=True)
                         except:
-                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime)
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime, disable_notification=True)
                     else:
   #                      print("PAYLOAD == 1")
                         try:
-                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime)
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime, disable_notification=True)
                         except:
-                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime)
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime, disable_notification=True)
             
     elif message.node_id == 32: # SENSORE DI PRESENZA
         print("message.node_id == 32")
@@ -219,9 +219,9 @@ def MySensorEvent(message):
                     print("PAYLOAD == 1")
                     if how_many_at_home == 0:
                         try:
-                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime, disable_notification=True)
                         except:
-                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime)
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime, disable_notification=True)
                 else:
                     print("PAYLOAD == 0")
                     #try:
