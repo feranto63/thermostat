@@ -141,7 +141,7 @@ def read_sensors():
 
 
 def MySensorEvent(message):
-    global MOVING_STATUS, ALARM_STATUS, sensor, MaggiordomoID, how_many_at_home
+    global MOVING_STATUS, ALARM_STATUS, ALARM_ACTIVE, sensor, MaggiordomoID, how_many_at_home
     """Callback for mysensors updates."""
 
     orario = time.localtime(time.time())
@@ -164,26 +164,47 @@ def MySensorEvent(message):
 
     if message.node_id == 30: # STATO ALLARME
 #        print("message.node_id == 30")
-        if message.sub_type == 16:
-#            print("message.sub_type == 16")
-#            print("PAYLOAD = "+str(PAYLOAD))
-            if int(PAYLOAD) == ALARM_STATUS:
-#                print("message.payload == "+str(ALARM_STATUS))
-                return()
-            else:
-                ALARM_STATUS = int(PAYLOAD)
-                if int(PAYLOAD) == 0:
- #                   print("PAYLOAD == 0")
-                    try:
-                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
-                    except:
-                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
+        if message.child_id == 1: # sensore allarme
+            if message.sub_type == 16:
+#                print("message.sub_type == 16")
+#                print("PAYLOAD = "+str(PAYLOAD))
+                if int(PAYLOAD) == ALARM_STATUS:
+#                    print("message.payload == "+str(ALARM_STATUS))
+                    return()
                 else:
-  #                  print("PAYLOAD == 1")
-                    try:
-                        bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
-                    except:
-                        bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
+                    ALARM_STATUS = int(PAYLOAD)
+                    if int(PAYLOAD) == 0:
+ #                       print("PAYLOAD == 0")
+                        try:
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
+                        except:
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' scattato l'antifurto alle "+localtime)
+                    else:
+  #                      print("PAYLOAD == 1")
+                        try:
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
+                        except:
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". L'antifurto si e' spento alle "+localtime)
+        elif message.child_id == 2: # led allarme attivato
+            if message.sub_type == 16:
+                if int(PAYLOAD) == ALARM_ACTIVE:
+#                    print("message.payload == "+str(ALARM_STATUS))
+                    return()
+                else:
+                    ALARM_ACTIVE = int(PAYLOAD)
+                    if int(PAYLOAD) == 0:
+ #                       print("PAYLOAD == 0")
+                        try:
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime)
+                        except:
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime)
+                    else:
+  #                      print("PAYLOAD == 1")
+                        try:
+                            bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime)
+                        except:
+                            bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime)
+            
     elif message.node_id == 32: # SENSORE DI PRESENZA
         print("message.node_id == 32")
         if message.sub_type == 16:
@@ -538,6 +559,7 @@ values = GATEWAY.sensors[23].children[4].values
 '''
 
 ALARM_STATUS = 1
+ALARM_ACTIVE = 1
 MOVING_STATUS = 1
 
 #GATEWAY = mysensors.SerialGateway('/dev/ttyMySensorsGateway', MySensorEvent, persistence=False)
