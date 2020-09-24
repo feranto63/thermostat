@@ -617,7 +617,7 @@ def handle(msg):
             f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
             f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
-            bot.sendMessage(CHAT_ID, "ho scritto il file di risultato: ",disable_notification=True)
+            bot.sendMessage(CHAT_ID, "ho scritto il file di risultato: "+str(result),disable_notification=True)
         else:
             bot.sendMessage(CHAT_ID, "CMD senza parametri, padrone",disable_notification=True)
     elif command == '/noip':
