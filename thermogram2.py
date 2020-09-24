@@ -606,6 +606,15 @@ def handle(msg):
     elif command == '/reset':
         bot.sendMessage(CHAT_ID, "Resetto "+nome_maggiordomo,disable_notification=True)
         result = subprocess.call(['sudo','reboot','now'])
+    elif command == '/cmd':
+        if num_args > 1:
+            cmd_str = ""
+            for i in range(1,num_args):
+                cmd_str += str(command_list[i])+" "
+            bot.sendMessage(CHAT_ID, "invio comando "+cmd_str,disable_notification=True)
+            result = subprocess.call([cmd_str])
+        else:
+            bot.sendMessage(CHAT_ID, "CMD senza parametri, padrone",disable_notification=True)
     elif command == '/noip':
         bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
         result = subprocess.call(['sudo','noip2'])
