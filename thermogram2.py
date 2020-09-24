@@ -608,9 +608,9 @@ def handle(msg):
         result = subprocess.call(['sudo','reboot','now'])
     elif command == '/cmd':
         if num_args > 1:
-            cmd_str = ["" for x in range(num_args)]
-            for i in range(2,num_args):
-                cmd_str[i-2] = str(command_list[i])
+            cmd_str = ["" for x in range(num_args-1)]
+            for i in range(1,num_args.1):
+                cmd_str[i-1] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
             bot.sendMessage(CHAT_ID, "invio comando "+str(cmd_str),disable_notification=True)
             result = subprocess.check_output(cmd_str)
