@@ -610,7 +610,7 @@ def handle(msg):
         if num_args > 1:
             cmd_str = ["" for x in range(num_args)]
             for i in range(1,num_args):
-                cmd_str[i] = str(command_list[i])
+                cmd_str[i-1] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
             bot.sendMessage(CHAT_ID, "invio comando "+cmd_str[1],disable_notification=True)
             result = subprocess.check_output(cmd_str)
