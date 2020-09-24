@@ -614,7 +614,10 @@ def handle(msg):
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
             bot.sendMessage(CHAT_ID, "invio comando "+cmd_str[1],disable_notification=True)
             result = subprocess.check_output(cmd_str)
-            bot.sendMessage(CHAT_ID, "risultato: "+result,disable_notification=True)
+            f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
+            f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
+            f.close()  #chiude il file dei dati e lo salva
+            bot.sendMessage(CHAT_ID, "ho scritto il file di risultato: ",disable_notification=True)
         else:
             bot.sendMessage(CHAT_ID, "CMD senza parametri, padrone",disable_notification=True)
     elif command == '/noip':
