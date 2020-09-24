@@ -611,6 +611,7 @@ def handle(msg):
             cmd_str = ""
             for i in range(1,num_args):
                 cmd_str += str(command_list[i])+" "
+            cmd_str += "> \home\pi\git\thermostat\thermostat\cmd_result.txt"
             bot.sendMessage(CHAT_ID, "invio comando "+cmd_str,disable_notification=True)
             result = subprocess.call([cmd_str])
         else:
