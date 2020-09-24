@@ -612,7 +612,7 @@ def handle(msg):
             for i in range(2,num_args):
                 cmd_str[i-2] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
-            bot.sendMessage(CHAT_ID, "invio comando "+cmd_str,disable_notification=True)
+            bot.sendMessage(CHAT_ID, "invio comando "+str(cmd_str),disable_notification=True)
             result = subprocess.check_output(cmd_str)
             f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
             f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
