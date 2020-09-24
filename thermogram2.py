@@ -609,7 +609,7 @@ def handle(msg):
     elif command == '/cmd':
         if num_args > 1:
             cmd_str = ["" for x in range(num_args-1)]
-            for i in range(1,num_args.1):
+            for i in range(1,num_args-1):
                 cmd_str[i-1] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
             bot.sendMessage(CHAT_ID, "invio comando "+str(cmd_str),disable_notification=True)
