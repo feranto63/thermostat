@@ -613,17 +613,17 @@ def handle(msg):
                 cmd_str[i-1] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
             bot.sendMessage(BOT_ASSISTANT_CHATID, "invio comando "+str(cmd_str),disable_notification=True)
-            bot.sendMessage(TOKEN, "invio comando "+str(cmd_str),disable_notification=True)
+#            bot.sendMessage(TOKEN, "invio comando "+str(cmd_str),disable_notification=True)
             result = subprocess.check_output(cmd_str)
             f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
             f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
             trunk_result = result[:4000]
             bot.sendMessage(BOT_ASSISTANT_CHATID, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
-            bot.sendMessage(TOKEN, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
+#            bot.sendMessage(TOKEN, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
         else:
             bot.sendMessage(BOT_ASSISTANT_CHATID, "CMD senza parametri, padrone",disable_notification=True)
-            bot.sendMessage(TOKEN, "CMD senza parametri, padrone",disable_notification=True)
+#            bot.sendMessage(TOKEN, "CMD senza parametri, padrone",disable_notification=True)
     elif command == '/noip':
         bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
         result = subprocess.call(['sudo','noip2'])
