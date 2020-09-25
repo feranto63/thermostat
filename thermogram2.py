@@ -615,7 +615,7 @@ def handle(msg):
             bot.sendMessage(BOT_ASSISTANT_CHATID, "invio comando "+str(cmd_str),disable_notification=True)
 #            bot.sendMessage(TOKEN, "invio comando "+str(cmd_str),disable_notification=True)
             result = subprocess.check_output(cmd_str)
-            f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
+            f = open(os.path.dirname(os.path.realpath(__file__)) + "/cmd_result.txt","w")  #apre il file dei dati in read mode
             f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
             trunk_result = result[:4000]
