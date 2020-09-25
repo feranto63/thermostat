@@ -539,7 +539,7 @@ def handle(msg):
                 bot.sendMessage(CHAT_ID, "Come ti posso aiutare?", reply_markup=main_show_keyboard, disable_notification=debug_notify)
             else:
                 show_keyboard = {'keyboard': [['/apri']], 'resize_keyboard':True} #tastiera personalizzata
-                bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa Bellezza",disable_notification=True)
+                bot.sendMessage(chat_id, "Apro il cancello, Visitatore della casa di "+nome_maggiordomo,disable_notification=True)
                 bot.sendMessage(chat_id, "Premere /apri per aprire il cancello", reply_markup=show_keyboard,disable_notification=True)
                 bot.sendMessage(CHAT_ID, msg_sender+" mi ha chiesto di aprire il cancello Padrone")
             time.sleep(2)
@@ -612,15 +612,18 @@ def handle(msg):
             for i in range(1, num_args):
                 cmd_str[i-1] = str(command_list[i])
 #            cmd_str = cmd_str + "> \home\pi\git\\thermostat\\thermostat\\cmd_result.txt"
-            bot.sendMessage(CHAT_ID, "invio comando "+str(cmd_str),disable_notification=True)
+            bot.sendMessage(BOT_ASSISTANT_CHATID, "invio comando "+str(cmd_str),disable_notification=True)
+            bot.sendMessage(TOKEN, "invio comando "+str(cmd_str),disable_notification=True)
             result = subprocess.check_output(cmd_str)
             f = open("cmd_result.txt","w")  #apre il file dei dati in read mode
             f.write(result)  #legge la info del sensore sul file e divide per data, ora e valore
             f.close()  #chiude il file dei dati e lo salva
             trunk_result = result[:4000]
-            bot.sendMessage(CHAT_ID, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
+            bot.sendMessage(BOT_ASSISTANT_CHATID, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
+            bot.sendMessage(TOKEN, "ho scritto il file di risultato: "+str(trunk_result),disable_notification=True)
         else:
-            bot.sendMessage(CHAT_ID, "CMD senza parametri, padrone",disable_notification=True)
+            bot.sendMessage(BOT_ASSISTANT_CHATID, "CMD senza parametri, padrone",disable_notification=True)
+            bot.sendMessage(TOKEN, "CMD senza parametri, padrone",disable_notification=True)
     elif command == '/noip':
         bot.sendMessage(CHAT_ID, "Avvio noip2",disable_notification=True)
         result = subprocess.call(['sudo','noip2'])
@@ -656,7 +659,7 @@ def handle(msg):
 tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
 chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
 chatidgatepath = os.path.dirname(os.path.realpath(__file__)) + "/chatid_cancello"
-
+bot_assistant_chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.chatid"
 
 try:
     tokenFile = open(tokenpath,'r')
@@ -693,6 +696,20 @@ if GATE_PRESENT:
 
     logging.info("caricata chatIdGate.")
     print('Ho letto il chatIdGate')
+    
+    
+#### legge il chatID del Maggiordomo Father
+
+try:
+    bot_assistant_chatidFile = open(bot_assistant_chatidpath,'r')
+    BOT_ASSISTANT_CHATID = bot_assistant_chatidFile.read().strip()
+    bot_assistant_chatidFile.close()
+except IOError: 
+    #logging.error("Non ho trovato il file di chatid. E' necessario creare un file 'BotAssistant.chatid' con la chatidi telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    exit()
+    
+logging.info("caricata bot_assistant_chatId.")
+print('Ho letto il bot_assistant_chatId')
 
 
 # variables for periodic reporting
