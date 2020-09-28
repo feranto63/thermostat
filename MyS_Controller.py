@@ -200,7 +200,7 @@ def MySensorEvent(message):
                         except:
                             bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime, disable_notification=True)
                         # invia messaggio di allarme inserito
-                        GATEWAY.set_child_value(37, 1, 2, 0)
+                        GATEWAY.set_child_value(37, 1, 2, 1)
 
                     else:                  # ALLARME DISINSERITO
   #                      print("PAYLOAD == 1")
@@ -209,7 +209,7 @@ def MySensorEvent(message):
                         except:
                             bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime, disable_notification=True)
                         #invia messaggio di allarme disinserito
-                        GATEWAY.set_child_value(37, 1, 2, 1)
+                        GATEWAY.set_child_value(37, 1, 2, 0)
            
     elif message.node_id == 32: # SENSORE DI PRESENZA
         print("message.node_id == 32")
