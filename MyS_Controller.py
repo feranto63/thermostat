@@ -160,6 +160,7 @@ def MySensorEvent(message):
 # CODICI NODE_ID
 # 30 STATO ALLARME
 # 32 SENSORE DI PRESENZA
+# 37 SPIA ALLARME INSERITO
 #
 
     if message.node_id == 30: # STATO ALLARME
@@ -192,19 +193,24 @@ def MySensorEvent(message):
                     return()
                 else:
                     ALARM_ACTIVE = int(PAYLOAD)
-                    if int(PAYLOAD) == 0:
+                    if int(PAYLOAD) == 0:  # ALLARME INSERITO
  #                       print("PAYLOAD == 0")
                         try:
                             bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime, disable_notification=True)
                         except:
                             bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato attivato l'antifurto alle "+localtime, disable_notification=True)
-                    else:
+                        # invia messaggio di allarme inserito
+                        GATEWAY.set_child_value(37, 1, 2, 0)
+
+                    else:                  # ALLARME DISINSERITO
   #                      print("PAYLOAD == 1")
                         try:
                             bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime, disable_notification=True)
                         except:
                             bot.sendMessage(CHATID,".Sono "+MaggiordomoID+". E' stato disattivato l'antifurto alle "+localtime, disable_notification=True)
-            
+                        #invia messaggio di allarme disinserito
+                        GATEWAY.set_child_value(37, 1, 2, 1)
+           
     elif message.node_id == 32: # SENSORE DI PRESENZA
         print("message.node_id == 32")
         if message.sub_type == 16:
