@@ -733,10 +733,13 @@ pulizie_timer=None
 
 ################# gestione della interfaccia di GPIO   
 # wiringpi numbers  
+
 import RPi.GPIO as GPIO
+
 ##import wiringpi2 as wiringpi
 ##wiringpi.wiringPiSetup()
 ##wiringpi.pinMode(0, 1) # sets WP pin 0 to output
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(HEAT_PIN,GPIO.OUT)
 GPIO.setup(HEAT2_PIN,GPIO.OUT)
