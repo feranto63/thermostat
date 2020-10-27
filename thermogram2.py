@@ -3,6 +3,8 @@
 
 import telepot.api
 import urllib3
+import subprocess
+
 
 # posto retry = 3 per evitare exception sul send.message casuale
 telepot.api._pools = {
@@ -984,7 +986,7 @@ def set_presence(n, presence_msg):
 
 
 ######################## check presence con ping IP su wifi
-import subprocess
+
 
 def check_presence_IP():
     global persona_IP, persona_at_home, persone_della_casa, persona_ARP
