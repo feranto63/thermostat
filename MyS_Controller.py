@@ -285,6 +285,8 @@ def MySensorEvent(message):
                 sensorfilename = "sensor3.log"
             elif message.node_id == 34: # sala hobby
                 sensorfilename = "sensor4.log"
+            elif message.node_id == 39: # cameretta
+                sensorfilename = "sensor5.log"
         elif MaggiordomoID == "Sas":
             if message.node_id == 37: #zona notte
                 sensorfilename = "sensor1.log"
