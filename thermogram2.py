@@ -65,13 +65,14 @@ NUM_SENSORI = settings.getint('SectionOne','NUM_SENSORI')
 sensor_type = settings.get('SectionOne','sensor_type').split("\n")
 # sensori = settings.get('SectionOne','sensori').split("\n")
 
-TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby']
+TIPO_SENSORE = ['living','giardino','zona notte','cucina','bagno','sala hobby','cameretta']
 # 0 = living
 # 1 = giardino
 # 2 = zona notte
 # 3 = cucina
 # 4 = bagno
 # 5 = sala hobby
+# 6 = cameretta
 
 main_sensor = int(settings.get('SectionOne','main_sensor'))
 sensor_value = [[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ',0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0],[' ', 0.0, 0.0, 0.0]] #time,temp,humid
