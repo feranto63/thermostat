@@ -223,7 +223,8 @@ def MySensorEvent(message):
                 MOVING_STATUS = int(PAYLOAD)
                 if int(PAYLOAD) == 1:
                     print("PAYLOAD == 1")
-                    if how_many_at_home == 0:
+#                    if how_many_at_home == 0:
+                    if ALARM_ACTIVE == 0:
                         try:
                             bot.sendMessage(CHATID,"Sono "+MaggiordomoID+". Ho notato un movimento alle "+localtime, disable_notification=True)
                         except:
