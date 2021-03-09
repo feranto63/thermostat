@@ -24,8 +24,9 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 #tar -zcvf /tmp/$BACKUPFILEDIR /home/pi/git/thermostat/thermostat/
 
 ### Send to Network disk through SCP
-FTPNAME="feranto63"
-FTPPASS="cldbzz00"
+read FTPNAME < /home/pi/git/thermostat/thermostat/FTPNAME
+read FTPPASS < /home/pi/git/thermostat/thermostat/FTPPASS
+
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/chatid /home/pi/git/thermostat/thermostat/chatid
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/filedati /home/pi/git/thermostat/thermostat/filedati
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/fileheating /home/pi/git/thermostat/thermostat/fileheating
