@@ -75,8 +75,8 @@ bot = telepot.Bot(TOKEN)
 #bot.message_loop(handle)
 print 'running Bot Assistant ...'
 
-# myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
-myIPaddress = str(subprocess.check_output(['hostname','I']))
+myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
+mylocalIPaddress = str(subprocess.check_output(['hostname','-I']))
 
 # generate a name for this maggiordomo if does not exist
 try:
@@ -94,7 +94,7 @@ except IOError:
 
     bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato", disable_notification=True)
 
-bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress, disable_notification=True)
+bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress+" "+mylocalIPaddress, disable_notification=True)
 
 # Keep the program running.
 #while 1:
