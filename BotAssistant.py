@@ -75,7 +75,8 @@ bot = telepot.Bot(TOKEN)
 #bot.message_loop(handle)
 print 'running Bot Assistant ...'
 
-myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
+# myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
+myIPaddress = str(subprocess.check_output(['hostname','I']))
 
 # generate a name for this maggiordomo if does not exist
 try:
