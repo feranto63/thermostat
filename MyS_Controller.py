@@ -528,9 +528,9 @@ bot = telepot.Bot(TOKEN)
 # bot.message_loop(handle)
 print ('running Sensor Controller ...')
 
-# myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
-myIPaddress = str(subprocess.check_output(['hostname','I']))
-print('myIPaddress:'+myIPaddress)
+myIPaddress = str(subprocess.check_output(['dig','+short','myip.opendns.com','@resolver1.opendns.com']))
+mylocalIPaddress = str(subprocess.check_output(['hostname','-I']))
+print('myIPaddress:'+myIPaddress+" "+mylocalIPaddress)
 
 
 import mysensors.mysensors as mysensors
