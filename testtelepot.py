@@ -14,7 +14,7 @@ from time import sleep
 owner_found = False
 
 
-from backports import configparser
+from backports import configparser as ConfigParser
 #import ConfigParser
 
 settings = ConfigParser.ConfigParser()
