@@ -82,8 +82,8 @@ def handle(msg):
     else:
         bot.sendMessage(CHAT_ID, "Puoi ripetere, Padrone? I miei circuiti sono un po' arrugginiti")
 
-TOKEN = '186703015:AAEJ2qKIPwbhktlPF0qdfLWHFJFSlE3uhBc'
-CHAT_ID = 26228522
+TOKEN = ''
+CHAT_ID = 
 
 
 def set_presence(n, presence_msg):
