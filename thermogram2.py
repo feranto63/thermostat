@@ -1316,7 +1316,7 @@ def is_connected():
 
 # -------------------- inizio programma
 
-print('INIZIO IL PROGRAMMA THERMOGRAM')
+logging.info('INIZIO IL PROGRAMMA THERMOGRAM')
 
 ######## Inizializza le temperature
 if DS_PRESENCE or DS1820_PRESENCE:
@@ -1385,10 +1385,10 @@ heating_overwrite = False
 get_tempschedule()
 
 ######## inizializza il bot Telegram ###########
-print('token: '+str(TOKEN))
+logging.info('token: '+str(TOKEN))
 
 bot = telepot.Bot(TOKEN)
-print('avviato il bot')
+logging.info('avviato il bot')
 
 
 #clear queue
