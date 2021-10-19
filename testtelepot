@@ -65,6 +65,36 @@ import time
 # import pprint
 import telepot
 
+########### legge da file il token del Telegram Bot e della chat id
+
+tokenpath = os.path.dirname(os.path.realpath(__file__)) + "/token"
+chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/chatid"
+chatidgatepath = os.path.dirname(os.path.realpath(__file__)) + "/chatid_cancello"
+bot_assistant_chatidpath = os.path.dirname(os.path.realpath(__file__)) + "/BotAssistant.chatid"
+
+try:
+    tokenFile = open(tokenpath,'r')
+    TOKEN = tokenFile.read().strip()
+    tokenFile.close()
+except IOError: 
+    logging.error("Non ho trovato il file di token. E' necessario creare un file 'token' con la token telegram per il bot. In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+    exit()
+
+logging.info("caricata token.")
+print('Ho letto il token')
+        
+try:
+    chatidFile = open(chatidpath,'r')
+    CHAT_ID = chatidFile.read().strip()
+    chatidFile.close()
+except IOError:
+    logging.error("Non ho trovato il file di chatId. E' necessario creare un file 'chatid' con la chatid telegram per il bot")
+    # In ogni caso questo file NON deve essere tracciato da git - viene ignorato perche' menzionato nel .gitignore.")
+
+logging.info("caricata chatId.")
+print('Ho letto il chatId')
+
+
 ###################### gestisce i comandi inviati al Telegram Bot
 def handle(msg):
     global CHAT_ID
