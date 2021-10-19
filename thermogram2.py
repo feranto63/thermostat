@@ -749,6 +749,8 @@ GPIO.setup(HEAT_PIN,GPIO.OUT)
 GPIO.setup(HEAT2_PIN,GPIO.OUT)
 GPIO.setup(GATE_PIN,GPIO.OUT)
 
+logging.info('ho fatto GPIO, sto per fare os.system')
+
 #Find temperature from thermometer
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
