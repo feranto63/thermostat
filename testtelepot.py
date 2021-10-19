@@ -14,7 +14,8 @@ from time import sleep
 owner_found = False
 
 
-import ConfigParser
+from backports import configparser
+#import ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
