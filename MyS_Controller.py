@@ -14,7 +14,8 @@ import sys
 owner_found = False
 
 
-import configparser as ConfigParser
+#import configparser as ConfigParser
+from backports import configparser as ConfigParser
 
 settings = ConfigParser.ConfigParser()
 settings.read('thermogram2.ini')
