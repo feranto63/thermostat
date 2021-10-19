@@ -131,7 +131,7 @@ bot = telepot.Bot(TOKEN)
 bot = telepot.Bot(TOKEN)
 bot.message_loop(handle)
 
-update_queue = updater.start_polling(poll_interval=1, timeout=5)
+# update_queue = updater.start_polling(poll_interval=1, timeout=5)
 
 print ("Listening ...")
 
