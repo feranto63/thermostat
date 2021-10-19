@@ -132,7 +132,7 @@ bot.message_loop(handle)
 
 update_queue = updater.start_polling(poll_interval=1, timeout=5)
 
-print "Listening ..."
+print ("Listening ...")
 
 
 main_show_keyboard = {'keyboard': [['/now']]} #tastiera personalizzata
