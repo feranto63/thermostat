@@ -4,10 +4,10 @@
 import sys
 
 import logging
-import telegram
-from telegram.error import NetworkError, Unauthorized
+# import telegram
+# from telegram.error import NetworkError, Unauthorized
 from time import sleep
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+# from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
 #PROPRIETARIO = sys.argv[1]  # get user from command-line
