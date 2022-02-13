@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 # DEFINIZIONE VARIABILI DI PERSONALIZZAZIONE
 import sys
 
