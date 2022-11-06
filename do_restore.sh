@@ -27,6 +27,7 @@ BACKUPFILEDIR="maggiordomo_all_$TIMESTAMP.tar.gz"
 read FTPNAME < /home/pi/git/thermostat/thermostat/FTPNAME
 read FTPPASS < /home/pi/git/thermostat/thermostat/FTPPASS
 
+mv /home/pi/git/thermostat/thermostat/chatid /home/pi/git/thermostat/thermostat/old_chatid
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/chatid /home/pi/git/thermostat/thermostat/chatid
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/filedati /home/pi/git/thermostat/thermostat/filedati
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/fileheating /home/pi/git/thermostat/thermostat/fileheating
@@ -36,10 +37,13 @@ ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/heatin
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/heating_update /home/pi/git/thermostat/thermostat/heating_update
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/MAGGIORDOMO.jpg /home/pi/git/thermostat/thermostat/MAGGIORDOMO.jpg
 #ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/termostato.log /home/pi/git/thermostat/thermostat/termostato.log
+mv /home/pi/git/thermostat/thermostat/thermogram2.ini /home/pi/git/thermostat/thermostat/old_thermogram2.ini
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/thermogram2.ini /home/pi/git/thermostat/thermostat/thermogram2.ini
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/thermoschedule /home/pi/git/thermostat/thermostat/termoschedule
+mv /home/pi/git/thermostat/thermostat/token /home/pi/git/thermostat/thermostat/old_token
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/token /home/pi/git/thermostat/thermostat/token
 # ncftpput -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/ /home/pi/git/thermostat/thermostat/Maggiordomo.ID
+mv /home/pi/git/thermostat/thermostat/chatid_cancello /home/pi/git/thermostat/thermostat/old_chatid_cancello
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/chatid_cancello /home/pi/git/thermostat/thermostat/chatid_cancello
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/templog.db /var/www/templog.db
 ncftpget -C -u $FTPNAME -p $FTPPASS $SERVER /maggiordomo/$NOMEMAGGIORDOMO/webgui.py /usr/lib/cgi-bin/webgui.py
