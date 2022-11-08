@@ -647,6 +647,25 @@ def handle(msg):
         bot.sendMessage(CHAT_ID, "Spengo la pompa di calore",disable_notification=True)
     elif command == '/image':
         result = bot.sendPhoto(CHAT_ID, open('FER_IN.jpg', 'rb'))
+    elif command == '/accendi':
+        if pulizie_status:
+            bot.sendMessage(CHAT_ID, "Modalita' pulizie attiva. Non puoi dare il comando /accendi",disable_notification=True)
+        else:
+            overwrite_duration = 3 #default forever = 1000 ore
+            overwrite_temp = 25     #default 25 gradi centigradi
+            overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
+            heating_overwrite = True
+            heating_status = True
+            TurnOnHeating()
+            bot.sendMessage(CHAT_ID, "Accendo il riscaldamento",disable_notification=True)
+    elif command == '/spegni':
+        if pulizie_status:
+            bot.sendMessage(CHAT_ID, "Modalita' pulizie attiva. Non puoi dare il comando /spegni",disable_notification=True)
+        else:
+            heating_overwrite = False
+            heating_status = False
+            TurnOffHeating()
+            bot.sendMessage(CHAT_ID, "Spengo il riscaldamento",disable_notification=True)
     elif command == '/all':
         messaggio=""
         for i in range (NUM_SENSORI):
@@ -1406,7 +1425,7 @@ help_or_gate = '/help'
 if GATE_PRESENT:
     help_or_gate = '/apri'
 
-main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/turnon 1','/annulla'],['/pulizie',help_or_gate]]} #tastiera personalizzata
+main_show_keyboard = {'keyboard': [['/now','/casa'], ['/ho_caldo','/ho_freddo'],['/accendi','/spegni'],['/pulizie',help_or_gate]]} #tastiera personalizzata
 if male_maggiordomo:
     sex_indicator="o"
 else:
