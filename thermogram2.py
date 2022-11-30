@@ -651,7 +651,7 @@ def handle(msg):
         if pulizie_status:
             bot.sendMessage(CHAT_ID, "Modalita' pulizie attiva. Non puoi dare il comando /accendi",disable_notification=True)
         else:
-            overwrite_duration = 3 #default forever = 1000 ore
+            overwrite_duration = 1 #default forever = 1000 ore
             overwrite_temp = 25     #default 25 gradi centigradi
             overwrite_timer = time.time() + overwrite_duration*60*60 #2 hours
             heating_overwrite = True
