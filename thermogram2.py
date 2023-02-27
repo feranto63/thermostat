@@ -1059,7 +1059,12 @@ def check_presence_arp():
     global persona_IP, persona_at_home, persone_della_casa, persona_retry, persona_ARP, persona_WIFI, PRESENCE_MAC
     global CHAT_ID
 
-    arp_result = str(subprocess.check_output(['sudo','/usr/bin/arp-scan','-l','-r','11']))
+    try:
+        arp_result = str(subprocess.check_output(['sudo','/usr/bin/arp-scan','-l','-r','11']))
+    except subprocess.CalledProcessError as e:
+        print e.returncode
+        print e.output
+    
 #    arp_result = art_result_b.decode('ascii')
     print (arp_result)
     
