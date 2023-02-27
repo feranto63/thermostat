@@ -94,7 +94,10 @@ except IOError:
 
     bot.sendMessage(CHATID,"sono "+MaggiordomoID+". Sono stato appena generato", disable_notification=True)
 
-bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress+" "+mylocalIPaddress, disable_notification=True)
+try:
+    bot.sendMessage(CHATID,"il mio indirizzo IP e' "+myIPaddress+" "+mylocalIPaddress, disable_notification=True)
+except:
+    bot.sendMessage(CHATID,".il mio indirizzo IP e' "+myIPaddress+" "+mylocalIPaddress, disable_notification=True)
 
 # Keep the program running.
 #while 1:
