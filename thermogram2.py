@@ -1064,6 +1064,7 @@ def check_presence_arp():
     except subprocess.CalledProcessError as e:
         print e.returncode
         print e.output
+        arp_result = "errore di lettura arp-scan"
     
 #    arp_result = art_result_b.decode('ascii')
     print (arp_result)
