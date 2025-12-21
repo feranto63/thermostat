@@ -22,7 +22,7 @@ settings.read('thermogram2.ini')
 HEAT_ID = settings.getint('SectionOne','HEAT_ID')
 HEATPUMP_ID = settings.getint('SectionOne','HEATPUMP_ID')
 
-# HEAT_ID = 31
+# HEAT_ID = 41 
 
 GATE_PRESENT = settings.getboolean('SectionOne','GATE_PRESENT')
 try:
@@ -514,8 +514,6 @@ except IOError:
     exit()
 
 #logging.info("caricata chatid.")
-
-# CHATID = 26228522
 
 #def handle(msg):
 #    flavor = telepot.flavor(msg)
